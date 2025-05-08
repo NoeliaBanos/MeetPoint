@@ -9,6 +9,17 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    public function reservas() {
+        return $this->hasMany(Reserva::class, 'user_id');
+    }
+
+    public function resenas() {
+        return $this->hasMany(Resena::class, 'user_id');
+    }
+
+    public function mensajes() {
+        return $this->hasMany(MensajeContacto::class, 'user_id');
+    }
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -17,6 +28,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    
     protected $fillable = [
         'name',
         'email',
