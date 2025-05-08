@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('espacio_id')->constrained()->onDelete('cascade');
             $table->date('fecha'); // fecha de la reserva
-            $table->time('hora_inicio')->nullable();
-            $table->time('hora_fin')->nullable();
+            $table->dateTime('fecha_hora');
+
             $table->timestamps();
         });
     }

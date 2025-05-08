@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('espacios', function (Blueprint $table) {
             $table->id();
-    $table->string('nombre');
-    $table->text('descripcion')->nullable();
-    $table->integer('capacidad')->nullable();
-    $table->decimal('precio', 8, 2)->nullable();
-    $table->timestamps();
+            $table->string('nombre');
+            $table->text('descripcion')->nullable();
+            $table->text('equipamiento')->nullable();
+            $table->enum('estado_espacio', ['disponible', 'no_disponible']);
+            $table->decimal('precio_hora', 10, 2);
+            $table->string('imagen_url')->nullable();
+            $table->integer('capacidad')->nullable();
+            $table->dateTime('fecha_hora')->nullable();
+
+            $table->timestamps();
         });
     }
 

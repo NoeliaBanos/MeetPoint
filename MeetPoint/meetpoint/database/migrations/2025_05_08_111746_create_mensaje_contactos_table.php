@@ -11,12 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // 'nombre'      => 'Carlos',
+        // 'email'       => 'carlos@example.com',
+        // 'telefono'    => '123456789',
+        // 'mensaje'     => 'Quisiera saber si hay disponibilidad para este viernes.',
+        // 'created_at'  => now(),
+        // 'updated_at'  => now(),
         Schema::create('mensaje_contactos', function (Blueprint $table) {
             $table->id();
-    $table->foreignId('user_id')->constrained()->onDelete('cascade');
-    $table->string('asunto');
-    $table->text('mensaje');
-    $table->timestamps();
+            $table->string('nombre');
+            $table->string('email');
+            $table->string('telefono');
+            $table->text('mensaje');
+            $table->timestamps();
         });
     }
 
