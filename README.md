@@ -28,12 +28,7 @@
 - **Laravel (PHP)**
 - **MySQL** (base de datos relacional)
 
-### Pasarelas de pago (evaluadas)
-- **Stripe** ✅ (recomendada por su facilidad de integración y comisiones competitivas)
-- Skrill
-- PayPal
-
-## 🧠 Características Innovadoras
+## 🧠 Características
 
 - Gestión inteligente en tiempo real para optimizar el uso del espacio.
 - Sistema de reseñas verificadas y filtrables.
