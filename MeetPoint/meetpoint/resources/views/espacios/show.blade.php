@@ -1,20 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $espacio->nombre }}</title>
-</head>
+@section('title', 'Detalle')
 
-<body>
-    <nav>
-        <p>MeetPoint
-            <a href="{{ route('espacios.index') }}">Espacios</a>
-            <a href="{{ route('resenas.index') }}">Reseñas</a>
-            <a href="{{ route('contacto.create') }}">Contacto</a>
-        </p>
-    </nav>
+@section('content')
+
     <h3>Aforo máximo: {{ $espacio->capacidad }}</h3>
     <h3>Precio: {{ $espacio->precio_hora }} €/hora</h3>
     <h1>{{ $espacio->nombre }}</h1>
@@ -73,17 +62,8 @@
         </section>
     @endif
     <!-- Aquí puedes agregar el botón de reserva o detalles adicionales -->
-    <footer style="background-color: rgb(197, 197, 197); text-decoration:none;">
+    {{-- FOOTER --}}
+  @include('partials.footer')
 
-        <a href="{{ route('espacios.index') }}">Espacios</a>
-        <a href="{{ route('resenas.index') }}">Reseñas</a>
-       
 
-           {{-- <a href="">Iniciar sesión</a> --}}
-           <a href="{{ route('contacto.create') }}">Contacta con nosotros</a>
-           <a href="{{ route('legal') }}">Información legal</a>
-        <p>MeetPoint &copy; 2025</p>
-    </footer>
-</body>
-
-</html>
+@endsection

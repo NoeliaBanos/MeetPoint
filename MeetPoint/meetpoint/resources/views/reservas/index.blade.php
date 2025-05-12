@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Reservas</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Reservas')
+
+@section('content')
     <h1>Mis Reservas</h1>
     <ul>
         @foreach ($reservas as $reserva)
@@ -20,5 +17,7 @@
             </li>
         @endforeach
     </ul>
-</body>
-</html>
+    {{-- FOOTER --}}
+  @include('partials.footer')
+
+@endsection

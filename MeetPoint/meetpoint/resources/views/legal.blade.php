@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Información legal</title>
-</head>
+@section('title', 'MeetPoint')
 
-<body>
-    <nav>
-        <p>MeetPoint
-            <a href="{{ route('espacios.index') }}">Espacios</a>
-            <a href="{{ route('resenas.index') }}">Reseñas</a>
-            <a href="{{ route('contacto.create') }}">Contacto</a></p>
-    </nav>
+@section('content')
+    {{-- NAVBAR --}}
     {{-- Título y menú interno ---------------------------------------------------- --}}
     <h1>Información legal</h1>
 
@@ -97,16 +87,7 @@
         </p>
     </section>
     </main>
-    <footer style="background-color: rgb(197, 197, 197); text-decoration:none;">
-    
-        <a href="{{ route('espacios.index') }}">Espacios</a>
-        <a href="{{ route('resenas.index') }}">Reseñas</a>
-        {{-- <a href="">Iniciar sesión</a> --}}
-        <a href="{{ route('contacto.create') }}">Contacta con nosotros</a>
-        <a href="{{ route('legal') }}">Información legal</a>
- <p>MeetPoint &copy; 2025</p>
-   </footer>
+    {{-- FOOTER --}}
+    @include('partials.footer')
 
-</body>
-
-</html>
+@endsection

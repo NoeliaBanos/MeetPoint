@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;   
 
 class ProfileController extends Controller
 {
@@ -26,15 +27,23 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        // Obtener el usuario autenticado
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Rellenar con los datos validados
+        $user->fill($request->validated());
+
+        // Si cambia el email, "desverificarlo"
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        // Guardar cambios
+        $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // Redirigir a la página de perfil con mensaje de éxito
+        return Redirect::route('profile.show')
+            ->with('status', 'Perfil actualizado con éxito.');
     }
 
     /**
@@ -56,5 +65,30 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+  public function show(Request $request): View
+{
+    return view('profile.show', [
+        'user' => $request->user(),
+    ]);
+}
+
+    /**
+     * Actualizar la contraseña
+     */
+    public function updatePassword(Request $request)
+    {
+        $data = $request->validate([
+            'current_password'      => ['required', 'current_password'],
+            'password'              => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = $request->user();
+        $user->password = Hash::make($data['password']);
+        $user->save();
+
+        return redirect()
+            ->route('profile.show')
+            ->with('status', 'Contraseña actualizada con éxito.');
     }
 }

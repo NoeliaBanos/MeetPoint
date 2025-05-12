@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto</title>
-</head>
-<body>
-    <nav>
-        <p>MeetPoint
-            <a href="{{ route('espacios.index') }}">Espacios</a>
-            <a href="{{ route('resenas.index') }}">Reseñas</a>
-            <a href="{{ route('contacto.create') }}">Contacto</a></p>
-    </nav>
+@extends('layouts.app')
+
+@section('title', 'Contacto')
+
+@section('content')
+
     <main>
 
         <h1>Preguntas frecuentes (FAQ)</h1>
@@ -198,14 +190,7 @@
         <button type="submit">Enviar</button>
     </form>
 
-    <footer style="background-color: rgb(197, 197, 197); text-decoration:none;">
-    
-        <a href="{{ route('espacios.index') }}">Espacios</a>
-        <a href="{{ route('resenas.index') }}">Reseñas</a>
-        {{-- <a href="">Iniciar sesión</a> --}}
-        <a href="{{ route('contacto.create') }}">Contacta con nosotros</a>
-        <a href="{{ route('legal') }}">Información legal</a>
- <p>MeetPoint &copy; 2025</p>
-   </footer>
-</body>
-</html>
+     {{-- FOOTER --}}
+   @include('partials.footer')
+
+@endsection
