@@ -1,20 +1,16 @@
-// resources/sass/app.scss
+// 1) variables y font-face
+@use 'custom' as *; 
+@use 'componentes' as *;
 
-@use './_variables'as *;
-
-// 2) Bootstraps
-@use 'bootstrap/scss/bootstrap'as bs;
-
-
-// 3) Tus estilos adicionales
-
-h1,h2,h3{
-   font-family: $font-family-title !important;
-}
+// 3) Tus estilos extra
 
 body {
+  font-family: $font-family-base !important;
 
-font-family: $font-family-base !important;
+}
+
+h1, h2, h3 {
+  font-family: $font-family-title !important;
 }
 
 img {
@@ -23,43 +19,11 @@ img {
     object-fit: cover;
 }
 
-// Ejemplo de uso de variable y mixin de Bootstrap
-.btn-custom {
-    padding: $space-s;
-    border-radius: $border-radius;
-    background-color: $primary;
-    color: $white;
-
-    &:hover {
-        background-color: darken($primary, 20%);
-    }
-}
-
 a {
     color: black;
     text-decoration: none;
 }
 
-footer {
-    color: $white;
-    background-color: $secondary;
 
-    a {
-        color: $white;
-    }
-}
-// Evita que las nav-link ocupen varias líneas
-.navbar-nav .nav-link {
-  white-space: nowrap;
-}
 
-// Espacio horizontal entre items
-.navbar-nav.flex-row > .nav-item + .nav-item {
-  margin-left: 1rem;
-}
 
-// Suaviza y redondea un poco el dropdown
-.dropdown-menu {
-  border-radius: 0.5rem;
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
-}

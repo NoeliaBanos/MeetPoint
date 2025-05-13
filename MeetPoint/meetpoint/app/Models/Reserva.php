@@ -14,7 +14,7 @@ class Reserva extends Model
         return $this->belongsTo(Espacio::class, 'espacio_id');
     }
      protected $casts = [
-        'fecha'      => 'date',                // convierte a Carbon (sólo fecha)
-        'hora_inicio'=> 'datetime:H:i',        // convierte a Carbon con formato de hora
+        'fecha'      => 'date',              
+        'hora_inicio'=> 'datetime:H:i',        
     ];
 }

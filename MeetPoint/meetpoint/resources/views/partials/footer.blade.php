@@ -1,4 +1,4 @@
-<footer class="mt-2 p-xl-5 text-center">
+<footer class="mt-4 p-5 text-center">
   <div class="d-flex justify-content-center flex-wrap gap-3">
     <a href="{{ route('espacios.index') }}">Espacios</a>
     <a href="{{ route('resenas.index') }}">Reseñas</a>

@@ -1,0 +1,15 @@
+// Evita que las nav-link ocupen varias líneas
+.navbar-nav .nav-link {
+  white-space: nowrap;
+}
+
+// Espacio horizontal entre items
+.navbar-nav.flex-row > .nav-item + .nav-item {
+  margin-left: 1rem;
+}
+// dropdown
+// Suaviza y redondea un poco el dropdown
+.dropdown-menu {
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+}

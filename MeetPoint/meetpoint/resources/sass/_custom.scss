@@ -1,52 +1,49 @@
+@use 'sass:color';
+// Reescribimos variables de Boostrap
 // resources/sass/_variables.scss
-/* Montserrat Regular */
 @font-face {
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/Montserrat.ttf') format('truetype');
+  src: url("../fonts/Montserrat.ttf") format('truetype');
+
 }
 
-/* Montserrat Italic */
 @font-face {
   font-family: 'Montserrat';
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/Montserrat-Italic.ttf') format('truetype');
+  src: url("../fonts/Montserrat-Italic.ttf") format('truetype');
 }
 
-/* DMSerifDisplay Regular */
 @font-face {
   font-family: 'DMSerifDisplay';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/DMSerifDisplay-Regular.ttf') format('truetype');
+  src: url("../fonts/DMSerifDisplay-Regular.ttf") format('truetype');
 }
 
-/* DMSerifDisplay Italic */
 @font-face {
   font-family: 'DMSerifDisplay';
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/DMSerifDisplay-Italic.ttf') format('truetype');
+  src: url("../fonts/DMSerifDisplay-Italic.ttf") format('truetype');
 }
-
 
 // Redefinimos el font-family base
-$btn-size: 60px;
-$duracion: 3s;
-$timing: ease-in-out;
-// Cualquier otra variable que veas en docs de Bootstrap
-$primary: #28A6BF !default;
-$secondary: #C0C0C0 !default;
-$body-color: #142028 !default;
-$white: white;
-$font-family-base: 'Montserrat', sans-serif !default;
-$font-family-title: 'DMSerifDisplay', sans-serif !default;
+$bp-sm : 420px;
+$bp-md : 744px;
+$bp-lg : 1280px;
 
-$space-s: 0.5rem;
-$border-radius: 10px;
+
+// Cualquier otra variable que veas en docs de Bootstrap
+
+$font-family-base: 'Montserrat', sans-serif !default;
+$font-family-title: 'DMSerifDisplay', serif !default;
+
+// importamos Boostrap de node_modules
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
