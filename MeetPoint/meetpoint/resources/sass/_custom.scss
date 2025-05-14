@@ -1,38 +1,5 @@
-@use 'sass:color';
+@use 'bootstrap/scss/bootstrap';
 // Reescribimos variables de Boostrap
-// resources/sass/_variables.scss
-@font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/Montserrat.ttf") format('truetype');
-
-}
-
-@font-face {
-  font-family: 'Montserrat';
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/Montserrat-Italic.ttf") format('truetype');
-}
-
-@font-face {
-  font-family: 'DMSerifDisplay';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/DMSerifDisplay-Regular.ttf") format('truetype');
-}
-
-@font-face {
-  font-family: 'DMSerifDisplay';
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/DMSerifDisplay-Italic.ttf") format('truetype');
-}
 
 // Redefinimos el font-family base
 $bp-sm : 420px;
@@ -41,7 +8,6 @@ $bp-lg : 1280px;
 
 
 // Cualquier otra variable que veas en docs de Bootstrap
-
 $font-family-base: 'Montserrat', sans-serif !default;
 $font-family-title: 'DMSerifDisplay', serif !default;
 

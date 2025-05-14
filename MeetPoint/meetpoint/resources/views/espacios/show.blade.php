@@ -4,14 +4,19 @@
 
 @section('content')
 
-    <h3>Aforo máximo: {{ $espacio->capacidad }}</h3>
-    <h3>Precio: {{ $espacio->precio_hora }} €/hora</h3>
-    <h1>{{ $espacio->nombre }}</h1>
-    <img width="100%" src="https://picsum.photos/1200/400" alt="">
-    <img src="https://picsum.photos/120/50" alt="">
-    <img src="https://picsum.photos/120/51" alt="">
-    <img src="https://picsum.photos/120/52" alt="">
-    <div width="100%"></div>
+    <div class="hero-size">
+        {{-- La imagen de fondo (desde BBDD, ruta en imagen_url) --}}
+        <img src="{{ asset($espacio->imagen_url) }}" alt="Foto de {{ $espacio->nombre }}">
+
+        {{-- Texto superpuesto --}}
+        <div class="hero-text">
+            <p><b>Aforo máximo:</b> {{ $espacio->capacidad }}</p>
+            <h1 class="display-m">{{ $espacio->nombre }}</h1>
+            <p><b>Precio:</b> {{ number_format($espacio->precio_hora, 2) }} €/hora</p>
+        </div>
+    </div>
+
+
     <p>{{ $espacio->descripcion }}</p>
     <p><b>Añadir a favoritos</b></p>
     {{-- Botón para reservar una sala --}}
@@ -32,9 +37,12 @@
             @foreach ($espacio->resenas as $resena)
                 <article style="display:flex; gap:1rem; padding:1rem 0; border-bottom:1px solid #ccc;">
                     {{-- Avatar del usuario (puedes sustituir src por tu propio campo/asset) --}}
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($resena->user->name) }}&size=64"
-                        alt="Avatar de {{ $resena->user->name }}" width="64" height="64"
-                        style="border-radius:50%; object-fit:cover;">
+                    <div class="img-avatar">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($resena->user->name) }}&size=64"
+                            alt="Avatar de {{ $resena->user->name }}" width="64" height="64"
+                            style="border-radius:50%; object-fit:cover;">
+
+                    </div>
 
                     <div style="flex:1;">
                         {{-- Nombre y fecha --}}
@@ -63,7 +71,7 @@
     @endif
     <!-- Aquí puedes agregar el botón de reserva o detalles adicionales -->
     {{-- FOOTER --}}
-  @include('partials.footer')
+    @include('partials.footer')
 
 
 @endsection

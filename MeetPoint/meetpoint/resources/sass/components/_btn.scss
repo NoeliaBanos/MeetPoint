@@ -1,0 +1,14 @@
+@use '../abstracts/variables' as v;
+@use '../base/mixins'as m;
+// Ejemplo de uso de variable y mixin de Bootstrap
+.btn-custom {
+  @include m.btn(v.$primary, v.$white);
+  &-sec{
+    @include m.btn(v.$secondary, v.$white);
+    
+  }
+  &-dark{
+    @include m.btn(v.$body-color, v.$white);
+
+  }
+}

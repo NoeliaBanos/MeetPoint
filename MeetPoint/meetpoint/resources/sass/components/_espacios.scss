@@ -1,0 +1,32 @@
+// resources/sass/_espacios.scss
+@use '../abstracts/variables'as v;
+// tus puntos de quiebre
+@use '../base/mixins'as m;
+
+// contenedor de espacios
+.espacios {
+    background: #fff; // opcional, para resaltar
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: fit-content;
+
+    &-grid {
+        display: grid;
+        gap: 1rem; // separación entre celdas
+        grid-template-columns: 1fr; // por defecto 1 columna
+
+        @include m.tablet {
+            grid-template-columns: repeat(2, 1fr);
+
+        }
+
+        @include m.desktop {
+            grid-template-columns: repeat(3, 1fr);
+
+        }
+
+
+    }
+}
+

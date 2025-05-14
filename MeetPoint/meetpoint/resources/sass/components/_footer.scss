@@ -1,0 +1,20 @@
+@use '../abstracts/variables'as v;
+@use '../base/mixins'as m;
+
+.footer {
+    color: v.$white;
+    background-color: v.$body-color;
+    display: flex;
+    justify-content: center;
+    flex-direction: column; // POR DEFECTO (pantallas pequeñas): columna vertical
+    flex-wrap: wrap;
+
+    a {
+        color: v.$white;
+    }
+
+    @include m.tablet {
+        flex-direction: row;
+    }
+
+}
