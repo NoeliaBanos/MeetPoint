@@ -6,17 +6,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ asset('icon.png') }}">
     <title>@yield('title', config('app.name', 'Laravel'))</title>
-
-<style>
-    @font-face {
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url({{ asset("../fonts/Montserrat.ttf") }}) format('truetype');
-
-}
-</style>
     <!-- Styles & Scripts -->
   @vite([
   'resources/js/app.js'

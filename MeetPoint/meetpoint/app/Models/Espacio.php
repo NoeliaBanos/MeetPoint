@@ -13,4 +13,11 @@ class Espacio extends Model
     public function resenas() {
         return $this->hasMany(Resena::class, 'espacio_id');
     }
+    public function favoritedBy()
+{
+    return $this->belongsToMany(
+        User::class,
+        'favorites'
+    );
+}
 }

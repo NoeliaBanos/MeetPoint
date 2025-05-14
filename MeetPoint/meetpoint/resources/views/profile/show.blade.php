@@ -15,29 +15,28 @@
                         <h3 class="display">{{ \App\Models\Espacio::count() }}</h3>
                         <p>Espacios en total</p>
                     </div>
-                    <a href="{{ route('espacios.index') }}" class="btn-custom">
+                    <a href="{{ route('resenas.index') }}" class="btn-custom">
                         VER LISTA
                     </a>
-                    <a href="{{ route('espacios.create') }}" class="mt-4 btn-custom-sec"> AÑADIR
+                    <a href="{{ route('espacios.create') }}" class="mt-4 btn-custom-sec">
+                        AÑADIR
                     </a>
                 </div>
 
                 {{-- Reseñas --}}
-                 <div class="text-center">
+                <div class="text-center">
                     <div class="pt-4">
                         <h3 class="display">{{ \App\Models\Resena::count() }}</h3>
                         <p>Reseñas en total</p>
                     </div>
-                    <a href="{{ route('resenas.index') }}"
-                  class="btn-custom">     VER LISTA
+                    <a href="{{ route('resenas.index') }}" class="btn-custom"> VER LISTA
                     </a>
                 </div>
 
                 {{-- Cerrar sesión --}}
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit"
-                      class="btn-custom-sec mt-4 w-100">  CERRAR SESIÓN
+                    <button type="submit" class="btn-custom-sec mt-4 w-100"> CERRAR SESIÓN
                     </button>
                 </form>
             </div>
@@ -101,6 +100,19 @@
                 </section>
             </div>
         @endif
+        @if (!auth()->user()->hasVerifiedEmail())
+            <form method="POST" action="{{ route('verification.send') }}" class="mt-4 text-center">
+                @csrf
+                <button type="submit" class="btn-custom-sec w-full md:w-1/2 lg:w-1/3 mx-auto">
+                    Reenviar correo de verificación
+                </button>
+            </form>
+            <p class="mt-2 text-sm text-gray-600">
+                ¿Ya recibiste tu correo?
+                <a href="{{ route('verification.notice') }}" class="text-teal-400 underline">Verifica tu cuenta aquí</a>
+            </p>
+        @endif
+
     </div>
 
     @include('partials.footer')

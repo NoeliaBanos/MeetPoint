@@ -2,55 +2,165 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Espacio;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class EspacioController extends Controller
-{  public function create()
-    {
-        return view('espacios.create');
-    }
-
+{
+    /**
+     * Listado público de espacios.
+     */
     public function index()
     {
         $espacios = Espacio::all();
-        return view('espacios.index', compact('espacios')); // Asegúrate de tener la vista 'espacios.index'
+        return view('espacios.index', compact('espacios'));
     }
 
-    public function show($id)
+    /**
+     * Detalle público de un espacio.
+     */
+    public function show(Espacio $espacio)
     {
-        $espacio = Espacio::findOrFail($id);
-        return view('espacios.show', compact('espacio')); // Asegúrate de tener la vista 'espacios.show'
+        return view('espacios.show', compact('espacio'));
     }
 
-    public function adminDashboard()
+    /**
+     * Formulario de creación – solo ADMIN.
+     */
+    public function create()
     {
-        return view('admin.dashboard'); // Asegúrate de tener la vista 'admin.dashboard'
+        if (! Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Acceso denegado');
+        }
+
+        return view('espacios.create');
     }
-      public function store(Request $request)
+
+    /**
+     * Almacenar nuevo espacio – solo ADMIN.
+     */
+    public function store(Request $request)
     {
-        // 1) Validación
+        if (! Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Acceso denegado');
+        }
+
         $data = $request->validate([
-            'nombre'         => 'required|string|max:255',
-            'precio_hora'    => 'required|numeric',
-            'equipamiento'   => 'nullable|string',
-            'descripcion'    => 'nullable|string',
-            'imagen'         => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'nombre'       => 'required|string|max:255',
+            'precio_hora'  => 'required|numeric',
+            'equipamiento' => 'nullable|string',
+            'descripcion'  => 'nullable|string',
+            'imagen'       => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
         ]);
 
-        // 2) Si subieron imagen, la guardamos en storage/app/public/espacios
         if ($request->hasFile('imagen')) {
             $path = $request->file('imagen')->store('espacios', 'public');
-            // guardamos la ruta relativa en la DB
             $data['imagen_url'] = 'storage/' . $path;
         }
 
-        // 3) Crear registro
+        // Opcional: por defecto no disponible
+        $data['estado_espacio'] = $data['estado_espacio'] ?? 'no_disponible';
+
         Espacio::create($data);
 
-        // 4) Redirigir de vuelta al index con mensaje
         return redirect()
-               ->route('espacios.index')
-               ->with('status', 'Espacio creado correctamente.');
+            ->route('espacios.index')
+            ->with('status', 'Espacio creado correctamente.');
+    }
+
+    /**
+     * Formulario de edición – solo ADMIN.
+     */
+    public function edit(Espacio $espacio)
+    {
+        if (! Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Acceso denegado');
+        }
+
+        return view('espacios.edit', compact('espacio'));
+    }
+
+    /**
+     * Actualizar espacio – solo ADMIN.
+     */
+    public function update(Request $request, Espacio $espacio)
+    {
+        if (! Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Acceso denegado');
+        }
+
+        $data = $request->validate([
+            'nombre'       => 'required|string|max:255',
+            'precio_hora'  => 'required|numeric',
+            'equipamiento' => 'nullable|string',
+            'descripcion'  => 'nullable|string',
+            'imagen'       => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('imagen')) {
+            // borra la vieja si existe
+            if ($espacio->imagen_url) {
+                Storage::disk('public')
+                    ->delete(str_replace('storage/', '', $espacio->imagen_url));
+            }
+            $path = $request->file('imagen')->store('espacios', 'public');
+            $data['imagen_url'] = 'storage/' . $path;
+        }
+
+        $espacio->update($data);
+
+        return back()->with('status', 'Espacio actualizado correctamente.');
+    }
+
+    /**
+     * Eliminar espacio – solo ADMIN.
+     */
+    public function destroy(Espacio $espacio)
+    {
+        if (! Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Acceso denegado');
+        }
+
+        if ($espacio->imagen_url) {
+            Storage::disk('public')
+                ->delete(str_replace('storage/', '', $espacio->imagen_url));
+        }
+        $espacio->delete();
+
+        return redirect()
+            ->route('espacios.index')
+            ->with('status', 'Espacio eliminado correctamente.');
+    }
+
+    /**
+     * Marcar como APTA – solo ADMIN.
+     */
+    public function markApta(Espacio $espacio)
+    {
+        if (! Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Acceso denegado');
+        }
+
+        $espacio->estado_espacio = 'disponible';
+        $espacio->save();
+
+        return back()->with('status', 'Espacio marcado como APTA.');
+    }
+
+    /**
+     * Marcar como NO APTA – solo ADMIN.
+     */
+    public function markNoApta(Espacio $espacio)
+    {
+        if (! Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Acceso denegado');
+        }
+
+        $espacio->estado_espacio = 'no_disponible';
+        $espacio->save();
+
+        return back()->with('status', 'Espacio marcado como NO APTA.');
     }
 }

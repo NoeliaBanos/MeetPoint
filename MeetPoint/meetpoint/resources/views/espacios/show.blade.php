@@ -18,13 +18,42 @@
 
 
     <p>{{ $espacio->descripcion }}</p>
-    <p><b>Añadir a favoritos</b></p>
-    {{-- Botón para reservar una sala --}}
     @auth
-        <a href="{{ route('reservas.create', ['espacio' => $espacio]) }}" class="btn">Reservar sala</a>
+    @if (Auth::user()->hasFavorited($espacio))
+        <form method="POST"
+              action="{{ route('espacios.unfavorite', $espacio) }}"
+              class="inline-block">
+            @csrf @method('DELETE')
+            <button type="submit" title="Quitar favorito" class="me-2">
+                <img src="{{ asset('images/heart-filled.png') }}"
+                     alt="Favorito" style="width:24px;">
+            </button>
+        </form>
     @else
-        <a href="{{ route('login') }}" class="btn">Inicia sesión para reservar</a>
-    @endauth
+        <form method="POST"
+              action="{{ route('espacios.favorite', $espacio) }}"
+              class="inline-block">
+            @csrf
+            <button type="submit" title="Añadir favorito" class="me-2">
+                <img src="{{ asset('images/heart-outline.png') }}"
+                     alt="No favorito" style="width:24px;">
+            </button>
+        </form>
+    @endif
+@endauth
+
+    {{-- Botón para reservar una sala --}}
+   @auth
+    <a href="{{ route('reservas.create', $espacio) }}"
+       class="btn-custom">
+        Reservar sala
+    </a>
+@else
+    <a href="{{ route('login') }}" class="btn-custom">
+        Inicia sesión para reservar
+    </a>
+@endauth
+
     <h2>Equipamiento</h2>
     <p>{{ $espacio->equipamiento }}</p>
     <hr>

@@ -57,4 +57,23 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function favorites()
+{
+    return $this->hasMany(Favorite::class);
+}
+
+public function favoritedEspacios()
+{
+    return $this->belongsToMany(
+        Espacio::class,
+        'favorites'
+    );
+}
+
+public function hasFavorited(Espacio $espacio): bool
+{
+    return $this->favoritedEspacios()
+                ->where('espacio_id', $espacio->id)
+                ->exists();
+}
 }
