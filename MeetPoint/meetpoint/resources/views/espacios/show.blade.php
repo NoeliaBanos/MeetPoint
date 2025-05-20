@@ -3,114 +3,68 @@
 @section('title', 'Detalle')
 
 @section('content')
-
-    <div class="hero-size">
-        {{-- La imagen de fondo (desde BBDD, ruta en imagen_url) --}}
-        <img src="{{ asset($espacio->imagen_url) }}" alt="Foto de {{ $espacio->nombre }}">
-
-        {{-- Texto superpuesto --}}
+    <div class="hero-size position-relative">
+        <img src="{{ asset($espacio->imagen_url) }}"
+             alt="Foto de {{ $espacio->nombre }}">
         <div class="hero-text">
             <p><b>Aforo máximo:</b> {{ $espacio->capacidad }}</p>
             <h1 class="display-m">{{ $espacio->nombre }}</h1>
-            <p><b>Precio:</b> {{ number_format($espacio->precio_hora, 2) }} €/hora</p>
+            <p><b>Precio:</b> {{ number_format($espacio->precio_hora,2) }} €/hora</p>
         </div>
     </div>
 
-
     <p>{{ $espacio->descripcion }}</p>
-    @auth
-    @if (Auth::user()->hasFavorited($espacio))
-        <form method="POST"
-              action="{{ route('espacios.unfavorite', $espacio) }}"
-              class="inline-block">
-            @csrf @method('DELETE')
-            <button type="submit" title="Quitar favorito" class="me-2">
-                <img src="{{ asset('images/heart-filled.png') }}"
-                     alt="Favorito" style="width:24px;">
-            </button>
-        </form>
-    @else
-        <form method="POST"
-              action="{{ route('espacios.favorite', $espacio) }}"
-              class="inline-block">
-            @csrf
-            <button type="submit" title="Añadir favorito" class="me-2">
-                <img src="{{ asset('images/heart-outline.png') }}"
-                     alt="No favorito" style="width:24px;">
-            </button>
-            <button id="btn-fav"
-        data-fav-url="{{ route('espacios.favorite.ajax', $espacio) }}"
-        data-unfav-url="{{ route('espacios.unfavorite.ajax', $espacio) }}"
-        class="btn-fav">
-    <img id="icono-fav"
-         src="{{ Auth::user()->hasFavorited($espacio)
-            ? asset('images/heart-filled.png')
-            : asset('images/heart-outline.png') }}"
-         alt="Favorito" style="width:24px;">
-</button>
-        </form>
-    @endif
-@endauth
 
-    {{-- Botón para reservar una sala --}}
-   @auth
-    <a href="{{ route('reservas.create', $espacio) }}"
-       class="btn-custom">
-        Reservar sala
-    </a>
-@else
-    <a href="{{ route('login') }}" class="btn-custom">
-        Inicia sesión para reservar
-    </a>
-@endauth
+    @auth
+        <a href="{{ route('reservas.create', ['espacio' => $espacio]) }}"
+           class="btn-custom">
+            Reservar sala
+        </a>
+    @else
+        <a href="{{ route('login') }}" class="btn-custom">
+            Inicia sesión para reservar
+        </a>
+    @endauth
 
     <h2>Equipamiento</h2>
     <p>{{ $espacio->equipamiento }}</p>
+
     <hr>
     <h2>Reseñas</h2>
-    {{-- === Reseñas del espacio ============================================== --}}
-    @if ($espacio->resenas->isEmpty())
+    @if($espacio->resenas->isEmpty())
         <p>Aún no hay reseñas para este espacio.</p>
     @else
         <section>
-            @foreach ($espacio->resenas as $resena)
-                <article style="display:flex; gap:1rem; padding:1rem 0; border-bottom:1px solid #ccc;">
-                    {{-- Avatar del usuario (puedes sustituir src por tu propio campo/asset) --}}
+            @foreach($espacio->resenas as $resena)
+                <article class="flex gap-4 p-4 border-b">
                     <div class="img-avatar">
                         <img src="https://ui-avatars.com/api/?name={{ urlencode($resena->user->name) }}&size=64"
-                            alt="Avatar de {{ $resena->user->name }}" width="64" height="64"
-                            style="border-radius:50%; object-fit:cover;">
-
+                             alt="Avatar de {{ $resena->user->name }}"
+                             width="64" height="64"
+                             class="rounded-full object-cover">
                     </div>
-
-                    <div style="flex:1;">
-                        {{-- Nombre y fecha --}}
-                        <header style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="flex-1">
+                        <header class="flex justify-between items-center">
                             <strong>{{ $resena->user->name }}</strong>
                             <small>{{ $resena->created_at->format('d/m/Y') }}</small>
                         </header>
-
-                        {{-- Puntuación con estrellas --}}
-                        <div aria-label="Calificación: {{ $resena->calificacion }} de 5">
-                            @for ($i = 1; $i <= 5; $i++)
-                                @if ($i <= $resena->calificacion)
-                                    <span style="color:gold;">&#9733;</span>
+                        <div class="flex items-center mt-1 mb-2">
+                            @for($i=1; $i<=5; $i++)
+                                @if($i <= $resena->calificacion)
+                                    <img src="{{ asset('images/star-2.png') }}"
+                                         alt="★" style="width:20px;height:20px;">
                                 @else
-                                    <span style="color:#d3d3d3;">&#9733;</span>
+                                    <img src="{{ asset('images/star-0.png') }}"
+                                         alt="☆" style="width:20px;height:20px;">
                                 @endif
                             @endfor
                         </div>
-
-                        {{-- Comentario --}}
-                        <p style="margin:.5rem 0 0 0;">{{ $resena->comentario }}</p>
+                        <p>{{ $resena->comentario }}</p>
                     </div>
                 </article>
             @endforeach
         </section>
     @endif
-    <!-- Aquí puedes agregar el botón de reserva o detalles adicionales -->
-    {{-- FOOTER --}}
+
     @include('partials.footer')
-
-
 @endsection

@@ -114,6 +114,60 @@
         @endif
 
     </div>
+     {{-- Modales de feedback de verificación --}}
+    @if (session('status') === 'verification-link-sent' && ! auth()->user()->hasVerifiedEmail())
+        <!-- Modal: Enlace reenviado -->
+        <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-xl shadow">
+              <div class="modal-header">
+                <h5 class="modal-title" id="verificationModalLabel">Correo reenviado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                <p>Hemos enviado un nuevo enlace de verificación a tu correo electrónico.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-teal rounded-full" data-bs-dismiss="modal">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    @elseif(auth()->user()->hasVerifiedEmail())
+        <!-- Modal: Ya verificado -->
+        <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-xl shadow">
+              <div class="modal-header">
+                <h5 class="modal-title" id="verificationModalLabel">Cuenta verificada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                <p>Tu correo ya ha sido verificado previamente.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-teal rounded-full" data-bs-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    @endif
+
+    {{-- Script para abrir el modal si existe --}}
+    @push('scripts')
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        @if (
+            (session('status') === 'verification-link-sent' && ! auth()->user()->hasVerifiedEmail())
+            || auth()->user()->hasVerifiedEmail()
+        )
+          var modalEl = document.getElementById('verificationModal');
+          var modal = new bootstrap.Modal(modalEl);
+          modal.show();
+        @endif
+      });
+    </script>
+    @endpush
 
     @include('partials.footer')
 @endsection

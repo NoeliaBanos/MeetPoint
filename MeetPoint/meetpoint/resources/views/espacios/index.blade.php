@@ -8,8 +8,10 @@
         <img src="{{ asset('images/fondo.jpg') }}" alt="…">
         <div class="hero-text">
             <h1 class="display">MeetPoint</h1>
-            <p>Consulta en tiempo real la disponibilidad, capacidad, equipamiento y valoraciones de otros usuarios para
-                reservar el espacio perfecto de forma rápida y eficiente.</p>
+            <p>
+                Consulta en tiempo real la disponibilidad, capacidad, equipamiento y valoraciones de otros usuarios para
+                reservar el espacio perfecto de forma rápida y eficiente.
+            </p>
         </div>
     </div>
 
@@ -17,92 +19,146 @@
 
     <section class="container espacios-grid">
         @foreach ($espacios as $espacio)
-            <div class="espacios">
-                {{-- Imagen --}}
-                <div class="img-espacios">
-                    <img src="{{ asset($espacio->imagen_url) }}" alt="Foto de {{ $espacio->nombre }}">
-                </div>
+            @if(
+                (auth()->check() && auth()->user()->role === 'admin')
+                || $espacio->estado_espacio === 'disponible'
+            )
+                <div class="espacios">
+                    {{-- Imagen --}}
+                    <div class="img-espacios">
+                        <img src="{{ asset($espacio->imagen_url) }}"
+                             alt="Foto de {{ $espacio->nombre }}">
+                    </div>
 
-                {{-- Título y estado solo para admin --}}
-                <div class="flex items-baseline justify-between mt-4 mb-2">
-                    <h3 class="text-xl font-semibold">
-                        <a href="{{ route('espacios.show', $espacio->id) }}">
-                            {{ $espacio->nombre }}
-                        </a>
-                    </h3>
-
-                    @auth
-                        @if (auth()->user()->role === 'admin')
-                            @if ($espacio->estado_espacio === 'disponible')
-                                <span class="text-teal-400 font-medium">Disponible</span>
-                            @else
-                                <span class="text-gray-500 font-medium">Espera</span>
-                            @endif
-                        @endif
-                    @endauth
-                </div>
-
-                <hr class="mb-2">
-
-                <p>Precio: <b>{{ number_format($espacio->precio_hora, 2) }} €</b></p>
-                <p>Equipamiento: <b>{{ $espacio->equipamiento }}</b></p>
-
-                @if (method_exists($espacio, 'resenas'))
-                    @php $media = $espacio->resenas->avg('calificacion'); @endphp
-                    <p>Reseñas: <b>{{ $media ? number_format($media, 1) : 'Sin reseñas' }}</b></p>
-                @endif
-
-                <div class="mt-4 space-y-2">
-                    @auth
-                        @if (auth()->user()->role === 'admin')
-                            {{-- Admin: modificar y eliminar --}}
-                            <a href="{{ route('espacios.edit', $espacio->id) }}" class="btn-custom">
-                                MODIFICAR
+                    {{-- Título y acciones según rol --}}
+                    <div class="flex items-baseline justify-between mt-4 mb-2">
+                        <h3 class="text-xl font-semibold">
+                            <a href="{{ route('espacios.show', $espacio) }}">
+                                {{ $espacio->nombre }}
                             </a>
+                        </h3>
 
-                            <form action="{{ route('espacios.destroy', $espacio->id) }}" method="POST"
-                                onsubmit="return confirm('¿Eliminar este espacio?');">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn-custom-dark">
-                                    ELIMINAR
-                                </button>
-                            </form>
-
-                            @if ($espacio->estado_espacio === 'no_disponible')
-                                {{-- Botones de verificación --}}
-                                <form action="{{ route('espacios.apta', $espacio->id) }}" method="POST"
-                                    class="inline-block w-1/2 pr-1">
-                                    @csrf
-                                    <button type="submit" class="btn-custom"> APTA
-                                    </button>
-                                </form>
-                                <form action="{{ route('espacios.no_apta', $espacio->id) }}" method="POST"
-                                    class="inline-block w-1/2 pl-1">
-                                    @csrf
-                                    <button type="submit" class="btn-custom-dark"> NO APTA
-                                    </button>
-                                </form>
-                            @endif
-                        @else
-                            {{-- Usuario normal: si está disponible, + INFO --}}
-                            @if ($espacio->estado_espacio === 'disponible')
-                                <a href="{{ route('espacios.show', $espacio->id) }}"
-                                    class="w-full bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 rounded-full text-center">
-                                    + INFO
+                        @auth
+                            @if(auth()->user()->role === 'admin')
+                                <a href="{{ route('espacios.edit', $espacio) }}"
+                                   class="btn-custom">
+                                    MODIFICAR
                                 </a>
                             @endif
-                        @endif
-                    @else
-                        {{-- Invitados: ver solo si está disponible --}}
-                        @if ($espacio->estado_espacio === 'disponible')
-                            <a href="{{ route('espacios.show', $espacio->id) }}"
-                                class="w-full bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 rounded-full text-center">
-                                + INFO
-                            </a>
+                        @endauth
+                    </div>
+
+                    <hr class="mb-2">
+
+                    <p>Precio: <b>{{ number_format($espacio->precio_hora, 2) }} €/h</b></p>
+                    <p>Equipamiento: <b>{{ $espacio->equipamiento }}</b></p>
+
+                    {{-- Reseñas con estrellas --}}
+                    @if(method_exists($espacio, 'resenas'))
+                        @php
+                            $media = $espacio->resenas->avg('calificacion') ?: 0;
+                        @endphp
+                        <div class="flex items-center mt-2 mb-4">
+                            @for($i = 1; $i <= 5; $i++)
+                                @php
+                                    $diff = $media - $i + 1;
+                                    if($diff >= 1) {
+                                        $img = 'star-2.png'; // llena
+                                    } elseif($diff >= 0.5) {
+                                        $img = 'star-1.png'; // mitad
+                                    } else {
+                                        $img = 'star-0.png'; // vacía
+                                    }
+                                @endphp
+                                <img src="{{ asset('images/' . $img) }}"
+                                     alt=""
+                                     style="width:50px; height:50px;"
+                                     class="inline-block me-1">
+                            @endfor
+                            <span class="ml-2 text-sm text-gray-600">
+                                {{ $media ? number_format($media, 1) : 'Sin reseñas' }}
+                            </span>
+                        </div>
+                    @endif
+
+                    {{-- Favorito (solo autenticados) --}}
+                    @auth
+                        <form id="favorite-form-{{ $espacio->id }}"
+                              action="{{ auth()->user()->hasFavorited($espacio)
+                                          ? route('espacios.unfavorite.ajax', $espacio)
+                                          : route('espacios.favorite.ajax', $espacio) }}"
+                              method="POST" class="mb-4 text-center">
+                            @csrf
+                            @if(auth()->user()->hasFavorited($espacio))
+                                @method('DELETE')
+                            @endif
+                            <button type="button"
+                                    id="favorite-btn-{{ $espacio->id }}"
+                                    class="text-2xl">
+                                {!! auth()->user()->hasFavorited($espacio) ? '💙' : '🤍' !!}
+                            </button>
+                        </form>
+                        <script>
+                            document.getElementById('favorite-btn-{{ $espacio->id }}')
+                              .addEventListener('click', async function(){
+                                const form = document.getElementById('favorite-form-{{ $espacio->id }}');
+                                const res  = await fetch(form.action, {
+                                  method: form.querySelector('input[name="_method"]')?.value || form.method,
+                                  headers:{
+                                    'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
+                                    'Accept':'application/json'
+                                  }
+                                });
+                                if(res.ok) {
+                                  location.reload();
+                                }
+                              });
+                        </script>
+                    @endauth
+
+                    {{-- + INFO al final --}}
+                    @if($espacio->estado_espacio === 'disponible')
+                        <a href="{{ route('espacios.show', $espacio) }}"
+                           class="btn-custom w-full text-center rounded-full py-2 mb-4">
+                            + INFO
+                        </a>
+                    @endif
+
+                    @auth
+                        @if(auth()->user()->role === 'admin')
+                            {{-- Admin: eliminar / verificar --}}
+                            <div class="mt-3 space-x-2">
+                                <form action="{{ route('espacios.destroy', $espacio) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('¿Eliminar este espacio?');"
+                                      class="inline-block">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn-custom-dark">
+                                        ELIMINAR
+                                    </button>
+                                </form>
+
+                                @if($espacio->estado_espacio === 'no_disponible')
+                                    <form action="{{ route('espacios.apta', $espacio) }}"
+                                          method="POST" class="inline-block">
+                                        @csrf
+                                        <button type="submit" class="btn-custom">
+                                            APTA
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('espacios.no_apta', $espacio) }}"
+                                          method="POST" class="inline-block">
+                                        @csrf
+                                        <button type="submit" class="btn-custom-dark">
+                                            NO APTA
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
                         @endif
                     @endauth
                 </div>
-            </div>
+            @endif
         @endforeach
     </section>
 

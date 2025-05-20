@@ -30,7 +30,7 @@
                     <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown"
                         data-bs-toggle="dropdown" aria-expanded="false">
 
-                        @if (!auth()->user()->hasVerifiedEmail())
+                        @if (auth()->user()->hasVerifiedEmail())
                             <img src="{{ asset('images/check.png') }}" alt="Verificado" class="me-2 check">
                         @endif
                         {{ Auth::user()->name }}

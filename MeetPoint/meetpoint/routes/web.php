@@ -1,150 +1,140 @@
 <?php
-
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;                                // ← importar Request
-use Illuminate\Foundation\Auth\EmailVerificationRequest;     // ← importar EmailVerificationRequest
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\{
-    EspacioController,
-    ReservaController,
-    ResenaController,
-    MensajeContactoController,
-     FavoriteController, 
-    PaymentController
+     EspacioController,
+     ReservaController,
+     ResenaController,
+     MensajeContactoController,
+     ProfileController
 };
 
-/* ---------- Espacios, HOME, etc.  -------------------- */
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
-Route::post(
-    'espacios/{espacio}/favorite-ajax',
-    [FavoriteController::class, 'store']
-)->name('espacios.favorite.ajax')->middleware('auth');
+/* ---------- Espacios: listado y detalle (público) ---------- */
 
-Route::delete(
-    'espacios/{espacio}/favorite-ajax',
-    [FavoriteController::class, 'destroy']
-)->name('espacios.unfavorite.ajax')->middleware('auth');
-// Público: listado y detalle
 Route::get('/', [EspacioController::class, 'index'])
      ->name('espacios.index');
-Route::resource('espacios', EspacioController::class)
-     ->only(['index', 'show']);
+Route::get('espacios/{espacio}', [EspacioController::class, 'show'])
+     ->name('espacios.show');
 
-/* ---------- Crear / almacenar Espacios (solo ADMIN en controlador) ----- */
-
-// Mostrar el formulario de creación
-Route::get('espacios/create', [EspacioController::class, 'create'])
-     ->name('espacios.create');
-
-// Procesar el formulario
-Route::post('espacios', [EspacioController::class, 'store'])
-     ->name('espacios.store');
-
-/* ---------- Editar / actualizar / borrar / verificar Espacios --------- */
-
-// Estas rutas quedan dentro de auth para redirigir a login si no estás identificado.
-// Aún así, el controlador comprueba además el role===admin.
+/* ----- Crear / almacenar Espacios (solo ADMIN en controlador) ----- */
 Route::middleware('auth')->group(function () {
-    // Editar
-    Route::get('espacios/{espacio}/edit', [EspacioController::class, 'edit'])
-         ->name('espacios.edit');
-    Route::put('espacios/{espacio}',        [EspacioController::class, 'update'])
-         ->name('espacios.update');
+     Route::get('espacios/create', [EspacioController::class, 'create'])
+          ->name('espacios.create');
+     Route::post('espacios', [EspacioController::class, 'store'])
+          ->name('espacios.store');
 
-    // Borrar
-    Route::delete('espacios/{espacio}',     [EspacioController::class, 'destroy'])
-         ->name('espacios.destroy');
+     /* ----- Editar / actualizar / borrar / verificar Espacios ----- */
+     Route::get('espacios/{espacio}/edit', [EspacioController::class, 'edit'])
+          ->name('espacios.edit');
+     Route::put('espacios/{espacio}', [EspacioController::class, 'update'])
+          ->name('espacios.update');
+     Route::delete('espacios/{espacio}', [EspacioController::class, 'destroy'])
+          ->name('espacios.destroy');
 
-    // Marcar como APTA / NO APTA
-    Route::post('espacios/{espacio}/apta',   [EspacioController::class, 'markApta'])
-         ->name('espacios.apta');
-    Route::post('espacios/{espacio}/no-apta',[EspacioController::class, 'markNoApta'])
-         ->name('espacios.no_apta');
+     Route::post('espacios/{espacio}/apta', [EspacioController::class, 'markApta'])
+          ->name('espacios.apta');
+     Route::post('espacios/{espacio}/no-apta', [EspacioController::class, 'markNoApta'])
+          ->name('espacios.no_apta');
 });
 
-/* ---------- RESEÑAS ---------------------------------- */
+/* ---------- Reseñas ---------- */
+// público: ver listado y detalle
+Route::get('resenas', [ResenaController::class, 'index'])
+     ->name('resenas.index');
+Route::get('resenas/{resena}', [ResenaController::class, 'show'])
+     ->name('resenas.show');
 
-// Público: ver todas y detalle
-Route::resource('resenas', ResenaController::class)
-     ->only(['index', 'show']);
-
-// Protegido: crear / almacenar / editar / actualizar / borrar
+// autenticados: crear / almacenar / editar / actualizar / borrar
 Route::middleware('auth')->group(function () {
-    Route::resource('resenas', ResenaController::class)
-         ->only(['create', 'store', 'edit', 'update', 'destroy']);
+     Route::get('resenas/create', [ResenaController::class, 'create'])
+          ->name('resenas.create');
+     Route::post('resenas', [ResenaController::class, 'store'])
+          ->name('resenas.store');
+     Route::get('resenas/{resena}/edit', [ResenaController::class, 'edit'])
+          ->name('resenas.edit');
+     Route::put('resenas/{resena}', [ResenaController::class, 'update'])
+          ->name('resenas.update');
+     Route::delete('resenas/{resena}', [ResenaController::class, 'destroy'])
+          ->name('resenas.destroy');
 });
 
-/* ---------- RESERVAS --------------------------------- */
+/* ---------- Reservas ---------- */
+// público: ver listado y detalle
+Route::get('reservas', [ReservaController::class, 'index'])
+     ->name('reservas.index');
+Route::get('reservas/{reserva}', [ReservaController::class, 'show'])
+     ->name('reservas.show');
 
-// Público: ver todas y detalle
-Route::resource('reservas', ReservaController::class)
-     ->only(['index', 'show']);
-
-// Protegido: crear / almacenar / editar / actualizar / borrar
+// autenticados: crear / almacenar / editar / actualizar / borrar
 Route::middleware('auth')->group(function () {
-    Route::resource('reservas', ReservaController::class)
-         ->only(['create', 'store', 'edit', 'update', 'destroy']);
+     Route::get('reservas/create', [ReservaController::class, 'create'])
+          ->name('reservas.create');
+     Route::post('reservas', [ReservaController::class, 'store'])
+          ->name('reservas.store');
+     Route::get('reservas/{reserva}/edit', [ReservaController::class, 'edit'])
+          ->name('reservas.edit');
+     Route::put('reservas/{reserva}', [ReservaController::class, 'update'])
+          ->name('reservas.update');
+     Route::delete('reservas/{reserva}', [ReservaController::class, 'destroy'])
+          ->name('reservas.destroy');
 });
-// 
 
-// Página de aviso para usuarios no verificados
+/* ---------- Verificación de correo ---------- */
 Route::get('/email/verify', function () {
-    return view('auth.verify-email');
+     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-// Procesa el enlace de verificación
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect()->route('profile.show')->with('status', 'Correo verificado correctamente.');
+     $request->fulfill();
+     return redirect()->route('profile.show')
+          ->with('status', 'Correo verificado correctamente.');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-// Reenvía el email de verificación
 Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('status', 'Se ha reenviado el correo de verificación.');
+     $request->user()->sendEmailVerificationNotification();
+     return back()->with('status', 'Se ha reenviado el correo de verificación.');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-/* ---------- Perfil de usuario ----------------------- */
+/* ---------- Perfil de usuario ---------- */
 Route::middleware('auth')->group(function () {
-    // Dashboard / Mi perfil
-    Route::get('/dashboard', [ProfileController::class, 'show'])
-         ->name('dashboard');
-    Route::get('/profile',   [ProfileController::class, 'show'])
-         ->name('profile.show');
-    Route::get('/verify-email',   [ProfileController::class, 'show'])
-         ->name('profile.verify-email');
-
-    // Editar perfil
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])
-         ->name('profile.edit');
-    Route::put('/profile',      [ProfileController::class, 'update'])
-         ->name('profile.update');
-
-    // Cambiar contraseña
-    Route::get('/profile/password', [ProfileController::class, 'editPassword'])
-         ->name('password.edit');
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])
-         ->name('password.update');
+     Route::get('/dashboard', [ProfileController::class, 'show'])
+          ->name('dashboard');
+     Route::get('/profile', [ProfileController::class, 'show'])
+          ->name('profile.show');
+     Route::get('/profile/edit', [ProfileController::class, 'edit'])
+          ->name('profile.edit');
+     Route::put('/profile', [ProfileController::class, 'update'])
+          ->name('profile.update');
+     Route::get('/profile/password', [ProfileController::class, 'editPassword'])
+          ->name('password.edit');
+     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])
+          ->name('password.update');
+     Route::get('/profile/verify-email', [ProfileController::class, 'show'])
+          ->name('profile.verify-email');
 });
 
-/* ---------- Contacto y Mensajes --------------------- */
-
-// Público: FAQ + formulario de contacto
+/* ---------- Contacto y Mensajes ---------- */
 Route::get('/contacto', [MensajeContactoController::class, 'create'])
      ->name('contacto.create');
 Route::post('/contacto', [MensajeContactoController::class, 'store'])
      ->name('contacto.store');
 
-// Protegido (solo admin): eliminar mensaje
+// solo admin (autenticado) puede eliminar
 Route::middleware('auth')->delete(
-    '/contacto/{mensaje}',
-    [MensajeContactoController::class, 'destroy']
+     '/contacto/{mensaje}',
+     [MensajeContactoController::class, 'destroy']
 )->name('contacto.destroy');
 
-/* ---------- Legal ----------------------------------- */
+/* ---------- Legal ---------- */
+Route::view('/legal', 'legal')
+     ->name('legal');
 
-Route::view('/legal', 'legal')->name('legal');
-
-/* ---------- Auth ------------------------------------ */
-
+/* ---------- Auth ---------- */
 require __DIR__ . '/auth.php';
