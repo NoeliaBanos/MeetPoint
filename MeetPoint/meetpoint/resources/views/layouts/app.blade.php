@@ -10,6 +10,11 @@
   @vite([
   'resources/js/app.js'
 ])
+<script>
+    window.Laravel = {
+      csrfToken: '{{ csrf_token() }}'
+    };
+</script>
 </head>
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">

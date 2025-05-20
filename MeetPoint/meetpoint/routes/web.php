@@ -9,11 +9,21 @@ use App\Http\Controllers\{
     ReservaController,
     ResenaController,
     MensajeContactoController,
+     FavoriteController, 
     PaymentController
 };
 
 /* ---------- Espacios, HOME, etc.  -------------------- */
 
+Route::post(
+    'espacios/{espacio}/favorite-ajax',
+    [FavoriteController::class, 'store']
+)->name('espacios.favorite.ajax')->middleware('auth');
+
+Route::delete(
+    'espacios/{espacio}/favorite-ajax',
+    [FavoriteController::class, 'destroy']
+)->name('espacios.unfavorite.ajax')->middleware('auth');
 // Público: listado y detalle
 Route::get('/', [EspacioController::class, 'index'])
      ->name('espacios.index');

@@ -38,6 +38,16 @@
                 <img src="{{ asset('images/heart-outline.png') }}"
                      alt="No favorito" style="width:24px;">
             </button>
+            <button id="btn-fav"
+        data-fav-url="{{ route('espacios.favorite.ajax', $espacio) }}"
+        data-unfav-url="{{ route('espacios.unfavorite.ajax', $espacio) }}"
+        class="btn-fav">
+    <img id="icono-fav"
+         src="{{ Auth::user()->hasFavorited($espacio)
+            ? asset('images/heart-filled.png')
+            : asset('images/heart-outline.png') }}"
+         alt="Favorito" style="width:24px;">
+</button>
         </form>
     @endif
 @endauth
