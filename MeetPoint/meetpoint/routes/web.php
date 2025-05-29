@@ -21,47 +21,30 @@ use App\Http\Controllers\{
 /* ---------- Espacios: listado y detalle (público) ---------- */
 
 /* Portada ─ / */
+// Público ---------------------------------------------------------------
+Route::get('/', [HomeController::class, 'index'])->name('index');
 
-Route::get('/', [HomeController::class, 'index'])
-     ->name('index');
+Route::get('espacios', [EspacioController::class, 'index'])->name('espacios.index');
 
-/* Listado de espacios ─ /espacios */
-Route::get('/espacios', [EspacioController::class, 'index'])
-     ->name('espacios.index');
+// primero create (auth) para que no colisione con {espacio}
+Route::middleware('auth')->get('espacios/create', [EspacioController::class, 'create'])
+      ->name('espacios.create');
 
-Route::get('espacios/{espacio}', [EspacioController::class, 'show'])->name('espacios.show');
+Route::get('espacios/{espacio}', [EspacioController::class, 'show'])
+      ->name('espacios.show')
+      ->whereNumber('espacio');          // evita choque con "create"
 
+// CRUD privado ----------------------------------------------------------
 Route::middleware('auth')->group(function () {
-     Route::get('espacios/create', [EspacioController::class, 'create'])->name('espacios.create');
-     Route::post('espacios', [EspacioController::class, 'store'])->name('espacios.store');
-     Route::get('espacios/{espacio}/edit', [EspacioController::class, 'edit'])->name('espacios.edit');
-     Route::put('espacios/{espacio}', [EspacioController::class, 'update'])->name('espacios.update');
-     Route::delete('espacios/{espacio}', [EspacioController::class, 'destroy'])->name('espacios.destroy');
-     Route::post('espacios/{espacio}/apta', [EspacioController::class, 'markApta'])->name('espacios.apta');
-     Route::post('espacios/{espacio}/no-apta', [EspacioController::class, 'markNoApta'])->name('espacios.no_apta');
+    Route::post('espacios', [EspacioController::class, 'store'])->name('espacios.store');
+    Route::get('espacios/{espacio}/edit', [EspacioController::class, 'edit'])->name('espacios.edit');
+    Route::put('espacios/{espacio}', [EspacioController::class, 'update'])->name('espacios.update');
+    Route::delete('espacios/{espacio}', [EspacioController::class, 'destroy'])->name('espacios.destroy');
+
+    Route::post('espacios/{espacio}/apta',     [EspacioController::class, 'markApta'])->name('espacios.apta');
+    Route::post('espacios/{espacio}/no-apta',  [EspacioController::class, 'markNoApta'])->name('espacios.no_apta');
 });
 
-
-/* ----- Crear / almacenar Espacios (solo ADMIN en controlador) ----- */
-Route::middleware('auth')->group(function () {
-     Route::get('espacios/create', [EspacioController::class, 'create'])
-          ->name('espacios.create');
-     Route::post('espacios', [EspacioController::class, 'store'])
-          ->name('espacios.store');
-
-     /* ----- Editar / actualizar / borrar / verificar Espacios ----- */
-     Route::get('espacios/{espacio}/edit', [EspacioController::class, 'edit'])
-          ->name('espacios.edit');
-     Route::put('espacios/{espacio}', [EspacioController::class, 'update'])
-          ->name('espacios.update');
-     Route::delete('espacios/{espacio}', [EspacioController::class, 'destroy'])
-          ->name('espacios.destroy');
-
-     Route::post('espacios/{espacio}/apta', [EspacioController::class, 'markApta'])
-          ->name('espacios.apta');
-     Route::post('espacios/{espacio}/no-apta', [EspacioController::class, 'markNoApta'])
-          ->name('espacios.no_apta');
-});
 
 /* ---------- Reseñas ---------- */
 // público: ver listado y detalle

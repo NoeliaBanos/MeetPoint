@@ -7,48 +7,79 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Hash;   
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    /* ─────────── Ver perfil ─────────── */
+    public function show(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        return view('profile.show', ['user' => $request->user()]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
+    /* ─────────── Formulario de edición ─────────── */
+    public function edit(Request $request): View
+    {
+        return view('profile.edit', ['user' => $request->user()]);
+    }
+
+    /* ─────────── Actualizar datos básicos ─────────── */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        // Obtener el usuario autenticado
-        $user = $request->user();
+        $user      = $request->user();
+        $validated = $request->validated();   // name, apellidos, email, avatar
 
-        // Rellenar con los datos validados
-        $user->fill($request->validated());
+        /* Avatar */
+        if ($request->hasFile('avatar')) {
+            // Borrar la foto previa
+            if ($user->imagen_url && Storage::disk('userpics')->exists($user->imagen_url)) {
+                Storage::disk('userpics')->delete($user->imagen_url);
+            }
 
-        // Si cambia el email, "desverificarlo"
+            // Guardar la nueva
+            $filename = time().'.'.$request->file('avatar')->extension();
+            Storage::disk('userpics')->putFileAs('', $request->file('avatar'), $filename);
+
+            $validated['imagen_url'] = $filename; // solo el nombre
+        }
+
+        /* Resto de campos */
+        $user->fill($validated);
+
+        // Si cambió el correo, anular verificación
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
-        // Guardar cambios
         $user->save();
 
-        // Redirigir a la página de perfil con mensaje de éxito
         return Redirect::route('profile.show')
             ->with('status', 'Perfil actualizado con éxito.');
     }
 
-    /**
-     * Delete the user's account.
-     */
+    /* ─────────── Formulario: cambiar contraseña ─────────── */
+    public function editPassword(): View
+    {
+        return view('profile.partials.edit-password');
+    }
+
+    /* ─────────── Actualizar contraseña ─────────── */
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password'         => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        // Cast 'hashed' en el modelo User gestiona el hash
+        $request->user()->update(['password' => $request->password]);
+
+        return Redirect::route('profile.show')
+            ->with('status', 'Contraseña actualizada con éxito.');
+    }
+
+    /* ─────────── Eliminar cuenta ─────────── */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
@@ -58,37 +89,11 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
-
         $user->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
-    }
-  public function show(Request $request): View
-{
-    return view('profile.show', [
-        'user' => $request->user(),
-    ]);
-}
-
-    /**
-     * Actualizar la contraseña
-     */
-    public function updatePassword(Request $request)
-    {
-        $data = $request->validate([
-            'current_password'      => ['required', 'current_password'],
-            'password'              => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-
-        $user = $request->user();
-        $user->password = Hash::make($data['password']);
-        $user->save();
-
-        return redirect()
-            ->route('profile.show')
-            ->with('status', 'Contraseña actualizada con éxito.');
     }
 }

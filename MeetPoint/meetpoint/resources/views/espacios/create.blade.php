@@ -3,127 +3,82 @@
 @section('title', 'Crear Espacio')
 
 @section('content')
-<div class="max-w-md mx-auto py-8 px-4">
-    <h2 class="text-3xl font-semibold text-center text-teal-400 mb-6">Espacio</h2>
-    <form action="{{ route('espacios.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-<form action="{{ route('espacios.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">  {{-- ancho algo mayor para la doble columna --}}
 
-    {{-- → tus campos de nombre, precio, etc. --}}
-+   {{-- forzamos el estado pendiente --}}
-+   <input type="hidden" name="estado_espacio" value="no_disponible">
+            <h2 class="mb-4 text-center">Nuevo espacio</h2>
 
-    {{-- Botón Confirmar --}}
-    <button type="submit" class="w-full bg-teal-400 hover:bg-teal-500 text-white font-bold py-3 rounded-full">
-        CONFIRMAR
-    </button>
-</form>
-        {{-- Nombre --}}
-        <div class="bg-white rounded-xl shadow p-4 mb-4">
-            <label for="nombre" class="block text-gray-700 mb-2">Nombre espacio</label>
-            <input
-                type="text"
-                name="nombre"
-                id="nombre"
-                value="{{ old('nombre') }}"
-                required
-                class="w-full p-3 rounded-xl shadow-inner focus:outline-none"
-                placeholder="Nombre espacio"
-            >
-            @error('nombre')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <form action="{{ route('espacios.store') }}" method="POST"
+                  enctype="multipart/form-data"
+                  class="needs-validation" novalidate>
+                @csrf
+                <input type="hidden" name="estado_espacio" value="no_disponible">
+
+                {{-- Fila que se parte en 2 columnas en ≥ lg --}}
+                <div class="row g-4">
+
+                    {{-- Columna IZQUIERDA (lg: 6 de 12) --}}
+                    <div class="col-12 col-lg-6">
+
+                        {{-- Nombre --}}
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="nombre"
+                                   name="nombre" placeholder="Nombre del espacio"
+                                   value="{{ old('nombre') }}" required>
+                            <label for="nombre">Nombre del espacio</label>
+                            <div class="invalid-feedback">Indica un nombre.</div>
+                        </div>
+
+                        {{-- Precio por hora --}}
+                        <div class="form-floating mb-3">
+                            <input type="number" step="0.01" class="form-control"
+                                   id="precio_hora" name="precio_hora"
+                                   placeholder="0.00"
+                                   value="{{ old('precio_hora') }}" required>
+                            <label for="precio_hora">Precio por hora (€)</label>
+                            <div class="invalid-feedback">Indica el precio por hora.</div>
+                        </div>
+
+                        {{-- Equipamiento --}}
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="equipamiento"
+                                   name="equipamiento"
+                                   placeholder="Proyector, WiFi, Pizarra"
+                                   value="{{ old('equipamiento') }}">
+                            <label for="equipamiento">Equipamiento (separado por comas)</label>
+                        </div>
+                    </div>
+
+                    {{-- Columna DERECHA (lg: 6 de 12) --}}
+                    <div class="col-12 col-lg-6">
+
+                        {{-- Descripción --}}
+                        <div class="form-floating mb-4">
+                            <textarea class="form-control" id="descripcion"
+                                      name="descripcion" style="height: 140px"
+                                      placeholder="Descripción" required>{{ old('descripcion') }}</textarea>
+                            <label for="descripcion">Descripción</label>
+                            <div class="invalid-feedback">Añade una descripción.</div>
+                        </div>
+
+                        {{-- Imagen --}}
+                        <div class="mb-4">
+                            <label for="imagen" class="form-label">Imagen principal</label>
+                            <input class="form-control" type="file" id="imagen"
+                                   name="imagen" accept="image/*">
+                        </div>
+                    </div>
+
+                </div> {{-- /.row --}}
+
+                {{-- Botón confirmar ocupa toda la fila --}}
+                <button type="submit" class="btn-custom w-100 mt-2">CONFIRMAR</button>
+            </form>
+
         </div>
-
-        {{-- Precio por hora --}}
-        <div class="bg-white rounded-xl shadow p-4 mb-4">
-            <label for="precio_hora" class="block text-gray-700 mb-2">Precio por hora</label>
-            <input
-                type="number"
-                name="precio_hora"
-                id="precio_hora"
-                value="{{ old('precio_hora') }}"
-                step="0.01"
-                required
-                class="w-full p-3 rounded-xl shadow-inner focus:outline-none"
-                placeholder="Precio por hora"
-            >
-            @error('precio_hora')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        {{-- Equipamiento --}}
-        <div class="bg-white rounded-xl shadow p-4 mb-4">
-            <label for="equipamiento" class="block text-gray-700 mb-2">Equipamiento (separar por comas)</label>
-            <input
-                type="text"
-                name="equipamiento"
-                id="equipamiento"
-                value="{{ old('equipamiento') }}"
-                class="w-full p-3 rounded-xl shadow-inner focus:outline-none"
-                placeholder="Proyector, WiFi, Pizarra..."
-            >
-            @error('equipamiento')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        {{-- Descripción --}}
-        <div class="bg-white rounded-xl shadow p-4 mb-4">
-            <label for="descripcion" class="block text-gray-700 mb-2">Descripción</label>
-            <textarea
-                name="descripcion"
-                id="descripcion"
-                rows="4"
-                class="w-full p-3 rounded-xl shadow-inner focus:outline-none"
-                placeholder="Descripción del espacio"
-            >{{ old('descripcion') }}</textarea>
-            @error('descripcion')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        {{-- Imagen principal --}}
-        <div class="bg-white rounded-xl shadow p-4 mb-6">
-            <label for="imagen" class="block text-gray-700 mb-2">Imagen principal</label>
-            <input
-                type="file"
-                name="imagen"
-                id="imagen"
-                accept="image/*"
-                class="w-full p-2 rounded-xl shadow-inner focus:outline-none"
-            >
-            @error('imagen')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
-
-        {{-- Botón Confirmar --}}
-        <button
-            type="submit"
-            class="w-full bg-teal-400 hover:bg-teal-500 text-white font-bold py-3 rounded-full"
-        >
-            CONFIRMAR
-        </button>
-            {{-- ... después de Modificar datos --}}
-    <a href="{{ route('espacios.create') }}"
-       class="w-full bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded-full inline-block text-center mt-4">
-        Añadir nuevo espacio
-    </a>
-
-    </form>
-</div>
-{{-- Mostrar alerta de pendiente --}}
-@if(session('pending'))
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            alert("{{ session('pending') }}");
-        });
-    </script>
-@endif
-
+    </div>
+</main>
 
 @include('partials.footer')
 @endsection

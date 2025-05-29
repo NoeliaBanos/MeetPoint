@@ -1,35 +1,67 @@
 <main class="max-w-3xl mx-auto py-8 px-4">
 
     {{-- CONTACTO --------------------------------------------------------------- --}}
-    <h2 id="contacto" class="text-2xl font-semibold mb-4">Contacto</h2>
-    <form action="{{ route('contacto.store') }}" method="POST" class="space-y-4">
-        @csrf
-        <div>
-            <label for="asunto" class="block text-gray-700 mb-1">Asunto</label>
-            <input type="text" name="asunto" id="asunto" required
-                   class="w-full p-3 rounded-xl shadow-inner focus:outline-none">
-        </div>
-        <div>
-            <label for="email" class="block text-gray-700 mb-1">Email</label>
-            <input type="email" name="email" id="email" required
-                   class="w-full p-3 rounded-xl shadow-inner focus:outline-none">
-        </div>
-        <div>
-            <label for="telefono" class="block text-gray-700 mb-1">Teléfono (Opcional)</label>
-            <input type="text" name="telefono" id="telefono"
-                   class="w-full p-3 rounded-xl shadow-inner focus:outline-none">
-        </div>
-        <div>
-            <label for="mensaje" class="block text-gray-700 mb-1">Mensaje</label>
-            <textarea name="mensaje" id="mensaje" rows="4" required
-                      class="w-full p-3 rounded-xl shadow-inner focus:outline-none"></textarea>
+   {{-- Sección contacto 50/50 ---------------------------------------------------- --}}
+<section class="container-fluid py-5">
+    <div class="row g-0">
+
+        {{-- Columna 1: Formulario --}}
+        <div class="col-12 col-lg-6 p-4 d-flex align-items-center justify-content-center">
+            <form action="{{ route('contacto.store') }}" method="POST"
+                  class="needs-validation w-100" novalidate>
+                @csrf
+
+                <h2 class="mb-4">Contacto</h2>
+
+                {{-- Asunto --}}
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="asunto" name="asunto"
+                           placeholder="Asunto" required>
+                    <label for="asunto">Asunto</label>
+                    <div class="invalid-feedback">Indica un asunto.</div>
+                </div>
+
+                {{-- Email --}}
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="email" name="email"
+                           placeholder="nombre@ejemplo.com" required>
+                    <label for="email">Email</label>
+                    <div class="invalid-feedback">Introduce un correo válido.</div>
+                </div>
+
+                {{-- Teléfono (opcional) --}}
+                <div class="form-floating mb-3">
+                    <input type="tel" class="form-control" id="telefono" name="telefono"
+                           placeholder="612345678" pattern="[0-9]{9}">
+                    <label for="telefono">Teléfono (Opcional)</label>
+                    <div class="invalid-feedback">Debe tener 9 dígitos.</div>
+                </div>
+
+                {{-- Mensaje --}}
+                <div class="form-floating mb-4">
+                    <textarea class="form-control" id="mensaje" name="mensaje"
+                              placeholder="Escribe tu mensaje" style="height: 120px"
+                              required></textarea>
+                    <label for="mensaje">Mensaje</label>
+                    <div class="invalid-feedback">El mensaje no puede quedar vacío.</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Enviar</button>
+            </form>
         </div>
 
-        <button type="submit"
-                class="btn-custom">
-            Enviar
-        </button>
-    </form>
+        {{-- Columna 2: Imagen --}}
+        <div class="col-12 col-lg-6">
+            {{-- Sustituye src por la ruta de tu imagen --}}
+            <img src="{{ asset('images/fondo.jpg') }}"
+                 alt="Imagen decorativa de contacto"
+                 class="object-fit-cover">
+        </div>
+
+    </div>
+</section>
+
+
 </main>
 
 @include('partials.footer')

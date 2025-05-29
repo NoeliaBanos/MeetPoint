@@ -5,7 +5,7 @@
 @section('content')
     
 
-    <h2>Espacios en Utrera</h2>
+    <h2 class="text-center p-4">Espacios en Utrera</h2>
 
     <section class="container espacios-grid">
         @foreach ($espacios as $espacio)
@@ -15,7 +15,7 @@
             )
                 <div class="espacios">
                     {{-- Imagen --}}
-                    <div class="img-espacios">
+                    <div class="img-espacios w-100 object-cover">
                         <img src="{{ asset($espacio->imagen_url) }}"
                              alt="Foto de {{ $espacio->nombre }}">
                     </div>
@@ -65,9 +65,7 @@
                                      style="width:50px; height:50px;"
                                      class="inline-block me-1">
                             @endfor
-                            <span class="ml-2 text-sm text-gray-600">
-                                {{ $media ? number_format($media, 1) : 'Sin reseñas' }}
-                            </span>
+                           
                         </div>
                     @endif
 

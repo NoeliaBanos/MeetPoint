@@ -5,27 +5,37 @@
 @use 'components'as *;
 
 @import 'custom';
-
-//  Estilos extras
+/* Estructura 100 % alto con footer al pie */
+html,
 body {
-    font-family: 'Montserrat', sans-serif !important;
+  height: 100%;
 }
 
+body {
+  font-family: 'Montserrat', sans-serif !important;
+  display: flex;
+  flex-direction: column;
+}
+
+main   { flex: 1 0 auto; }
+footer { flex-shrink: 0; }
+
+/* Encabezados con la serif personalizada */
 h1,
 h2,
 h3 {
-    font-family: 'DMSerifDisplay', serif !important;
+  font-family: 'DMSerifDisplay', serif !important;
 }
 
-
-
+/* Enlaces genéricos */
 a {
-    color: black;
-    text-decoration: none;
+  color: black;
+  text-decoration: none;
 }
 
+/* Icono check reutilizable */
 .check {
-    width: 15px;
-    height: auto;
-    color: v.$primary;
+  width: 15px;
+  height: auto;
+  color: v.$primary;
 }

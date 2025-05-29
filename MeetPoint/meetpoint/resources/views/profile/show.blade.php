@@ -46,19 +46,40 @@
             <div class="bg-white shadow rounded p-4 m-4 space-y-6">
                 {{-- Datos personales --}}
                 <section>
-                    <div style="width: 70px;">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&size=64"
-                            alt="Avatar de {{ $user->name }}" width="64" height="64"
-                            style="border-radius:50%; object-fit:cover;">
-                    </div>
+                    
+
+                    @php
+    // Si hay foto subida, úsala; si no, genera avatar con iniciales
+    $avatarSrc = $user->imagen_url
+        ? asset('img_subidas/users/'.$user->imagen_url)
+        : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&size=64';
+@endphp
+
+<div style="width: 70px;">
+    <img src="{{ $avatarSrc }}"
+         alt="Avatar de {{ $user->name }}"
+         width="64" height="64"
+         style="border-radius:50%; object-fit:cover;">
+</div>
+
                     <h1 class="text-2xl font-semibold">
                         {{ $user->name }} {{ $user->apellido }}
                     </h1>
                     <p class="text-gray-600">{{ $user->email }}</p>
                     <a href="{{ route('profile.edit') }}"
-                        class="w-full bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded-full inline-block text-center mt-4">
+                        class="btn-custom w-50">
                         Modificar datos
                     </a>
+                    {{-- Botón: Crear sala (solo usuarios autenticados) --}}
+@auth
+    <div class="text-end mb-4">
+        <a href="{{ route('espacios.create') }}" class="btn-custom-sec w-50 mt-2">
+            <i class="bi bi-plus-circle me-1"></i>  {{-- icono opcional Bootstrap Icons --}}
+            Crear sala
+        </a>
+    </div>
+@endauth
+
                 </section>
 
                 {{-- Salas reservadas --}}

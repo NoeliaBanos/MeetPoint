@@ -16,7 +16,8 @@
     };
 </script>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased d-flex flex-column min-vh-100">
+ 
     <div class="min-h-screen bg-gray-100">
 
       

@@ -9,7 +9,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: fit-content;
 
     &-grid {
         display: grid;
@@ -18,15 +17,15 @@
 
         @include m.tablet {
             grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
 
         }
 
         @include m.desktop {
             grid-template-columns: repeat(3, 1fr);
-
+            gap: 3rem;
         }
 
 
     }
 }
-

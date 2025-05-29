@@ -60,8 +60,9 @@ class EspacioController extends ControllersController
         Espacio::create($data);
 
         return redirect()
-            ->route('profile.show')
+            ->route('index')
             ->with('pending', 'Su sala está siendo aprobada por nuestro equipo');
+        
     }
 
     /**

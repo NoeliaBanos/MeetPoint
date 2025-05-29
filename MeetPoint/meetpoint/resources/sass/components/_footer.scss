@@ -1,20 +1,24 @@
 @use '../abstracts/variables'as v;
 @use '../base/mixins'as m;
 
+
 .footer {
-    color: v.$white;
-    background-color: v.$body-color;
-    display: flex;
-    justify-content: center;
-    flex-direction: column; // POR DEFECTO (pantallas pequeñas): columna vertical
-    flex-wrap: wrap;
+  margin-top: auto;        // 4) empuja al final solo cuando hay hueco
 
-    a {
-        color: v.$white;
-    }
+  color: v.$white;
+  background-color: v.$body-color;
 
-    @include m.tablet {
-        flex-direction: row;
-    }
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;  // móvil: apilado
+  flex-wrap: wrap;
 
+  a { color: v.$white; }
+
+  /* ≥ tablet: orientación horizontal */
+  @include m.tablet {
+    flex-direction: row;
+  }
 }

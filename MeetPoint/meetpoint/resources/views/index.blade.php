@@ -45,7 +45,6 @@
             </div>
         </div>
     </section>
-    
 
     {{-- FAQ + Contacto --}}
 <section class="container my-5">
@@ -130,9 +129,5 @@
 
     </div>
 </section>
-
-
-   
-
     @include('partials.footer')
 @endsection
