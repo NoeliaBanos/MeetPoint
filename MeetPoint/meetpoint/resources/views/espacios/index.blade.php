@@ -3,17 +3,7 @@
 @section('title', 'MeetPoint')
 
 @section('content')
-    {{-- Hero --}}
-    <div class="hero-size">
-        <img src="{{ asset('images/fondo.jpg') }}" alt="…">
-        <div class="hero-text">
-            <h1 class="display">MeetPoint</h1>
-            <p>
-                Consulta en tiempo real la disponibilidad, capacidad, equipamiento y valoraciones de otros usuarios para
-                reservar el espacio perfecto de forma rápida y eficiente.
-            </p>
-        </div>
-    </div>
+    
 
     <h2>Espacios en Utrera</h2>
 

@@ -17,5 +17,11 @@ $primary: #28A6BF !default;
 $secondary: #C0C0C0 !default;
 $body-color: #142028 !default;
 $white: white;
+//  Cambios en acordeon
+$accordion-button-bg:            $primary !default;                 // fondo del botón
+$accordion-button-color:         $white   !default;                 // texto
+$accordion-icon-color:           $white   !default;                 // ícono flecha
+$accordion-icon-active-color:    $white   !default;
 
-
+$accordion-button-active-bg:     darken($primary, 6%) !default;     // fondo al abrir
+$accordion-button-focus-box-shadow: 0 0 0 .25rem rgba($primary,.25) !default;

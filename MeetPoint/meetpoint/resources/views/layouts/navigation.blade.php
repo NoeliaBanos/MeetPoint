@@ -2,7 +2,7 @@
     <div class="container">
 
         {{-- Logo --}}
-        <a class="navbar-brand me-4" href="{{ route('espacios.index') }}">
+        <a class="navbar-brand me-4" href="{{ route('index') }}">
             <div style="width: 70px">
                 <img src="{{ asset('logo.png') }}" alt="">
             </div>
@@ -10,6 +10,9 @@
 
         {{-- Nav links (nunca hacen wrap) --}}
         <ul class="navbar-nav flex-row flex-nowrap me-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('espacios.index') }}">Espacios</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('resenas.index') }}">Reseñas</a>
             </li>
