@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="max-w-3xl mx-auto py-8 px-4 container">
+        
         @if ($user->role === 'admin')
             {{-- Panel Administrador --}}
             <h2 class="mt-4 text-center">Panel administrador</h2>

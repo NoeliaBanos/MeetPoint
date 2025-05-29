@@ -9,7 +9,7 @@
         <div class="hero-text">
             <p><b>Aforo máximo:</b> {{ $espacio->capacidad }}</p>
             <h1 class="display-m">{{ $espacio->nombre }}</h1>
-            <p><b>Precio:</b> {{ number_format($espacio->precio_hora,2) }} €/hora</p>
+            <p><b>Precio:</b> {{ number_format($espacio->precio_hora, 2) }} €/hora</p>
         </div>
     </div>
 
@@ -31,6 +31,7 @@
 
     <hr>
     <h2>Reseñas</h2>
+
     @if($espacio->resenas->isEmpty())
         <p>Aún no hay reseñas para este espacio.</p>
     @else
@@ -49,13 +50,15 @@
                             <small>{{ $resena->created_at->format('d/m/Y') }}</small>
                         </header>
                         <div class="flex items-center mt-1 mb-2">
-                            @for($i=1; $i<=5; $i++)
+                            @for($i = 1; $i <= 5; $i++)
                                 @if($i <= $resena->calificacion)
                                     <img src="{{ asset('images/star-2.png') }}"
-                                         alt="★" style="width:20px;height:20px;">
+                                         alt="★"
+                                         style="width:50px; height:50px;">
                                 @else
                                     <img src="{{ asset('images/star-0.png') }}"
-                                         alt="☆" style="width:20px;height:20px;">
+                                         alt="☆"
+                                         style="width:50px; height:50px;">
                                 @endif
                             @endfor
                         </div>

@@ -7,7 +7,18 @@
     <h2 class="text-3xl font-semibold text-center text-teal-400 mb-6">Espacio</h2>
     <form action="{{ route('espacios.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+<form action="{{ route('espacios.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
 
+    {{-- → tus campos de nombre, precio, etc. --}}
++   {{-- forzamos el estado pendiente --}}
++   <input type="hidden" name="estado_espacio" value="no_disponible">
+
+    {{-- Botón Confirmar --}}
+    <button type="submit" class="w-full bg-teal-400 hover:bg-teal-500 text-white font-bold py-3 rounded-full">
+        CONFIRMAR
+    </button>
+</form>
         {{-- Nombre --}}
         <div class="bg-white rounded-xl shadow p-4 mb-4">
             <label for="nombre" class="block text-gray-700 mb-2">Nombre espacio</label>
@@ -96,8 +107,23 @@
         >
             CONFIRMAR
         </button>
+            {{-- ... después de Modificar datos --}}
+    <a href="{{ route('espacios.create') }}"
+       class="w-full bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded-full inline-block text-center mt-4">
+        Añadir nuevo espacio
+    </a>
+
     </form>
 </div>
+{{-- Mostrar alerta de pendiente --}}
+@if(session('pending'))
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            alert("{{ session('pending') }}");
+        });
+    </script>
+@endif
+
 
 @include('partials.footer')
 @endsection

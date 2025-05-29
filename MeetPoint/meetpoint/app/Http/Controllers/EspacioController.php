@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller as ControllersController;
 use App\Models\Espacio;
+use Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class EspacioController extends Controller
+class EspacioController extends ControllersController
 {
     /**
      * Listado público de espacios.
@@ -27,26 +29,19 @@ class EspacioController extends Controller
     }
 
     /**
-     * Formulario de creación – solo ADMIN.
+     * Formulario de creación – usuarios autenticados (protegido en rutas).
      */
     public function create()
     {
-        if (! Auth::check() || Auth::user()->role !== 'admin') {
-            abort(403, 'Acceso denegado');
-        }
-
         return view('espacios.create');
     }
 
     /**
-     * Almacenar nuevo espacio – solo ADMIN.
+     * Almacenar nuevo espacio – usuarios autenticados.
+     * Arranca siempre como no_disponible (pendiente de aprobación).
      */
     public function store(Request $request)
     {
-        if (! Auth::check() || Auth::user()->role !== 'admin') {
-            abort(403, 'Acceso denegado');
-        }
-
         $data = $request->validate([
             'nombre'       => 'required|string|max:255',
             'precio_hora'  => 'required|numeric',
@@ -60,22 +55,21 @@ class EspacioController extends Controller
             $data['imagen_url'] = 'storage/' . $path;
         }
 
-        // Opcional: por defecto no disponible
-        $data['estado_espacio'] = $data['estado_espacio'] ?? 'no_disponible';
+        $data['estado_espacio'] = 'no_disponible';
 
         Espacio::create($data);
 
         return redirect()
-            ->route('espacios.index')
-            ->with('status', 'Espacio creado correctamente.');
+            ->route('profile.show')
+            ->with('pending', 'Su sala está siendo aprobada por nuestro equipo');
     }
 
     /**
-     * Formulario de edición – solo ADMIN.
+     * Formulario de edición – solo ADMIN (comprobado en rutas o aquí).
      */
     public function edit(Espacio $espacio)
     {
-        if (! Auth::check() || Auth::user()->role !== 'admin') {
+        if (Auth::user()->role !== 'admin') {
             abort(403, 'Acceso denegado');
         }
 
@@ -87,7 +81,7 @@ class EspacioController extends Controller
      */
     public function update(Request $request, Espacio $espacio)
     {
-        if (! Auth::check() || Auth::user()->role !== 'admin') {
+        if (Auth::user()->role !== 'admin') {
             abort(403, 'Acceso denegado');
         }
 
@@ -100,7 +94,6 @@ class EspacioController extends Controller
         ]);
 
         if ($request->hasFile('imagen')) {
-            // borra la vieja si existe
             if ($espacio->imagen_url) {
                 Storage::disk('public')
                     ->delete(str_replace('storage/', '', $espacio->imagen_url));
@@ -119,7 +112,7 @@ class EspacioController extends Controller
      */
     public function destroy(Espacio $espacio)
     {
-        if (! Auth::check() || Auth::user()->role !== 'admin') {
+        if (Auth::user()->role !== 'admin') {
             abort(403, 'Acceso denegado');
         }
 
@@ -127,6 +120,7 @@ class EspacioController extends Controller
             Storage::disk('public')
                 ->delete(str_replace('storage/', '', $espacio->imagen_url));
         }
+
         $espacio->delete();
 
         return redirect()
@@ -139,7 +133,7 @@ class EspacioController extends Controller
      */
     public function markApta(Espacio $espacio)
     {
-        if (! Auth::check() || Auth::user()->role !== 'admin') {
+        if (Auth::user()->role !== 'admin') {
             abort(403, 'Acceso denegado');
         }
 
@@ -154,7 +148,7 @@ class EspacioController extends Controller
      */
     public function markNoApta(Espacio $espacio)
     {
-        if (! Auth::check() || Auth::user()->role !== 'admin') {
+        if (Auth::user()->role !== 'admin') {
             abort(403, 'Acceso denegado');
         }
 

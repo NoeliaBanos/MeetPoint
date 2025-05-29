@@ -17,11 +17,19 @@ use App\Http\Controllers\{
 */
 
 /* ---------- Espacios: listado y detalle (público) ---------- */
+Route::get('/', [EspacioController::class,'index'])->name('espacios.index');
+Route::get('espacios/{espacio}', [EspacioController::class,'show'])->name('espacios.show');
 
-Route::get('/', [EspacioController::class, 'index'])
-     ->name('espacios.index');
-Route::get('espacios/{espacio}', [EspacioController::class, 'show'])
-     ->name('espacios.show');
+Route::middleware('auth')->group(function(){
+    Route::get('espacios/create',[EspacioController::class,'create'])->name('espacios.create');
+    Route::post('espacios',[EspacioController::class,'store'])->name('espacios.store');
+    Route::get('espacios/{espacio}/edit',[EspacioController::class,'edit'])->name('espacios.edit');
+    Route::put('espacios/{espacio}',[EspacioController::class,'update'])->name('espacios.update');
+    Route::delete('espacios/{espacio}',[EspacioController::class,'destroy'])->name('espacios.destroy');
+    Route::post('espacios/{espacio}/apta',[EspacioController::class,'markApta'])->name('espacios.apta');
+    Route::post('espacios/{espacio}/no-apta',[EspacioController::class,'markNoApta'])->name('espacios.no_apta');
+});
+
 
 /* ----- Crear / almacenar Espacios (solo ADMIN en controlador) ----- */
 Route::middleware('auth')->group(function () {

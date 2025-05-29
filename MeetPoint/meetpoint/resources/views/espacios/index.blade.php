@@ -81,40 +81,8 @@
                         </div>
                     @endif
 
-                    {{-- Favorito (solo autenticados) --}}
-                    @auth
-                        <form id="favorite-form-{{ $espacio->id }}"
-                              action="{{ auth()->user()->hasFavorited($espacio)
-                                          ? route('espacios.unfavorite.ajax', $espacio)
-                                          : route('espacios.favorite.ajax', $espacio) }}"
-                              method="POST" class="mb-4 text-center">
-                            @csrf
-                            @if(auth()->user()->hasFavorited($espacio))
-                                @method('DELETE')
-                            @endif
-                            <button type="button"
-                                    id="favorite-btn-{{ $espacio->id }}"
-                                    class="text-2xl">
-                                {!! auth()->user()->hasFavorited($espacio) ? '💙' : '🤍' !!}
-                            </button>
-                        </form>
-                        <script>
-                            document.getElementById('favorite-btn-{{ $espacio->id }}')
-                              .addEventListener('click', async function(){
-                                const form = document.getElementById('favorite-form-{{ $espacio->id }}');
-                                const res  = await fetch(form.action, {
-                                  method: form.querySelector('input[name="_method"]')?.value || form.method,
-                                  headers:{
-                                    'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
-                                    'Accept':'application/json'
-                                  }
-                                });
-                                if(res.ok) {
-                                  location.reload();
-                                }
-                              });
-                        </script>
-                    @endauth
+               
+                  
 
                     {{-- + INFO al final --}}
                     @if($espacio->estado_espacio === 'disponible')

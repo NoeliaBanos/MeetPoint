@@ -9,84 +9,70 @@
 
     <ul class="indice">
         <li><a href="#privacidad">Política de privacidad</a></li>
-        <li><a href="#aviso">Aviso legal - Condiciones de uso</a></li>
-        <li><a href="#cookies">Política de cookies</a></li>
+        <li><a href="#aviso">Aviso legal – Condiciones de uso</a></li>
     </ul>
 
     {{-- 1. POLÍTICA DE PRIVACIDAD ------------------------------------------------ --}}
     <section id="privacidad" class="seccion">
         <h2>Política de privacidad</h2>
 
-        <h3>¿Con qué finalidad tratamos sus datos?</h3>
-        <p>Gestionar la relación comercial, prestar los servicios contratados,
-            enviar comunicaciones sobre novedades de MeetPoint y mejorar la experiencia
-            de usuario mediante elaboración de perfiles comerciales (sin decisiones
-            automatizadas).</p>
+        <h3>1. ¿Para qué usamos sus datos?</h3>
+        <p>En MeetPoint tratamos la información que usted nos facilita con estas finalidades:</p>
+        <ul>
+            <li><strong>Gestionar las reservas de salas y eventos</strong>, incluyendo recordatorios y cambios de última
+                hora.</li>
+            <li><strong>Contactar con usted</strong> por teléfono o mensajería en relación con la reserva.</li>
+            <li><strong>Personalizar la experiencia</strong>: la geolocalización permite mostrarle espacios cercanos y
+                mejorar tiempos de respuesta.</li>
+            <li><strong>Enviarle comunicaciones internas</strong> sobre mejoras de la plataforma o cambios en las
+                condiciones del servicio (nunca publicidad ajena).</li>
+        </ul>
 
-        <h3>¿Cuál es la base jurídica?</h3>
-        <p>La ejecución del contrato y el interés legítimo de MeetPoint; el
-            envío de ofertas adicionales se basa en su consentimiento.</p>
+        <h3>2. Base jurídica</h3>
+        <p>La legitimación principal es la <strong>ejecución del contrato de reserva</strong>. El envío puntual de
+            información sobre nuevas funcionalidades se basa en nuestro <strong>interés legítimo</strong> de mantenerle
+            informado como cliente. En ningún caso cedemos sus datos a terceros ni hacemos perfiles con efectos jurídicos.
+        </p>
 
-        <h3>¿Durante cuánto tiempo conservaremos sus datos?</h3>
-        <p>Mientras dure la relación contractual y, tras ella, los plazos
-            exigidos por la normativa vigente.</p>
+        <h3>3. Tiempo de conservación</h3>
+        <p>Sus datos (nombre, teléfono y, en su caso, correo electrónico y ubicación) se conservan mientras mantenga activa
+            su cuenta o exista alguna reserva pendiente. Una vez finalizada la relación, bloqueamos la información el tiempo
+            estrictamente necesario para cumplir las obligaciones legales (por ejemplo, cinco años según la normativa
+            contable española).</p>
 
-        <h3>Derechos</h3>
-        <p>Puede ejercer los derechos de acceso, rectificación, supresión,
-            oposición y limitación escribiendo a la dirección arriba indicada.
-            Tiene derecho a reclamar ante la Agencia Española de Protección de Datos.</p>
+        <h3>4. Destinatarios</h3>
+        <p><strong>No se realizan cesiones de datos a terceros.</strong> Solo accede el personal interno de MeetPoint que
+            necesita la información para dar soporte y gestionar las reservas, bajo obligación de confidencialidad.</p>
+
+        <h3>5. Sus derechos</h3>
+        <p>Puede ejercer los derechos de acceso, rectificación, supresión, oposición, portabilidad y limitación escribiendo
+            a <a href="mailto:privacidad@meetpoint.es">privacidad@meetpoint.es</a> o a la dirección postal indicada en el
+            aviso legal. Si considera que no hemos atendido correctamente su solicitud, puede reclamar ante la <a
+                href="https://www.aepd.es">Agencia Española de Protección de Datos</a>.</p>
     </section>
 
     {{-- 2. AVISO LEGAL ----------------------------------------------------------- --}}
     <section id="aviso" class="seccion">
         <h2>Aviso legal y condiciones de uso</h2>
 
-        <p><strong>Objeto:</strong> el portal meetpoint.es ofrece un directorio de salas
-            y espacios para reuniones y eventos. El acceso implica la aceptación de estas
-            condiciones y el compromiso de uso lícito y diligente.</p>
+        <p><strong>Objeto.</strong> El portal <em>meetpoint.es</em> facilita un directorio de salas y la posibilidad de
+            reservarlas en línea. El acceso y uso del sitio implican la aceptación íntegra de estas condiciones.</p>
 
-        <p>El usuario garantiza la veracidad de la información publicada y exime a
-            MeetPoint de cualquier responsabilidad derivada de contenidos aportados por
-            terceros. Queda prohibida la difusión de contenidos xenófobos, difamatorios,
-            sexistas o contrarios a la legalidad.</p>
+        <p><strong>Responsabilidad del usuario.</strong> Quien publica información (por ejemplo, descripciones de salas o
+            imágenes) garantiza que es veraz y no vulnera derechos de terceros. Está prohibido difundir contenido ilícito,
+            difamatorio, sexista, xenófobo o que contravenga la normativa vigente.</p>
 
-        <p>MeetPoint es titular de todos los derechos de propiedad intelectual e
-            industrial. Se concede al usuario una licencia limitada y revocable para uso
-            personal; cualquier explotación comercial requiere autorización expresa.</p>
+        <p><strong>Propiedad intelectual.</strong> Todos los textos, códigos, logotipos, fotografías y diseños pertenecen a
+            MeetPoint o a sus legítimos titulares. Se concede una licencia de uso estrictamente personal; cualquier
+            explotación comercial requerirá autorización escrita.</p>
 
-        <p>Estas condiciones se rigen por la legislación española; las partes se
-            someten, cuando la norma lo permita, a los Juzgados de Madrid capital.</p>
+        <p><strong>Jurisdicción.</strong> Con carácter general, las partes se someten a los Juzgados y Tribunales de Madrid
+            capital, salvo normativa imperativa que disponga otra cosa.</p>
     </section>
 
-    {{-- 3. POLÍTICA DE COOKIES --------------------------------------------------- --}}
-    <section id="cookies" class="seccion">
-        <h2>Política de cookies</h2>
 
-        <p>Este sitio utiliza cookies técnicas, de personalización y analíticas para
-            mejorar la navegación. Al continuar navegando acepta su uso.
-            Puede bloquearlas o eliminarlas en la configuración de su navegador.</p>
-
-        <h3>¿Qué son las cookies?</h3>
-        <p>Archivos que se descargan en su dispositivo al acceder a determinadas
-            páginas web y que permiten almacenar y recuperar información sobre la
-            navegación.</p>
-
-        <h3>Tipos de cookies empleadas</h3>
-        <ul>
-            <li><strong>Técnicas y de personalización:</strong> recuerdan sus
-                preferencias (por ejemplo, volumen o idioma).</li>
-            <li><strong>Geolocalización:</strong> orientan el contenido a su región.</li>
-            <li><strong>Analíticas:</strong> recopilan datos estadísticos anónimos sobre
-                el uso del portal (Google Analytics).</li>
-        </ul>
-
-        <h3>Cómo gestionar las cookies</h3>
-        <p>Puede permitir, bloquear o eliminar las cookies configurando su navegador.
-            Consulte la ayuda de <em>Chrome</em>, <em>Firefox</em>, <em>Edge</em> o
-            <em>Safari</em> para más información.
-        </p>
-    </section>
     </main>
+
     {{-- FOOTER --}}
     @include('partials.footer')
 
