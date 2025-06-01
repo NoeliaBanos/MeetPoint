@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="max-w-3xl mx-auto py-8 px-4 container">
-        
+
         @if ($user->role === 'admin')
             {{-- Panel Administrador --}}
             <h2 class="mt-4 text-center">Panel administrador</h2>
@@ -46,55 +46,67 @@
             <div class="bg-white shadow rounded p-4 m-4 space-y-6">
                 {{-- Datos personales --}}
                 <section>
-                    
+
 
                     @php
-    // Si hay foto subida, úsala; si no, genera avatar con iniciales
-    $avatarSrc = $user->imagen_url
-        ? asset('img_subidas/users/'.$user->imagen_url)
-        : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&size=64';
-@endphp
+                        // Si hay foto subida, úsala; si no, genera avatar con iniciales
+                        $avatarSrc = $user->imagen_url
+                            ? asset('img_subidas/users/' . $user->imagen_url)
+                            : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&size=64';
+                    @endphp
 
-<div style="width: 70px;">
-    <img src="{{ $avatarSrc }}"
-         alt="Avatar de {{ $user->name }}"
-         width="64" height="64"
-         style="border-radius:50%; object-fit:cover;">
-</div>
+                    <div style="width: 70px;">
+                        <img src="{{ $avatarSrc }}" alt="Avatar de {{ $user->name }}" width="64" height="64"
+                            style="border-radius:50%; object-fit:cover;">
+                    </div>
 
                     <h1 class="text-2xl font-semibold">
                         {{ $user->name }} {{ $user->apellido }}
                     </h1>
                     <p class="text-gray-600">{{ $user->email }}</p>
-                    <a href="{{ route('profile.edit') }}"
-                        class="btn-custom w-50">
+                    <a href="{{ route('profile.edit') }}" class="btn-custom w-50">
                         Modificar datos
                     </a>
                     {{-- Botón: Crear sala (solo usuarios autenticados) --}}
-@auth
-    <div class="text-end mb-4">
-        <a href="{{ route('espacios.create') }}" class="btn-custom-sec w-50 mt-2">
-            <i class="bi bi-plus-circle me-1"></i>  {{-- icono opcional Bootstrap Icons --}}
-            Crear sala
-        </a>
-    </div>
-@endauth
+                    @auth
+                        <div class="text-end mb-4">
+                            <a href="{{ route('espacios.create') }}" class="btn-custom-sec w-50 mt-2">
+                                <i class="bi bi-plus-circle me-1"></i> {{-- icono opcional Bootstrap Icons --}}
+                                Crear sala
+                            </a>
+                        </div>
+                    @endauth
 
                 </section>
 
                 {{-- Salas reservadas --}}
-                <section class="pt-4">
-                    @php($upcoming = $user->reservas->where('fecha', '>=', now()))
-                    <h2 class="text-xl font-semibold mb-2">Salas reservadas</h2>
-                    @forelse($upcoming as $r)
-                        <p class="mb-1">
-                            {{ $r->espacio->nombre }}
-                            — {{ $r->fecha->format('d/m/Y') }} a las {{ $r->hora_inicio->format('H:i') }}
-                        </p>
-                    @empty
-                        <p class="text-gray-500">No tienes reservas.</p>
-                    @endforelse
-                </section>
+                @php
+                    $upcoming = $user->reservas
+                        ->where('fecha', '>=', now())
+                        ->sortBy('fecha_hora')
+                        ->groupBy(fn($r) => $r->espacio_id . '—' . $r->fecha->toDateString());
+                @endphp
+
+                <h2 class="text-xl font-semibold mb-2">Salas reservadas</h2>
+
+                @forelse ($upcoming as $group)
+                    @php
+                        $first = $group->first(); // misma sala y día
+                        $horas = $group
+                            ->pluck('fecha_hora') // → colección de Carbon
+                            ->unique(fn($h) => $h->format('H:i')) // quita duplicados
+                            ->map->format('H:i') // solo hora
+                            ->implode(', ');
+                    @endphp
+
+                    <p class="mb-1">
+                        <b>{{ $first->espacio->nombre }}</b> — {{ $first->fecha_hora->format('d/m/Y') }}
+                        – <b> Horas:</b> {{ $horas }}
+                    </p>
+                @empty
+                    <p class="text-gray-500">No tienes reservas.</p>
+                @endforelse
+
 
                 {{-- Salas usadas --}}
                 <section class="pt-4">
@@ -103,7 +115,8 @@
                     @forelse($past as $r)
                         <div class="flex justify-between items-center mb-1">
                             <span>
-                                {{ $r->espacio->nombre }} — {{ $r->fecha->format('d/m/Y') }}
+                                {{ $r->espacio->nombre }}
+                                — {{ $r->fecha_hora->format('d/m/Y') }}
                             </span>
                             @if ($r->resena)
                                 <span class="text-yellow-500 font-medium">
@@ -136,59 +149,60 @@
         @endif
 
     </div>
-     {{-- Modales de feedback de verificación --}}
-    @if (session('status') === 'verification-link-sent' && ! auth()->user()->hasVerifiedEmail())
+    {{-- Modales de feedback de verificación --}}
+    @if (session('status') === 'verification-link-sent' && !auth()->user()->hasVerifiedEmail())
         <!-- Modal: Enlace reenviado -->
-        <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-xl shadow">
-              <div class="modal-header">
-                <h5 class="modal-title" id="verificationModalLabel">Correo reenviado</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-              </div>
-              <div class="modal-body">
-                <p>Hemos enviado un nuevo enlace de verificación a tu correo electrónico.</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-teal rounded-full" data-bs-dismiss="modal">OK</button>
-              </div>
+        <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-xl shadow">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="verificationModalLabel">Correo reenviado</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Hemos enviado un nuevo enlace de verificación a tu correo electrónico.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-teal rounded-full" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
     @elseif(auth()->user()->hasVerifiedEmail())
         <!-- Modal: Ya verificado -->
-        <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content rounded-xl shadow">
-              <div class="modal-header">
-                <h5 class="modal-title" id="verificationModalLabel">Cuenta verificada</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-              </div>
-              <div class="modal-body">
-                <p>Tu correo ya ha sido verificado previamente.</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-teal rounded-full" data-bs-dismiss="modal">Cerrar</button>
-              </div>
+        <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-xl shadow">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="verificationModalLabel">Cuenta verificada</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tu correo ya ha sido verificado previamente.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-teal rounded-full" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
     @endif
 
     {{-- Script para abrir el modal si existe --}}
     @push('scripts')
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        @if (
-            (session('status') === 'verification-link-sent' && ! auth()->user()->hasVerifiedEmail())
-            || auth()->user()->hasVerifiedEmail()
-        )
-          var modalEl = document.getElementById('verificationModal');
-          var modal = new bootstrap.Modal(modalEl);
-          modal.show();
-        @endif
-      });
-    </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                @if (
+                    (session('status') === 'verification-link-sent' && !auth()->user()->hasVerifiedEmail()) ||
+                        auth()->user()->hasVerifiedEmail())
+                    var modalEl = document.getElementById('verificationModal');
+                    var modal = new bootstrap.Modal(modalEl);
+                    modal.show();
+                @endif
+            });
+        </script>
     @endpush
 
     @include('partials.footer')

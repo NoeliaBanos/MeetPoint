@@ -1,13 +1,10 @@
-@use 'abstracts'as v;
-
+@use 'abstracts' as v;
 @use 'base';
-
-@use 'components'as *;
-
+@use 'components' as *;
 @import 'custom';
-/* Estructura 100 % alto con footer al pie */
-html,
-body {
+
+/* === Estructura 100 % alto con footer al pie ===================== */
+html {
   height: 100%;
 }
 
@@ -15,19 +12,25 @@ body {
   font-family: 'Montserrat', sans-serif !important;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  /* 1️⃣ ocupamos todo el viewport incluso cuando el contenido es corto */
+  min-height: 100vh;
 }
 
-main   { flex: 1 0 auto; }
+/* 2️⃣ el contenedor principal crece y empuja al footer */
+main { flex: 1 0 auto; }
+
+/* el footer nunca se encoge, pero ya no lleva margin-top:auto aquí */
 footer { flex-shrink: 0; }
 
-/* Encabezados con la serif personalizada */
+/* === Tipografías de titulares ==================================== */
 h1,
 h2,
 h3 {
   font-family: 'DMSerifDisplay', serif !important;
 }
 
-/* Enlaces genéricos */
+/* === Enlaces genéricos =========================================== */
 a {
   color: black;
   text-decoration: none;

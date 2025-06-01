@@ -34,5 +34,10 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+  
+'paypalme' => [
+    'user' => env('PAYPAL_ME_USER', 'TuUsuarioPayPal'),
+],
+
 
 ];

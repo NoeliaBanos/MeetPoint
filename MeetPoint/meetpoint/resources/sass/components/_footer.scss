@@ -1,9 +1,8 @@
-@use '../abstracts/variables'as v;
-@use '../base/mixins'as m;
-
+@use '../abstracts/variables' as v;
+@use '../base/mixins'         as m;
 
 .footer {
-  margin-top: auto;        // 4) empuja al final solo cuando hay hueco
+  /* ❸ eliminado margin-top:auto; lo gestiona el flex-layout de <body> */
 
   color: v.$white;
   background-color: v.$body-color;
@@ -12,7 +11,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;  // móvil: apilado
+  flex-direction: column;   // móvil: apilado
   flex-wrap: wrap;
 
   a { color: v.$white; }

@@ -16,10 +16,12 @@
     <p>{{ $espacio->descripcion }}</p>
 
     @auth
-        <a href="{{ route('reservas.create', ['espacio' => $espacio]) }}"
-           class="btn-custom">
-            Reservar sala
-        </a>
+     @auth
+<a href="{{ route('reservas.create', $espacio) }}" class="btn-custom">
+    Reservar sala
+</a>
+@endauth
+
     @else
         <a href="{{ route('login') }}" class="btn-custom">
             Inicia sesión para reservar

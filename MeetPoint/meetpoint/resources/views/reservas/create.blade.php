@@ -1,56 +1,94 @@
 @extends('layouts.app')
 
-@section('title', 'Reservar Sala')
+@section('title', 'Reservar')
 
 @section('content')
-<div class="max-w-md mx-auto py-8 px-4">
-    <h2 class="text-3xl font-semibold text-center text-teal-400 mb-6">
-        Reservar: {{ $espacio->nombre }}
+<h1 class="mb-4">Reserva – {{ $espacio->nombre }}</h1>
+
+<form method="POST"
+      action="{{ route('reservas.store', $espacio) }}"
+      id="formReserva">
+    @csrf
+
+    {{-- FECHA ----------------------------------------------------------- --}}
+    <label class="block mb-2 font-semibold">Fecha:</label>
+    <input  type="date"
+            name="fecha"
+            id="fecha"
+            class="border p-2 rounded w-52"
+            min="{{ now()->toDateString() }}"
+            required>
+
+    {{-- HORAS ----------------------------------------------------------- --}}
+    <h2 class="mt-6 mb-2 font-semibold">
+        Horas ({{ number_format($espacio->precio_hora,2) }} €/h):
     </h2>
+    <ul id="hoursWrapper" class="space-y-2"></ul>
 
-    <form action="{{ route('reservas.store') }}" method="POST" class="space-y-4">
-        @csrf
+    {{-- TOTAL ----------------------------------------------------------- --}}
+    <p id="summary" class="mt-4 text-lg font-semibold hidden">
+        Total: <span id="total">0,00</span> €
+    </p>
 
-        {{-- Hidden espacio_id --}}
-        <input type="hidden" name="espacio_id" value="{{ $espacio->id }}">
+    <button class="btn-custom mt-6"
+            id="btnSubmit"
+            type="submit"
+            disabled>
+        Continuar a pago
+    </button>
+</form>
 
-        {{-- Fecha --}}
-        <div>
-            <label for="date" class="block text-gray-700 mb-1">Fecha</label>
-            <input type="date" name="date" id="date"
-                   class="w-full p-3 rounded-xl shadow-inner focus:outline-none"
-                   value="{{ old('date') }}" required>
-            @error('date')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+{{-- --------------  SCRIPT IN-LINE, GARANTIZADO -------------- --}}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const precioHora = {{ $espacio->precio_hora }};
+    const fechaInput = document.getElementById('fecha');
+    const hoursWrap  = document.getElementById('hoursWrapper');
+    const totalSpan  = document.getElementById('total');
+    const btnSubmit  = document.getElementById('btnSubmit');
+    const summaryBox = document.getElementById('summary');
 
-        {{-- Horas --}}
-        <div>
-            <p class="text-gray-700 mb-2">Selecciona las horas:</p>
-            <div class="grid grid-cols-4 gap-2">
-                @foreach($hours as $h)
-                    <label class="inline-flex items-center">
-                        <input type="checkbox"
-                               name="hours[]"
-                               value="{{ $h }}"
-                               class="form-checkbox">
-                        <span class="ml-2">{{ $h }}:00 – {{ $h+1 }}:00</span>
-                    </label>
-                @endforeach
-            </div>
-            @error('hours')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+    /* genera checkboxes 09-21 */
+    function drawHours () {
+        hoursWrap.innerHTML = '';                 // limpia
+        for (let h = 9; h <= 21; h++) {
+            const li    = document.createElement('li');
+            const label = document.createElement('label');
+            label.className = 'inline-flex items-center gap-2 cursor-pointer';
 
-        {{-- Botón --}}
-        <button type="submit"
-                class="w-full bg-teal-400 hover:bg-teal-500 text-white font-bold py-3 rounded-full">
-            Confirmar Reserva
-        </button>
-    </form>
-</div>
+            const cb = document.createElement('input');
+            cb.type  = 'checkbox';
+            cb.name  = 'hours[]';
+            cb.value = h;
+            cb.addEventListener('change', updateTotal);
 
-@include('partials.footer')
+            label.appendChild(cb);
+            label.append(`${h}:00`);
+            li.appendChild(label);
+            hoursWrap.appendChild(li);
+        }
+    }
+
+    /* actualiza total */
+    function updateTotal () {
+        const horasSel = hoursWrap.querySelectorAll('input:checked').length;
+        if (horasSel === 0) {
+            btnSubmit.disabled = true;
+            summaryBox.classList.add('hidden');
+        } else {
+            const total = (horasSel * precioHora).toFixed(2).replace('.', ',');
+            totalSpan.textContent = total;
+            btnSubmit.disabled = false;
+            summaryBox.classList.remove('hidden');
+        }
+    }
+
+    /* cambia fecha → pinta horas y reinicia total */
+    fechaInput.addEventListener('change', () => {
+        if (!fechaInput.value) return;
+        drawHours();
+        updateTotal();
+    });
+});
+</script>
 @endsection
