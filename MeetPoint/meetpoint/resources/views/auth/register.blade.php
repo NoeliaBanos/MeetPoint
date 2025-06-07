@@ -3,70 +3,121 @@
 @section('title', 'Crear cuenta')
 
 @section('content')
-<div class="max-w-md mx-auto py-10 px-4">
-    <div class="bg-white shadow rounded-xl p-8 space-y-6">
-        <h1 class="text-2xl font-semibold text-center mb-4">Crear cuenta</h1>
+{{-- ------------------------------------------------------------------ --}}
+{{--  Layout 50 / 50  – formulario + imagen                            --}}
+{{-- ------------------------------------------------------------------ --}}
+<section class="container-fluid py-5">
+    <div class="row g-0">
 
-        <form method="POST" action="{{ route('register') }}" class="space-y-5">
-            @csrf
+        {{-- Columna 1: Formulario ------------------------------------- --}}
+        <div class="col-12 col-lg-6 p-4 d-flex align-items-center justify-content-center">
 
-            {{-- Nombre --}}
-            <div>
-                <label for="name" class="block font-medium mb-1">Nombre</label>
-                <input id="name" type="text" name="name" value="{{ old('name') }}"
-                       required autofocus
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-400">
-                @error('name') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+            <div class="w-100" style="max-width:460px"> {{-- ancho máx. opcional --}}
+                <form method="POST" action="{{ route('register') }}"
+                      class="needs-validation" novalidate>
+                    @csrf
+
+                    <h2 class="mb-4 text-center">Crear cuenta</h2>
+
+                    {{-- Nombre --}}
+                    <div class="form-floating mb-3">
+                        <input  type="text"
+                                class="form-control @error('name') is-invalid @enderror"
+                                id="name"
+                                name="name"
+                                placeholder="Nombre"
+                                value="{{ old('name') }}"
+                                required
+                                autofocus>
+                        <label for="name">Nombre</label>
+                        <div class="invalid-feedback">
+                            @error('name') {{ $message }} @else Indica tu nombre. @enderror
+                        </div>
+                    </div>
+
+                    {{-- Apellido (opcional) --}}
+                    <div class="form-floating mb-3">
+                        <input  type="text"
+                                class="form-control"
+                                id="apellido"
+                                name="apellido"
+                                placeholder="Apellido"
+                                value="{{ old('apellido') }}">
+                        <label for="apellido">Apellido (opcional)</label>
+                    </div>
+
+                    {{-- Email --}}
+                    <div class="form-floating mb-3">
+                        <input  type="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                id="email"
+                                name="email"
+                                placeholder="nombre@ejemplo.com"
+                                value="{{ old('email') }}"
+                                required
+                                autocomplete="username">
+                        <label for="email">Email</label>
+                        <div class="invalid-feedback">
+                            @error('email') {{ $message }} @else Introduce un correo válido. @enderror
+                        </div>
+                    </div>
+
+                    {{-- Contraseña --}}
+                    <div class="form-floating mb-3">
+                        <input  type="password"
+                                class="form-control @error('password') is-invalid @enderror"
+                                id="password"
+                                name="password"
+                                placeholder="Contraseña"
+                                required
+                                autocomplete="new-password">
+                        <label for="password">Contraseña</label>
+                        <div class="invalid-feedback">
+                            @error('password') {{ $message }} @else Introduce una contraseña. @enderror
+                        </div>
+                    </div>
+
+                    {{-- Confirmar contraseña --}}
+                    <div class="form-floating mb-4">
+                        <input  type="password"
+                                class="form-control"
+                                id="password_confirmation"
+                                name="password_confirmation"
+                                placeholder="Confirmar contraseña"
+                                required
+                                autocomplete="new-password">
+                        <label for="password_confirmation">Confirmar contraseña</label>
+                        <div class="invalid-feedback">
+                            Repite la contraseña.
+                        </div>
+                    </div>
+
+                    {{-- Acción --}}
+                    <button type="submit" class="btn btn-primary w-100">
+                        Registrarme
+                    </button>
+
+                    {{-- Enlace a login --}}
+                    <p class="text-center small mt-4">
+                        ¿Ya tienes cuenta?
+                        <a href="{{ route('login') }}" class="text-decoration-none fw-semibold">
+                            Iniciar sesión
+                        </a>
+                    </p>
+                </form>
             </div>
+        </div>
 
-            {{-- Apellido (opcional) --}}
-            <div>
-                <label for="apellido" class="block font-medium mb-1">Apellido</label>
-                <input id="apellido" type="text" name="apellido" value="{{ old('apellido') }}"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-400">
-            </div>
+        {{-- Columna 2: Imagen ----------------------------------------- --}}
+        <div class="col-12 col-lg-6">
+            {{-- Sustituye la ruta por la imagen que quieras mostrar --}}
+            <img  src="{{ asset('images/register-bg.jpg') }}"
+                  alt="Imagen decorativa de registro"
+                  class="object-fit-cover w-100 h-100">
+        </div>
 
-            {{-- Email --}}
-            <div>
-                <label for="email" class="block font-medium mb-1">Email</label>
-                <input id="email" type="email" name="email" value="{{ old('email') }}"
-                       required autocomplete="username"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-400">
-                @error('email') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            {{-- Contraseña --}}
-            <div>
-                <label for="password" class="block font-medium mb-1">Contraseña</label>
-                <input id="password" type="password" name="password" required
-                       autocomplete="new-password"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-400">
-                @error('password') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            {{-- Confirmar contraseña --}}
-            <div>
-                <label for="password_confirmation" class="block font-medium mb-1">Confirmar contraseña</label>
-                <input id="password_confirmation" type="password" name="password_confirmation" required
-                       autocomplete="new-password"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-400">
-            </div>
-
-            {{-- Acción --}}
-            <button type="submit" class="btn-custom w-full">
-                Registrarme
-            </button>
-        </form>
-
-        {{-- Enlace a login --}}
-        <p class="text-center text-sm mt-4">
-            ¿Ya tienes cuenta?
-            <a href="{{ route('login') }}" class="text-teal-500 font-semibold hover:underline">
-                Iniciar sesión
-            </a>
-        </p>
     </div>
-</div>
+</section>
 
 @include('partials.footer')
 @endsection

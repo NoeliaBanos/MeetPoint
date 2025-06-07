@@ -2,7 +2,7 @@
 @use '../base/mixins'         as m;
 
 .footer {
-  /* ❸ eliminado margin-top:auto; lo gestiona el flex-layout de <body> */
+  margin-top: auto; // ⬅️  aquí está la magia
 
   color: v.$white;
   background-color: v.$body-color;
@@ -11,12 +11,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;   // móvil: apilado
+  flex-direction: column;   // móvil
   flex-wrap: wrap;
 
   a { color: v.$white; }
 
-  /* ≥ tablet: orientación horizontal */
+  /* ≥ tablet */
   @include m.tablet {
     flex-direction: row;
   }

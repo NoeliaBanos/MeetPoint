@@ -42,4 +42,5 @@ class Reserva extends Model
     {
         return Carbon::parse($this->fecha_hora)->format('H');
     }
+    
 }

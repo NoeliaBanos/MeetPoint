@@ -46,17 +46,17 @@
                     <div class="invalid-feedback">El mensaje no puede quedar vacío.</div>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Enviar</button>
+                <button type="submit" class="btn-custom w-100">Enviar</button>
             </form>
         </div>
 
         {{-- Columna 2: Imagen --}}
-        <div class="col-12 col-lg-6">
+        {{-- <div class="col-12 col-lg-6">
             {{-- Sustituye src por la ruta de tu imagen --}}
             <img src="{{ asset('images/fondo.jpg') }}"
                  alt="Imagen decorativa de contacto"
                  class="object-fit-cover">
-        </div>
+        </div> --}}
 
     </div>
 </section>

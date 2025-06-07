@@ -21,7 +21,7 @@
                     </div>
 
                     {{-- Título y acciones según rol --}}
-                    <div class="flex items-baseline justify-between mt-4 mb-2">
+                    <div class="flex items-baseline justify-between mt-4 ">
                         <h3 class="text-xl font-semibold">
                             <a href="{{ route('espacios.show', $espacio) }}">
                                 {{ $espacio->nombre }}
@@ -38,17 +38,17 @@
                         @endauth
                     </div>
 
-                    <hr class="mb-2">
+                    <hr class="">
 
                     <p>Precio: <b>{{ number_format($espacio->precio_hora, 2) }} €/h</b></p>
-                    <p>Equipamiento: <b>{{ $espacio->equipamiento }}</b></p>
+                    {{-- <p>Equipamiento: <b>{{ $espacio->equipamiento }}</b></p> --}}
 
                     {{-- Reseñas con estrellas --}}
                     @if(method_exists($espacio, 'resenas'))
                         @php
                             $media = $espacio->resenas->avg('calificacion') ?: 0;
                         @endphp
-                        <div class="flex items-center mt-2 mb-4">
+                        <div class="d-flex justify-content-between mb-4 px-4">
                             @for($i = 1; $i <= 5; $i++)
                                 @php
                                     $diff = $media - $i + 1;

@@ -3,48 +3,86 @@
 @section('title', 'Restablecer contraseña')
 
 @section('content')
-<div class="max-w-md mx-auto py-10 px-4">
-    <div class="bg-white shadow rounded-xl p-8 space-y-6">
-        <h1 class="text-2xl font-semibold text-center mb-4">Restablecer contraseña</h1>
+{{-- ------------------------------------------------------------------ --}}
+{{--  Layout 50 / 50  – formulario + imagen                            --}}
+{{-- ------------------------------------------------------------------ --}}
+<section class="container-fluid py-5">
+    <div class="row g-0">
 
-        <form method="POST" action="{{ route('password.store') }}" class="space-y-5">
-            @csrf
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+        {{-- Columna 1: Formulario ------------------------------------- --}}
+        <div class="col-12 col-lg-6 p-4 d-flex align-items-center justify-content-center">
 
-            {{-- Email --}}
-            <div>
-                <label for="email" class="block font-medium mb-1">Email</label>
-                <input id="email" type="email" name="email"
-                       value="{{ old('email', $request->email) }}"
-                       required autofocus
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-400">
-                @error('email') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+            <div class="w-100" style="max-width:460px"> {{-- ancho máx. opcional --}}
+                <form method="POST" action="{{ route('password.store') }}"
+                      class="needs-validation" novalidate>
+                    @csrf
+                    <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+                    <h2 class="mb-4 text-center">Restablecer contraseña</h2>
+
+                    {{-- Email --}}
+                    <div class="form-floating mb-3">
+                        <input  type="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                id="email"
+                                name="email"
+                                placeholder="nombre@ejemplo.com"
+                                value="{{ old('email', $request->email) }}"
+                                required
+                                autofocus>
+                        <label for="email">Email</label>
+                        <div class="invalid-feedback">
+                            @error('email') {{ $message }} @else Introduce un correo válido. @enderror
+                        </div>
+                    </div>
+
+                    {{-- Nueva contraseña --}}
+                    <div class="form-floating mb-3">
+                        <input  type="password"
+                                class="form-control @error('password') is-invalid @enderror"
+                                id="password"
+                                name="password"
+                                placeholder="Nueva contraseña"
+                                required
+                                autocomplete="new-password">
+                        <label for="password">Nueva contraseña</label>
+                        <div class="invalid-feedback">
+                            @error('password') {{ $message }} @else Introduce la nueva contraseña. @enderror
+                        </div>
+                    </div>
+
+                    {{-- Confirmación --}}
+                    <div class="form-floating mb-4">
+                        <input  type="password"
+                                class="form-control @error('password_confirmation') is-invalid @enderror"
+                                id="password_confirmation"
+                                name="password_confirmation"
+                                placeholder="Confirmar contraseña"
+                                required
+                                autocomplete="new-password">
+                        <label for="password_confirmation">Confirmar contraseña</label>
+                        <div class="invalid-feedback">
+                            @error('password_confirmation') {{ $message }} @else Repite la contraseña. @enderror
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Restablecer contraseña
+                    </button>
+                </form>
             </div>
+        </div>
 
-            {{-- Contraseña nueva --}}
-            <div>
-                <label for="password" class="block font-medium mb-1">Nueva contraseña</label>
-                <input id="password" type="password" name="password" required
-                       autocomplete="new-password"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-400">
-                @error('password') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
+        {{-- Columna 2: Imagen ----------------------------------------- --}}
+        <div class="col-12 col-lg-6">
+            {{-- Sustituye la ruta por la imagen que quieras mostrar --}}
+            <img  src="{{ asset('images/reset-bg.jpg') }}"
+                  alt="Imagen decorativa de restablecer contraseña"
+                  class="object-fit-cover w-100 h-100">
+        </div>
 
-            {{-- Confirmación --}}
-            <div>
-                <label for="password_confirmation" class="block font-medium mb-1">Confirmar contraseña</label>
-                <input id="password_confirmation" type="password" name="password_confirmation" required
-                       autocomplete="new-password"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-400">
-                @error('password_confirmation') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            <button type="submit" class="btn-custom w-full">
-                Restablecer contraseña
-            </button>
-        </form>
     </div>
-</div>
+</section>
 
 @include('partials.footer')
 @endsection

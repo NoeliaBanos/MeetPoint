@@ -23,81 +23,58 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 // Público
 Route::get('espacios',             [EspacioController::class, 'index'])->name('espacios.index');
 Route::get('espacios/{espacio}',   [EspacioController::class, 'show'])
-      ->whereNumber('espacio')->name('espacios.show');
+    ->whereNumber('espacio')->name('espacios.show');
 
 // Privado
 Route::middleware('auth')->group(function () {
-    Route::get ('espacios/create',           [EspacioController::class, 'create'])->name('espacios.create');
-    Route::post('espacios',                  [EspacioController::class, 'store' ])->name('espacios.store');
-    Route::get ('espacios/{espacio}/edit',   [EspacioController::class, 'edit'  ])->whereNumber('espacio')->name('espacios.edit');
-    Route::put ('espacios/{espacio}',        [EspacioController::class, 'update'])->whereNumber('espacio')->name('espacios.update');
-    Route::delete('espacios/{espacio}',      [EspacioController::class, 'destroy'])->whereNumber('espacio')->name('espacios.destroy');
+    Route::get('espacios/create',           [EspacioController::class, 'create'])->name('espacios.create');
+    Route::post('espacios',                 [EspacioController::class, 'store'])->name('espacios.store');
+    Route::get('espacios/{espacio}/edit',   [EspacioController::class, 'edit'])->whereNumber('espacio')->name('espacios.edit');
+    Route::put('espacios/{espacio}',        [EspacioController::class, 'update'])->whereNumber('espacio')->name('espacios.update');
+    Route::delete('espacios/{espacio}',     [EspacioController::class, 'destroy'])->whereNumber('espacio')->name('espacios.destroy');
 
-    Route::post('espacios/{espacio}/apta',    [EspacioController::class, 'markApta'  ])->whereNumber('espacio')->name('espacios.apta');
+    Route::post('espacios/{espacio}/apta',    [EspacioController::class, 'markApta'])->whereNumber('espacio')->name('espacios.apta');
     Route::post('espacios/{espacio}/no-apta', [EspacioController::class, 'markNoApta'])->whereNumber('espacio')->name('espacios.no_apta');
 });
+
+/* Horas disponibles (público para AJAX) */
 Route::get('api/espacios/{espacio}/horas', [ReservaController::class, 'availableHours'])
-      ->whereNumber('espacio')
-      ->name('reservas.availableHours');
-
-      Route::middleware('auth')->get(
-    'reservas/{reserva}/pagar',
-    [ReservaController::class, 'pay']
-)->whereNumber('reserva')->name('reservas.pay');
-
+    ->whereNumber('espacio')
+    ->name('reservas.availableHours');
 
 /*--------------------------------------------------------------------
  | RESERVAS
  *-------------------------------------------------------------------*/
-// --- Flujo autenticado ---
 Route::middleware('auth')->group(function () {
+    Route::get('espacios/{espacio}/reservar', [ReservaController::class, 'create'])->whereNumber('espacio')->name('reservas.create');
+    Route::post('espacios/{espacio}/reservar', [ReservaController::class, 'store'])->whereNumber('espacio')->name('reservas.store');
 
-    /* Selector día / horas */
-    Route::get ('espacios/{espacio}/reservar',  [ReservaController::class, 'create'])
-          ->whereNumber('espacio')->name('reservas.create');
+    Route::get('reservas/{reserva}/pagar', [ReservaController::class, 'pay'])->whereNumber('reserva')->name('reservas.pay');
 
-    /* Guardar reserva */
-    Route::post('espacios/{espacio}/reservar',  [ReservaController::class, 'store'])
-          ->whereNumber('espacio')->name('reservas.store');
+    Route::get('reservas/{reserva}/edit', [ReservaController::class, 'edit'])->whereNumber('reserva')->name('reservas.edit');
+    Route::put('reservas/{reserva}', [ReservaController::class, 'update'])->whereNumber('reserva')->name('reservas.update');
+    Route::delete('reservas/{reserva}', [ReservaController::class, 'destroy'])->whereNumber('reserva')->name('reservas.destroy');
 
-    /* Horas disponibles (AJAX) */
-    Route::get ('api/espacios/{espacio}/horas', [ReservaController::class, 'availableHours'])
-          ->whereNumber('espacio')->name('reservas.availableHours');
-
-    /* Pagar (declarada antes de reservas.show) */
-    Route::get ('reservas/{reserva}/pagar',     [ReservaController::class, 'pay'])
-          ->whereNumber('reserva')->name('reservas.pay');
-
-    /* Editar / eliminar reserva */
-    Route::get   ('reservas/{reserva}/edit', [ReservaController::class, 'edit'   ])->whereNumber('reserva')->name('reservas.edit');
-    Route::put   ('reservas/{reserva}',      [ReservaController::class, 'update' ])->whereNumber('reserva')->name('reservas.update');
-    Route::delete('reservas/{reserva}',      [ReservaController::class, 'destroy'])->whereNumber('reserva')->name('reservas.destroy');
-
-    /* Endpoint AJAX alternativo para bloques */
     Route::post('reservas/ajax', [ReservaController::class, 'storeAjax'])->name('reservas.ajax');
 });
 
-// --- Listado y detalle públicos / admin ---
-Route::get('reservas',            [ReservaController::class, 'index'])->name('reservas.index');
-Route::get('reservas/{reserva}',  [ReservaController::class, 'show'])
-      ->whereNumber('reserva')->name('reservas.show');
-Route::middleware('auth')->put(
-    'reservas/{reserva}/pagado',
-    [ReservaController::class, 'markPaid']
-)->whereNumber('reserva')->name('reservas.markPaid');
+Route::get('reservas', [ReservaController::class, 'index'])->name('reservas.index');
+Route::get('reservas/{reserva}', [ReservaController::class, 'show'])->whereNumber('reserva')->name('reservas.show');
+
+Route::middleware('auth')->put('reservas/{reserva}/pagado', [ReservaController::class, 'markPaid'])->whereNumber('reserva')->name('reservas.markPaid');
 
 /*--------------------------------------------------------------------
  | RESEÑAS
  *-------------------------------------------------------------------*/
-Route::get ('resenas',            [ResenaController::class, 'index'])->name('resenas.index');
-Route::get ('resenas/{resena}',   [ResenaController::class, 'show'])->whereNumber('resena')->name('resenas.show');
+Route::get('resenas', [ResenaController::class, 'index'])->name('resenas.index');
+Route::get('resenas/{resena}', [ResenaController::class, 'show'])->whereNumber('resena')->name('resenas.show');
 
 Route::middleware('auth')->group(function () {
-    Route::get   ('resenas/create',           [ResenaController::class, 'create' ])->name('resenas.create');
-    Route::post  ('resenas',                  [ResenaController::class, 'store'  ])->name('resenas.store');
-    Route::get   ('resenas/{resena}/edit',    [ResenaController::class, 'edit'   ])->whereNumber('resena')->name('resenas.edit');
-    Route::put   ('resenas/{resena}',         [ResenaController::class, 'update' ])->whereNumber('resena')->name('resenas.update');
-    Route::delete('resenas/{resena}',         [ResenaController::class, 'destroy'])->whereNumber('resena')->name('resenas.destroy');
+    Route::get('resenas/create', [ResenaController::class, 'create'])->name('resenas.create');
+    Route::post('resenas', [ResenaController::class, 'store'])->name('resenas.store'); // ✅ Mantén solo esta
+    Route::get('resenas/{resena}/edit', [ResenaController::class, 'edit'])->whereNumber('resena')->name('resenas.edit');
+    Route::put('resenas/{resena}', [ResenaController::class, 'update'])->whereNumber('resena')->name('resenas.update');
+    Route::delete('resenas/{resena}', [ResenaController::class, 'destroy'])->whereNumber('resena')->name('resenas.destroy');
 });
 
 /*--------------------------------------------------------------------
@@ -121,22 +98,22 @@ Route::post('/email/verification-notification', function (Request $request) {
  | PERFIL
  *-------------------------------------------------------------------*/
 Route::middleware('auth')->group(function () {
-    Route::get ('/dashboard',            [ProfileController::class, 'show'         ])->name('dashboard');
-    Route::get ('/profile',              [ProfileController::class, 'show'         ])->name('profile.show');
-    Route::get ('/profile/edit',         [ProfileController::class, 'edit'         ])->name('profile.edit');
-    Route::put ('/profile',              [ProfileController::class, 'update'       ])->name('profile.update');
-    Route::get ('/profile/password',     [ProfileController::class, 'editPassword' ])->name('password.edit');
-    Route::put ('/profile/password',     [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::get('/dashboard', [ProfileController::class, 'show'])->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('password.edit');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('password.update');
 });
 
 /*--------------------------------------------------------------------
  | CONTACTO
  *-------------------------------------------------------------------*/
-Route::get ('/contacto',          [MensajeContactoController::class, 'create'])->name('contacto.create');
-Route::post('/contacto',          [MensajeContactoController::class, 'store' ])->name('contacto.store');
+Route::get('/contacto', [MensajeContactoController::class, 'create'])->name('contacto.create');
+Route::post('/contacto', [MensajeContactoController::class, 'store'])->name('contacto.store');
 
 Route::middleware('auth')->delete('/contacto/{mensaje}', [MensajeContactoController::class, 'destroy'])
-      ->whereNumber('mensaje')->name('contacto.destroy');
+    ->whereNumber('mensaje')->name('contacto.destroy');
 
 /*--------------------------------------------------------------------
  | LEGAL
@@ -146,4 +123,4 @@ Route::view('/legal', 'legal')->name('legal');
 /*--------------------------------------------------------------------
  | AUTH SCAFFOLD
  *-------------------------------------------------------------------*/
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
