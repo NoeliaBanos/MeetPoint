@@ -12,39 +12,52 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
+
+use Illuminate\Database\QueryException;
+
+
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): View
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name'     => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
+            'password' => ['required', 'string', 'confirmed', Rules\Password::min(8)],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            $user = User::create([
+                'name'     => $request->name,
+                'apellidos' => $request->apellidos,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+        } catch (QueryException $e) {
+            return back()
+                ->withInput($request->only('name', 'apellidos', 'email'))
+                ->withErrors([
+                    'general' => 'No se ha podido crear la cuenta. Por favor, inténtalo de nuevo más tarde.'
+                ]);
+        }
+
+        if (! $user instanceof User) {
+            return back()
+                ->withInput($request->only('name', 'apellidos', 'email'))
+                ->withErrors([
+                    'general' => 'Ocurrió un error inesperado. No se creó el usuario.'
+                ]);
+        }
 
         event(new Registered($user));
-
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('index'));
     }
 }

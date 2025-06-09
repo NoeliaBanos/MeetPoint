@@ -5,45 +5,57 @@
 @section('content')
     @auth
         @if(auth()->user()->role === 'admin')
-            {{-- Panel de Mensajes para Admin --}}
-            <div class="max-w-3xl mx-auto py-8 px-4">
-                <h1 class="mt-4 text-center">
-                    Mensajes de Contacto
-                </h1>
+            <!-- Panel de Mensajes Simplificado -->
+            <div class="messages-container">
+                <div class="messages-header">
+                    <h1>Mensajes de Contacto</h1>
+                    <p>Gestión de mensajes recibidos</p>
+                </div>
 
                 @forelse($mensajes as $mensaje)
-                    <div class="bg-white rounded-xl shadow p-6 mb-4">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-medium">{{ $mensaje->nombre }}</h3>
-                            <small class="text-gray-500">{{ $mensaje->created_at->format('d/m/Y H:i') }}</small>
-                        </div>
-                        <p class="text-gray-700 mb-1"><strong>Email:</strong> {{ $mensaje->email }}</p>
-                        <p class="text-gray-700 mb-1"><strong>Teléfono:</strong> {{ $mensaje->telefono }}</p>
-                        <p class="text-gray-800 mt-3">{{ $mensaje->mensaje }}</p>
-
-                        <div class="mt-4 flex space-x-2">
-                            {{-- Opcional: botón para eliminar --}}
-                            <form action="{{ route('contacto.destroy', $mensaje->id) }}" method="POST"
-                                  onsubmit="return confirm('¿Eliminar este mensaje?');">
+                    <div class="message-card">
+                        <div class="message-header">
+                            <div class="sender-info">
+                                <h2>{{ $mensaje->nombre }}</h2>
+                                <span class="message-date">{{ $mensaje->created_at->format('d/m/Y H:i') }}</span>
+                            </div>
+                            <form action="{{ route('contacto.destroy', $mensaje->id) }}" method="POST" class="delete-form">
                                 @csrf @method('DELETE')
-                                <button type="submit"
-                                        class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-full">
-                                    Eliminar
+                                <button type="submit" class="delete-btn" onclick="return confirm('¿Eliminar este mensaje?');">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
                                 </button>
                             </form>
                         </div>
+
+                        <div class="message-content">
+                            <div class="contact-detail">
+                                <span class="detail-label">Email:</span>
+                                <span class="detail-value">{{ $mensaje->email }}</span>
+                            </div>
+                            
+                            <div class="contact-detail">
+                                <span class="detail-label">Teléfono:</span>
+                                <span class="detail-value">{{ $mensaje->telefono ?? 'No proporcionado' }}</span>
+                            </div>
+                            
+                            <div class="message-text">
+                                <p>{{ $mensaje->mensaje }}</p>
+                            </div>
+                        </div>
                     </div>
                 @empty
-                    <p class="text-center text-gray-500">No hay mensajes pendientes.</p>
+                    <div class="empty-state">
+                        <h3>No hay mensajes</h3>
+                        <p>No se han encontrado mensajes de contacto pendientes.</p>
+                    </div>
                 @endforelse
             </div>
-
         @else
-            {{-- Usuario autenticado NO admin: mostramos FAQ + Form --}}
             @include('contacto._publico')
         @endif
     @else
-        {{-- Invitado: mostramos FAQ + Form --}}
         @include('contacto._publico')
     @endauth
 @endsection

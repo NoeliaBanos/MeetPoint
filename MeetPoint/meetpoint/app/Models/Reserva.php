@@ -42,5 +42,9 @@ class Reserva extends Model
     {
         return Carbon::parse($this->fecha_hora)->format('H');
     }
-    
+    public function resena()
+    {
+        return $this->hasOne(\App\Models\Resena::class, 'espacio_id', 'espacio_id')
+            ->where('user_id', $this->user_id);
+    }
 }

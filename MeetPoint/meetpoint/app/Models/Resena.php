@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Resena extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['user_id', 'espacio_id', 'calificacion', 'comentario'];
 
     public function user() {

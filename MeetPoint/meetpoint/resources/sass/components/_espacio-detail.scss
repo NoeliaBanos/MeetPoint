@@ -1,0 +1,232 @@
+// _espacio-detail.scss
+@use '../abstracts/variables' as v;
+@use '../base/mixins' as m;
+
+.espacio-detail {
+    .espacio-hero {
+        position: relative;
+        height: 400px;
+        overflow: hidden;
+        border-radius: 0 0 v.$border-radius v.$border-radius;
+        
+        &-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform v.$transition-base;
+        }
+        
+        &-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(v.$body-color, 0.8), rgba(v.$body-color, 0.3));
+            display: flex;
+            align-items: flex-end;
+        }
+        
+        &-content {
+            padding-bottom: v.$space-xl;
+            color: v.$white;
+        }
+        
+        .espacio-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: v.$space-m;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .espacio-meta {
+            display: flex;
+            gap: v.$space-l;
+            
+            .meta-item {
+                display: flex;
+                align-items: center;
+                gap: v.$space-xs;
+                font-size: 1.1rem;
+            }
+        }
+    }
+    
+    .espacio-container {
+        padding: v.$space-xl 0;
+    }
+    
+    .espacio-section {
+        margin-bottom: v.$space-xl;
+        
+        .section-title {
+            color: v.$primary;
+            margin-bottom: v.$space-l;
+            position: relative;
+            padding-bottom: v.$space-xs;
+            
+          
+        }
+    }
+    
+    .espacio-description {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: lighten(v.$body-color, 10%);
+    }
+    
+    .equipment-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: v.$space-s;
+        
+        .equipment-item {
+            background: v.$primary-light;
+            color: v.$primary;
+            padding: v.$space-xs v.$space-s;
+            border-radius: v.$border-radius;
+            font-size: 0.9rem;
+        }
+    }
+    
+    .reserva-card {
+        background: v.$white;
+        padding: v.$space-l;
+        border-radius: v.$border-radius;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: v.$space-l;
+        
+        .btn-reservar {
+            width: 100%;
+            padding: v.$space-m;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: v.$space-l;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: v.$space-s;
+        }
+        
+        .reserva-info {
+            .info-item {
+                display: flex;
+                align-items: center;
+                gap: v.$space-s;
+                padding: v.$space-s 0;
+                border-bottom: 1px solid rgba(v.$secondary, 0.2);
+                
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+    
+    .espacio-reviews {
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: v.$space-l;
+        }
+        
+        .rating-summary {
+            display: flex;
+            align-items: center;
+            gap: v.$space-s;
+            
+            .average-rating {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: v.$primary;
+            }
+            
+            .review-count {
+                color: v.$secondary;
+            }
+        }
+        
+        .no-reviews {
+            text-align: center;
+            padding: v.$space-xl 0;
+            color: v.$secondary;
+            
+            i {
+                font-size: 3rem;
+                margin-bottom: v.$space-m;
+                opacity: 0.5;
+            }
+        }
+        
+        .reviews-grid {
+            display: grid;
+            gap: v.$space-l;
+            grid-template-columns: 1fr;
+            
+            @include m.tablet {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            @include m.desktop {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .review-card {
+            background: v.$white;
+            border-radius: v.$border-radius;
+            padding: v.$space-l;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: v.$transition-base;
+            
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            .review-header {
+                display: flex;
+                gap: v.$space-m;
+                margin-bottom: v.$space-m;
+                
+                .user-avatar {
+                    .avatar-img {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        border: 2px solid v.$primary-light;
+                    }
+                }
+                
+                .user-info {
+                    .user-name {
+                        font-weight: 600;
+                        margin-bottom: v.$space-xs;
+                    }
+                    
+                    .review-date {
+                        font-size: 0.8rem;
+                        color: v.$secondary;
+                    }
+                }
+            }
+            
+            .review-rating {
+                color: v.$primary;
+                margin-bottom: v.$space-m;
+                
+                i {
+                    margin-right: v.$space-xs;
+                }
+            }
+            
+            .review-content {
+                color: lighten(v.$body-color, 10%);
+                line-height: 1.6;
+            }
+        }
+    }
+}

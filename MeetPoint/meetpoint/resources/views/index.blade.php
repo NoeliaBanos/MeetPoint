@@ -1,27 +1,27 @@
 @extends('layouts.app')
 
-@section('title', 'Inicio – MeetPoint')
+@section('title', 'MeetPoint')
 
 @section('content')
     {{-- Hero Section --}}
-  <div class="hero-section" style="height: 90vh; min-height: 600px; background: url('{{ asset('images/fondo.jpg') }}') center/cover no-repeat; position: relative;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);"></div>
-    <div class="container d-flex flex-column justify-content-center text-white" style="height: 100%; position: relative; z-index: 2; padding: 3rem 0;">
-        <h1 style="font-size: 4rem; font-weight: bold; margin-bottom: 1.5rem;">MeetPoint</h1>
-        <p style="font-size: 1.5rem; max-width: 800px; margin-bottom: 2rem;">
+ <div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content container d-flex flex-column justify-content-center text-white">
+        <h1 class="hero-title">MeetPoint</h1>
+        <p class="hero-description">
             Consulta en tiempo real la disponibilidad, capacidad, equipamiento y valoraciones de otros usuarios para
             reservar el espacio perfecto de forma rápida y eficiente.
         </p>
-       <div class="hero-cta d-flex flex-wrap gap-3">
-    <a href="#" class="btn-custom btn-primary-lg">
-        <span class="btn-custom-text">Regístrate</span>
-        <i class="bi bi-arrow-right-short btn-custom-icon"></i>
-    </a>
-    <a href="#" class="btn-custom btn-secondary-lg">
-        <span class="btn-custom-text">Explora espacios</span>
-        <i class="bi bi-search btn-custom-icon"></i>
-    </a>
-</div>
+        <div class="hero-cta d-flex flex-wrap gap-3">
+            <a href="#" class="btn-custom btn-primary-lg">
+                <span class="">Regístrate</span>
+            
+            </a>
+            <a href="#" class="btn-custom-sec btn-secondary-lg">
+                <span class="">Explora espacios</span>
+               
+            </a>
+        </div>
     </div>
 </div>
 
@@ -33,14 +33,14 @@
                 <div class="step-card p-4 h-100 text-center shadow-sm rounded-4 transition-all">
                     <div class="step-number btn-custom text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">1</div>
                     <h3 class="h5 mb-3">Regístrate</h3>
-                    <p class="mb-0 text-muted">Completa tu perfil con tus preferencias en minutos.</p>
+                    <p class="mb-0 text-muted">Completa tu perfil en minutos.</p>
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="step-card p-4 h-100 text-center shadow-sm rounded-4 transition-all">
                     <div class="step-number btn-custom text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">2</div>
                     <h3 class="h5 mb-3">Explora</h3>
-                    <p class="mb-0 text-muted">Encuentra espacios con filtros y valoraciones.</p>
+                    <p class="mb-0 text-muted">Encuentra espacios con valoraciones.</p>
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">

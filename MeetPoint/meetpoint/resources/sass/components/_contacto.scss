@@ -1,0 +1,146 @@
+@use '../abstracts/variables'as v;
+@use '../base/mixins'as m;
+
+.messages-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+
+  .messages-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+}
+
+.message-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s ease;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: #d1d5db;
+  }
+
+  .message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+
+    .sender-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+    
+
+      .message-date {
+        font-size: 0.875rem;
+        color: #6b7280;
+      }
+    }
+
+    .delete-form {
+      .delete-btn {
+        background: #fee2e2;
+        border: none;
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #dc2626;
+
+        &:hover {
+          background: #fecaca;
+          transform: scale(1.1);
+        }
+
+        svg {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+      }
+    }
+  }
+
+  .message-content {
+    padding: 1.5rem;
+
+    .contact-detail {
+      display: flex;
+      margin-bottom: 0.75rem;
+      font-size: 0.9375rem;
+
+      .detail-label {
+        font-weight: 500;
+        color: #4b5563;
+        min-width: 80px;
+      }
+
+      .detail-value {
+        color: #111827;
+      }
+    }
+
+    .message-text {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px dashed #e5e7eb;
+
+      p {
+        color: #374151;
+        line-height: 1.6;
+        white-space: pre-line;
+      }
+    }
+  }
+}
+
+.empty-state {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  h3 {
+    font-size: 1.25rem;
+    color: v.$primary;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #6b7280;
+    font-size: 0.9375rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .message-card {
+    .message-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+
+      .sender-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+    }
+  }
+}

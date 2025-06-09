@@ -3,40 +3,41 @@
 @section('title', 'Mi perfil')
 
 @section('content')
-    <div class="max-w-3xl mx-auto py-8 px-4 container">
+    <div class=" mx-auto py-8 px-4 container">
 
         @if ($user->role === 'admin')
-            {{-- Panel Administrador (sin cambios) --}}
-            <h2 class="mt-4 text-center">Panel administrador</h2>
+            {{-- Panel Administrador --}}
+            <h2 class="admin-panel-title">Panel administrador</h2>
 
-            <div class="space-y-6">
-                {{-- Espacios --}}
-                <div class="text-center">
-                    <div class="pt-4">
-                        <h3 class="display">{{ \App\Models\Espacio::count() }}</h3>
-                        <p>Espacios en total</p>
+            <div class="admin-stats-container">
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <h3 class="stat-value">{{ \App\Models\Espacio::count() }}</h3>
+                        <p class="stat-label">Espacios en total</p>
                     </div>
-                    <a href="{{ route('resenas.index') }}" class="btn-custom">VER LISTA</a>
-                    <a href="{{ route('espacios.create') }}" class="mt-4 btn-custom-sec">AÑADIR</a>
+                    <div class="stat-actions">
+                        <a href="{{ route('espacios.index') }}" class="btn-primary">VER LISTA</a>
+                        <a href="{{ route('espacios.create') }}" class="btn-secondary">AÑADIR</a>
+                    </div>
                 </div>
 
-                {{-- Reseñas --}}
-                <div class="text-center">
-                    <div class="pt-4">
-                        <h3 class="display">{{ \App\Models\Resena::count() }}</h3>
-                        <p>Reseñas en total</p>
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <h3 class="stat-value">{{ \App\Models\Resena::count() }}</h3>
+                        <p class="stat-label">Reseñas en total</p>
                     </div>
-                    <a href="{{ route('resenas.index') }}" class="btn-custom">VER LISTA</a>
+                    <div class="stat-actions">
+                        <a href="{{ route('resenas.index') }}" class="btn-primary">VER LISTA</a>
+                    </div>
                 </div>
 
-                {{-- Cerrar sesión --}}
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" class="logout-form">
                     @csrf
-                    <button type="submit" class="btn-custom-sec mt-4 w-100">CERRAR SESIÓN</button>
+                    <button type="submit" class="btn-logout">CERRAR SESIÓN</button>
                 </form>
             </div>
         @else
-            {{-- Perfil de usuario normal --}}
+            {{-- Perfil Usuario --}}
             <div class="bg-white shadow rounded p-4 m-4 space-y-6">
 
                 {{-- Datos personales --}}
@@ -52,7 +53,7 @@
                             style="border-radius:50%; object-fit:cover;">
                     </div>
 
-                    <h1 class="text-2xl font-semibold">{{ $user->name }} {{ $user->apellido }}</h1>
+                    <h1 class="text-2xl font-semibold">{{ $user->name }} {{ $user->apellidos }}</h1>
                     <p class="text-gray-600">{{ $user->email }}</p>
                     <a href="{{ route('profile.edit') }}" class="btn-custom w-50">Modificar datos</a>
 
@@ -65,7 +66,7 @@
                     @endauth
                 </section>
 
-                {{-- Salas reservadas (futuras) --}}
+                {{-- Salas futuras --}}
                 @php
                     $upcoming = $user->reservas
                         ->where('fecha', '>=', now())
@@ -93,34 +94,72 @@
                     <p class="text-gray-500">No tienes reservas.</p>
                 @endforelse
 
-                {{-- Salas usadas (pasadas) --}}
-                <section class="pt-4">
-                    @php($past = $user->reservas->where('fecha', '<', now()))
-                    <h2 class="text-xl font-semibold mb-2">Salas usadas</h2>
+                {{-- Salas pasadas --}}
+                {{-- Salas pasadas --}}
+                @php
+                    // 1. Reseñas realizadas por el usuario
+                    $userReviews = $user->resenas()->with('espacio')->get();
 
-                    @forelse($past as $r)
-                        <div class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-2">
-                            <div>
-                                <strong>{{ $r->espacio->nombre }}</strong> — {{ $r->fecha_hora->format('d/m/Y') }}
+                    // 2. Reservas pasadas sin reseña
+                    $pastReservations = $user
+                        ->reservas()
+                        ->where('fecha', '<', now())
+                        ->doesntHave('resena')
+                        ->with('espacio')
+                        ->get();
+                @endphp
+
+                {{-- … sección de datos personales, próximas reservas, etc. … --}}
+
+                <section class="pt-4">
+                    {{-- 1. Reseñas realizadas --}}
+                    <h2 class="text-xl font-semibold mb-4">Reseñas realizadas</h2>
+                    @forelse($userReviews as $review)
+                        <div class="mb-4 p-3 border border-gray-200 rounded shadow-sm bg-white">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <strong>{{ $review->espacio->nombre }}</strong><br>
+                                    <small class="text-muted">{{ $review->created_at->format('d/m/Y') }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="fw-bold text-dark">{{ $review->calificacion }}/5</span>
+                                </div>
                             </div>
-                            <div>
-                                @if ($r->resena)
-                                    <span class="text-warning fw-semibold">
-                                        {{ $r->resena->calificacion }}/5
-                                    </span>
-                                @else
-                                    <button class="btn-custom" data-bs-toggle="modal" data-bs-target="#crearResenaModal"
-                                        data-espacio-id="{{ $r->espacio->id }}"
-                                        data-espacio-nombre="{{ $r->espacio->nombre }}">
+                            @if ($review->comentario)
+                                <div class="text-sm text-gray-700 fst-italic">
+                                    “{{ $review->comentario }}”
+                                </div>
+                            @endif
+                        </div>
+                    @empty
+                        <p class="text-gray-500">Aún no has realizado ninguna reseña.</p>
+                    @endforelse
+
+                    {{-- 2. Salas pasadas pendientes de reseña --}}
+                    <h2 class="text-xl font-semibold mb-4 mt-6">Salas pendientes de reseña</h2>
+                    @forelse($pastReservations as $reserva)
+                        <div class="mb-4 p-3 border border-dashed border-gray-300 rounded bg-gray-50">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ $reserva->espacio->nombre }}</strong><br>
+                                    <small
+                                        class="text-sm text-muted">{{ $reserva->fecha_hora->format('d/m/Y H:i') }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-sm btn-custom" data-bs-toggle="modal"
+                                        data-bs-target="#crearResenaModal" data-espacio-id="{{ $reserva->espacio->id }}"
+                                        data-espacio-nombre="{{ $reserva->espacio->nombre }}">
                                         Puntuar
                                     </button>
-                                @endif
+                                </div>
                             </div>
                         </div>
                     @empty
-                        <p class="text-gray-500">No has usado ninguna sala aún.</p>
+                        <p class="text-gray-500">No tienes salas pendientes de reseñar.</p>
                     @endforelse
                 </section>
+
+
 
                 {{-- Cerrar sesión --}}
                 <form method="POST" action="{{ route('logout') }}">
@@ -130,13 +169,15 @@
             </div>
         @endif
 
-        {{-- Modal de reseña --}}
+        {{-- Modal Reseña --}}
         <div class="modal fade" id="crearResenaModal" tabindex="-1" aria-labelledby="crearResenaModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content rounded-xl shadow">
                     <div class="modal-header">
-                        <h3 class="pt-2 ps-2">Reseña</h3>
+                        <h3 class="pt-2 ps-2">
+                            Reseña para <span id="modalNombreSala" class="text-muted small"></span>
+                        </h3>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <form method="POST" action="{{ route('resenas.store') }}">
@@ -144,8 +185,6 @@
                         <input type="hidden" name="espacio_id" id="modalEspacioId">
 
                         <div class="modal-body">
-
-                            {{-- Puntuación --}}
                             <div class="form-floating mb-3">
                                 <input type="number" name="calificacion" id="modalCalificacion" min="1"
                                     max="5" step="1" class="form-control" placeholder="Puntuación del 1 al 5"
@@ -156,7 +195,6 @@
                                 @enderror
                             </div>
 
-                            {{-- Comentario --}}
                             <div class="form-floating mb-3">
                                 <textarea name="comentario" id="modalComentario" class="form-control" placeholder="Escribe tu reseña"
                                     style="height: 120px" required>{{ old('comentario') }}</textarea>
@@ -165,7 +203,6 @@
                                     <div class="text-danger mt-1 small">{{ $message }}</div>
                                 @enderror
                             </div>
-
                         </div>
 
                         <div class="modal-footer">
@@ -173,30 +210,28 @@
                             <button type="button" class="btn btn-custom-sec" data-bs-dismiss="modal">Cancelar</button>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
 
-        {{-- Script dinámico para rellenar modal --}}
+        {{-- Script del Modal --}}
         @push('scripts')
             <script>
-                console.log("Espacio ID:", espacioId);
-
-                const crearResenaModal = document.getElementById('crearResenaModal');
-                crearResenaModal.addEventListener('show.bs.modal', function(event) {
-                    const button = event.relatedTarget;
-                    const espacioId = button.getAttribute('data-espacio-id');
-                    const espacioNombre = button.getAttribute('data-espacio-nombre');
-
-                    document.getElementById('modalEspacioId').value = espacioId;
-                    document.getElementById('modalNombreSala').textContent = espacioNombre;
+                document.addEventListener('DOMContentLoaded', function() {
+                    const modal = document.getElementById('crearResenaModal');
+                    modal.addEventListener('show.bs.modal', function(event) {
+                        const button = event.relatedTarget;
+                        const espacioId = button.getAttribute('data-espacio-id');
+                        const espacioNombre = button.getAttribute('data-espacio-nombre');
+                        document.getElementById('modalEspacioId').value = espacioId;
+                        document.getElementById('modalNombreSala').textContent = espacioNombre;
+                    });
                 });
             </script>
         @endpush
 
-
     </div>
+
     {{-- Footer --}}
     @include('partials.footer')
 @endsection

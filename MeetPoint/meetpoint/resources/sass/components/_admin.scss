@@ -1,0 +1,137 @@
+@use '../abstracts/variables'as v;
+@use '../base/mixins'as m;
+
+// Usando tus variables existentes
+.admin-panel-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: v.$body-color;
+    margin-bottom: v.$space-xl;
+    position: relative;
+    padding-bottom: v.$space-s;
+    text-align: center;
+
+
+}
+
+.admin-stats-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: grid;
+    gap: v.$space-l;
+}
+
+.stat-card {
+    background: v.$white;
+    border-radius: v.$border-radius;
+    padding: v.$space-l;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: v.$transition-base;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.stat-content {
+    margin-bottom: v.$space-l;
+    text-align: center;
+
+    .stat-value {
+        font-size: 3rem;
+        font-weight: 700;
+        color: v.$primary;
+        margin-bottom: v.$space-s;
+    }
+
+    .stat-label {
+        font-size: 1.1rem;
+        color: v.$secondary;
+    }
+}
+
+.stat-actions {
+    display: flex;
+    justify-content: center;
+    gap: v.$space-m;
+}
+
+// Botones - Adaptados a tu sistema
+.btn {
+    display: inline-block;
+    padding: v.$space-s v.$space-l;
+    border-radius: v.$border-radius;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    transition: v.$transition-base;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    @extend .btn;
+    background-color: v.$primary;
+    color: v.$white;
+
+    &:hover {
+        background-color: darken(v.$primary, 10%);
+        transform: translateY(-2px);
+    }
+
+    &:focus {
+        box-shadow: v.$accordion-button-focus-box-shadow;
+    }
+}
+
+.btn-secondary {
+    @extend .btn;
+    background-color: v.$white;
+    color: v.$body-color;
+    border-color: v.$secondary;
+
+    &:hover {
+        background-color: darken(v.$white, 5%);
+        transform: translateY(-2px);
+    }
+}
+
+.btn-logout {
+    @extend .btn;
+    width: 100%;
+    background-color: v.$secondary;
+    color: v.$body-color;
+    padding: v.$space-m;
+    font-size: 1.1rem;
+    font-weight: 600;
+
+    &:hover {
+        background-color: darken(v.$secondary, 10%);
+        transform: translateY(-2px);
+    }
+}
+
+.logout-form {
+    margin-top: v.$space-xl;
+}
+
+// Responsive usando tus breakpoints
+@media (max-width: v.$bp-md) {
+    .stat-actions {
+        flex-direction: column;
+        gap: v.$space-s;
+
+        .btn {
+            width: 100%;
+        }
+    }
+
+    .stat-card {
+        padding: v.$space-m;
+    }
+
+    .stat-value {
+        font-size: 2.5rem !important;
+    }
+}

@@ -3,52 +3,40 @@
 @section('title', 'Reseñas')
 
 @section('content')
-    <div class="container py-4">
+    <div class="resenas-container">
+        <div class="container">
+            <h1>Reseñas</h1>
 
-        {{-- Título --}}
-        <h1 class="text-center mb-4">Reseñas</h1>
-
-        @if ($resenas->isEmpty())
-            <p class="text-center text-muted">Aún no hay reseñas.</p>
-        @else
-            <section>
-                @foreach ($resenas as $resena)
-                    <article class="row align-items-start mb-4 pb-3 border-bottom">
-                        {{-- Avatar del usuario --}}
-                        <div class="col-auto">
-                            @php
-                                $user = $resena->user;
-                                $imagenPath = 'img_subidas/users/' . $user->imagen_url;
-                                $hasValidImage = !empty($user->imagen_url) && file_exists(public_path($imagenPath));
-                                $avatarSrc = $hasValidImage
-                                    ? asset($imagenPath)
-                                    : asset('images/profile.png');
-                            @endphp
-
-                            <img src="{{ $avatarSrc }}" alt="Avatar de {{ $user->name }}"
-                                 class="rounded-circle img-avatar"
-                                 width="70" height="70"
-                                 style="object-fit: cover;">
-                        </div>
-
-                        {{-- Contenido de la reseña --}}
-                        <div class="col">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <div>
-                                    <strong>{{ $user->name }}</strong>
-                                    <small class="text-muted ms-2">
-                                        en <a href="{{ route('espacios.show', $resena->espacio) }}" class="text-decoration-none">
-                                            {{ $resena->espacio->nombre }}
-                                        </a>
-                                    </small>
+            @if ($resenas->isEmpty())
+                <p class="no-resenas">Aún no hay reseñas.</p>
+            @else
+                <div class="resenas-grid">
+                    @foreach ($resenas as $resena)
+                        <div class="resena-card">
+                            <div class="resena-header">
+                                <div class="resena-avatar">
+                                    @php
+                                        $user = $resena->user;
+                                        $imagenPath = 'img_subidas/users/' . $user->imagen_url;
+                                        $hasValidImage = !empty($user->imagen_url) && file_exists(public_path($imagenPath));
+                                        $avatarSrc = $hasValidImage
+                                            ? asset($imagenPath)
+                                            : asset('images/profile.png');
+                                    @endphp
+                                    <img src="{{ $avatarSrc }}" alt="Avatar de {{ $user->name }}">
                                 </div>
-                                <small class="text-muted">
-                                    {{ $resena->created_at->format('d/m/Y') }}
-                                </small>
+                                <div class="resena-user">
+                                    <div class="user-name">{{ $user->name }}</div>
+                                    <a href="{{ route('espacios.show', $resena->espacio) }}" class="espacio-link">
+                                        {{ $resena->espacio->nombre }}
+                                    </a>
+                                    <div class="resena-date">
+                                        {{ $resena->created_at->format('d/m/Y') }}
+                                    </div>
+                                </div>
                             </div>
 
-                            {{-- Puntuación con estrellas --}}
-                            <div class="mb-2" aria-label="Calificación: {{ $resena->calificacion }} de 5">
+                            <div class="resena-stars" aria-label="Calificación: {{ $resena->calificacion }} de 5">
                                 @for ($i = 1; $i <= 5; $i++)
                                     @php
                                         $diff = $resena->calificacion - $i + 1;
@@ -60,22 +48,17 @@
                                             $img = 'star-0.png'; // vacía
                                         }
                                     @endphp
-                                    <img src="{{ asset('images/' . $img) }}" alt="Estrella"
-                                         class="me-1 d-inline-block stars"
-                                         width="50" height="50">
+                                    <img src="{{ asset('images/' . $img) }}" alt="Estrella">
                                 @endfor
                             </div>
 
-                            {{-- Comentario --}}
-                            <p class="mb-0">{{ $resena->comentario }}</p>
+                            <p class="resena-comment">{{ $resena->comentario }}</p>
                         </div>
-                    </article>
-                @endforeach
-            </section>
-        @endif
-
+                    @endforeach
+                </div>
+            @endif
+        </div>
     </div>
 
-    {{-- FOOTER --}}
     @include('partials.footer')
 @endsection
