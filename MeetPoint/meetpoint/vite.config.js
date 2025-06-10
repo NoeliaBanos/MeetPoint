@@ -4,13 +4,6 @@ import laravel from "laravel-vite-plugin";
 import path from "path";
 
 export default defineConfig({
-    resolve: {
-        alias: {
-            // para usar @use 'abstracts/variables' en vez
-            // de rutas relativas largas
-            "@": path.resolve(__dirname, "resources/sass"),
-        },
-    },
     css: {
         preprocessorOptions: {
             scss: {
@@ -31,7 +24,11 @@ export default defineConfig({
         alias: {
             // @use "~components/index" as *;
             "~": path.resolve(__dirname, "resources/sass"),
+            // para usar @use 'abstracts/variables' en vez
+            // de rutas relativas largas
+            "@": path.resolve(__dirname, "resources/sass"),
         },
+        extensions: [".js", ".vue"],
     },
-     assetsInclude: [ '**/*.ttf'],
+    assetsInclude: ["**/*.ttf"],
 });

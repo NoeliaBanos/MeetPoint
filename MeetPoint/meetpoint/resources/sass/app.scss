@@ -32,6 +32,13 @@ main {
 h1, h2, h3 {
   font-family: $font-family-title !important;
   letter-spacing: -0.5px;
+  padding: 1rem;
+}
+h1{
+  color:v.$primary;
+}
+h3{
+  color:v.$secondary;
 }
 
 /* === Enlaces genéricos =========================================== */
