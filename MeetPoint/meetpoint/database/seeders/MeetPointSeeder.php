@@ -159,13 +159,44 @@ class MeetPointSeeder extends Seeder
         }
 
         // Mensajes de contacto
-        $mensajes = [
-            ['user_id' => null, 'nombre' => 'Carlos Sánchez', 'email' => 'carlos@gmail.com', 'telefono' => '987456374', 'mensaje' => '¿Tienen disponibilidad este viernes por la tarde?'],
-            ['user_id' => 2, 'nombre' => 'Laura Gómez', 'email' => 'laura@gmail.com', 'telefono' => '612345789', 'mensaje' => '¿Cómo reservo la sala de conferencias?'],
-            ['user_id' => null, 'nombre' => 'Miguel Torres', 'email' => 'miguel@gmail.com', 'telefono' => '698765432', 'mensaje' => '¿Cuál es la tarifa por hora de la terraza?'],
-            ['user_id' => 3, 'nombre' => 'Raquel Díaz', 'email' => 'raquel@gmail.com', 'telefono' => '600111222', 'mensaje' => '¿Puedo cancelar una reserva ya hecha?'],
-            ['user_id' => null, 'nombre' => 'Sergio Martín', 'email' => 'sergio@gmail.com', 'telefono' => '611222333', 'mensaje' => 'Me gustaría un descuento para reservas recurrentes.'],
-        ];
+       $mensajes = [
+    [
+        'user_id' => null,
+        'asunto'  => 'Disponibilidad viernes por la tarde',
+        'email'   => 'carlos@gmail.com',
+        'telefono'=> '987456374',
+        'mensaje' => '¿Tienen disponibilidad este viernes por la tarde?'
+    ],
+    [
+        'user_id' => 2,
+        'asunto'  => 'Cómo reservar la sala de conferencias',
+        'email'   => 'laura@gmail.com',
+        'telefono'=> '612345789',
+        'mensaje' => '¿Cómo reservo la sala de conferencias?'
+    ],
+    [
+        'user_id' => null,
+        'asunto'  => 'Tarifa por hora de la terraza',
+        'email'   => 'miguel@gmail.com',
+        'telefono'=> '698765432',
+        'mensaje' => '¿Cuál es la tarifa por hora de la terraza?'
+    ],
+    [
+        'user_id' => 3,
+        'asunto'  => 'Cancelar una reserva existente',
+        'email'   => 'raquel@gmail.com',
+        'telefono'=> '600111222',
+        'mensaje' => '¿Puedo cancelar una reserva ya hecha?'
+    ],
+    [
+        'user_id' => null,
+        'asunto'  => 'Descuento para reservas recurrentes',
+        'email'   => 'sergio@gmail.com',
+        'telefono'=> '611222333',
+        'mensaje' => 'Me gustaría un descuento para reservas recurrentes.'
+    ],
+];
+
 
         foreach ($mensajes as $msg) {
             MensajeContacto::create($msg);
