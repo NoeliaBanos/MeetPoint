@@ -19,10 +19,10 @@ return new class extends Migration
         // 'updated_at'  => now(),
         Schema::create('mensaje_contactos', function (Blueprint $table) {
             $table->id();
-               $table->foreignId('user_id')
-                  ->nullable()
-                  ->constrained()
-                  ->onDelete('set null');
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->onDelete('set null');
             $table->string('nombre');
             $table->string('email');
             $table->string('telefono');
