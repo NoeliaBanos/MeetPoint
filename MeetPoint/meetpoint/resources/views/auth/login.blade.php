@@ -73,7 +73,7 @@
                                 ¿Olvidaste tu contraseña?
                             </a>
                         @endif
-                        <button type="submit" class="btn btn-primary">Entrar</button>
+                        <button type="submit" class="btn-custom">Entrar</button>
                     </div>
 
                     {{-- Enlace a registro --}}
@@ -88,11 +88,9 @@
         </div>
 
         {{-- Columna 2: Imagen ----------------------------------------- --}}
-        <div class="col-12 col-lg-6">
-            {{-- Sustituye la ruta por la imagen que quieras mostrar --}}
-            <img  src="{{ asset('images/login-bg.jpg') }}"
-                  alt="Imagen decorativa de inicio de sesión"
-                  class="object-fit-cover w-100 h-100">
+         <div class="col-12 col-lg-6  p-0 img-half ">
+            <img src="{{ asset('images/fondo.jpg') }}" alt="Imagen decorativa de contacto"
+                class="img-fluid object-fit-cover">
         </div>
 
     </div>

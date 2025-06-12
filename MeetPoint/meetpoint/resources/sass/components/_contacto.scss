@@ -100,7 +100,7 @@
       border-top: 1px dashed #e5e7eb;
 
       p {
-        color: #374151;
+      
         line-height: 1.6;
         white-space: pre-line;
       }
@@ -113,7 +113,7 @@
   border-radius: 0.5rem;
   padding: 3rem 2rem;
   text-align: center;
-  border: 1px solid #e5e7eb;
+  border: 1px solid v.$white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
   h3 {
@@ -123,9 +123,13 @@
   }
 
   p {
-    color: #6b7280;
+    color: v.$primary;
     font-size: 0.9375rem;
   }
+}
+
+.img-half{
+  height: 95%;
 }
 
 // Responsive adjustments

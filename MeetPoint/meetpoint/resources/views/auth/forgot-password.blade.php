@@ -13,7 +13,7 @@
         <div class="col-12 col-lg-6 p-4 d-flex align-items-center justify-content-center">
 
             <div class="w-100" style="max-width:460px"> {{-- ancho máx. opcional --}}
-                <h2 class="mb-3 text-center">¿Olvidaste tu contraseña?</h2>
+                <h1 class="mb-3 text-center">¿Olvidaste tu contraseña?</h1>
 
                 <p class="small text-muted mb-4">
                     Introduce tu email y te enviaremos un enlace para que puedas establecer una nueva contraseña.
@@ -46,7 +46,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">
+                    <button type="submit" class="btn-custom w-100">
                         Enviar enlace
                     </button>
                 </form>
@@ -54,11 +54,9 @@
         </div>
 
         {{-- Columna 2: Imagen ----------------------------------------- --}}
-        <div class="col-12 col-lg-6">
-            {{-- Sustituye la ruta por la imagen que quieras mostrar --}}
-            <img  src="{{ asset('images/password-email-bg.jpg') }}"
-                  alt="Imagen decorativa de recuperación de contraseña"
-                  class="object-fit-cover w-100 h-100">
+        <div class="col-12 col-lg-6  p-0 img-half ">
+            <img src="{{ asset('images/fondo.jpg') }}" alt="Imagen decorativa de contacto"
+                class="img-fluid object-fit-cover">
         </div>
 
     </div>

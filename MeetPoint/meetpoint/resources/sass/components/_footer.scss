@@ -1,23 +1,26 @@
-@use '../abstracts/variables' as v;
-@use '../base/mixins'         as m;
+@use '../abstracts/variables'as v;
+@use '../base/mixins'as m;
 
 .footer {
-  margin-top: auto; // ⬅️  aquí está la magia
 
-  color: v.$white;
-  background-color: v.$body-color;
+    display: flex;
+    flex-direction: column; // móvil: columna → uno bajo otro
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    width: 100%;
+    color: v.$white;
+    background-color: v.$body-color;
 
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;   // móvil
-  flex-wrap: wrap;
+    a {
+        color: v.$white;
+    }
 
-  a { color: v.$white; }
-
-  /* ≥ tablet */
-  @include m.tablet {
-    flex-direction: row;
-  }
+    /* ≥ tablet: fila de izq a derecha */
+    @include m.tablet {
+        flex-direction: row;
+        flex-wrap: nowrap; // evita wrap en desktop
+        justify-content: center; // o space-between, según te guste
+        gap: 2rem; // si quieres más separación en desktop
+    }
 }

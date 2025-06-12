@@ -58,7 +58,11 @@ a {
   color: v.$primary;
 }
 
-
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;  // que el wrapper ocupe toda la altura de la ventana
+}
 
 // Steps Section
 .step-card {

@@ -13,11 +13,12 @@
             reservar el espacio perfecto de forma rápida y eficiente.
         </p>
         <div class="hero-cta d-flex flex-wrap gap-3">
-            <a href="#" class="btn-custom btn-primary-lg">
+            <a href="{{ route('register') }}" class="btn-custom btn-primary-lg">
+            
                 <span class="">Regístrate</span>
             
             </a>
-            <a href="#" class="btn-custom-sec btn-secondary-lg">
+            <a href="{{ route('espacios.index') }}" class="btn-custom-sec btn-secondary-lg">
                 <span class="">Explora espacios</span>
                
             </a>
@@ -64,12 +65,12 @@
     <section class="container my-5 py-5 bg-light rounded-4">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <h2 class="text-center mb-5 font-title">Preguntas frecuentes</h2>
+                <h2 class="text-center font-title">Preguntas frecuentes</h2>
                 
                 <div class="accordion custom-accordion" id="faqAccordion">
                     <div class="accordion-item border-0 mb-3 rounded-3 overflow-hidden shadow-sm">
                         <h3 class="accordion-header" id="heading1">
-                            <button class="accordion-button bg-white fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            <button class="accordion-button bg-white fw-bold py-3" type="button"  data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false">
                                 ¿Quién puede dar de alta una sala?
                             </button>
                         </h3>

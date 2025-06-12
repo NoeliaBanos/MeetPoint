@@ -19,6 +19,7 @@
   &:hover {
     // oscurecemos el fondo un 10%
     background-color: color.adjust($bgColor, $lightness: -10%);
+      color:             $fgColor;
   }
 
   // en tablet y superiores, el ancho deja de ser full-width

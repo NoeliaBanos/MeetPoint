@@ -55,6 +55,7 @@ return [
             'root'       => public_path('img_subidas/users'),
             'url'        => env('APP_URL').'/img_subidas/users',
             'visibility' => 'public',
+            'throw'      => false,
         ],
 
         's3' => [

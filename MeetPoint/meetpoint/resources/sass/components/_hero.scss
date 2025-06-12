@@ -32,6 +32,7 @@
     position: relative;
     width: 100%;
     overflow: hidden;
+    padding: 1rem;
 
     img {
         width: 100%;
@@ -74,9 +75,9 @@
 }
 
 .hero-section {
-    height: 90vh;
-    min-height: 600px;
-    background: url('images/fondo.webp') center/cover no-repeat;
+    height: 70vh;
+    min-height: 465px;
+    background: url('../images/fondo.webp') center/cover no-repeat;
     position: relative;
 }
 
@@ -97,12 +98,12 @@
 }
 
 .hero-title {
-    font-size: 6rem;
-    margin-bottom: 1.5rem;
+    font-size: 5rem;
+    color:v.$white;
 }
 
 .hero-description {
-    font-size: 1.5rem;
+    font-size: 1rem;
     max-width: 800px;
     margin-bottom: 2rem;
 }

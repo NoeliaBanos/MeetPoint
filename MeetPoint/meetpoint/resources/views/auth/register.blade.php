@@ -93,7 +93,7 @@
                         </div>
 
                         {{-- Acción --}}
-                        <button type="submit" class="btn btn-primary w-100">
+                        <button type="submit" class="btn-custom w-100">
                             Registrarme
                         </button>
 
@@ -109,11 +109,10 @@
             </div>
 
             {{-- Columna 2: Imagen ----------------------------------------- --}}
-            <div class="col-12 col-lg-6">
-                {{-- Sustituye la ruta por la imagen que quieras mostrar --}}
-                <img src="{{ asset('images/register-bg.jpg') }}" alt="Imagen decorativa de registro"
-                    class="object-fit-cover w-100 h-100">
-            </div>
+             <div class="col-12 col-lg-6  p-0 img-half ">
+            <img src="{{ asset('images/fondo.jpg') }}" alt="Imagen decorativa de contacto"
+                class="img-fluid object-fit-cover">
+        </div>
 
         </div>
     </section>
