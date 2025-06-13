@@ -103,7 +103,7 @@
                                         onsubmit="return confirm('¿Eliminar este espacio?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn-custom-dark">
+                                        <button type="submit" class="btn-custom-dark w-100 mt-3 mb-3">
                                             ELIMINAR
                                         </button>
                                     </form>
@@ -113,7 +113,8 @@
                     </div>
 
                     <hr class="my-2">
-
+                    {{-- separacion --}}
+<div class="d-flex flex-column justify-content-between" >
                     {{-- Precio --}}
                     <p>Precio: <b>{{ number_format($espacio->precio_hora, 2) }} €/h</b></p>
 
@@ -122,7 +123,7 @@
                         @php
                             $media = $espacio->resenas->avg('calificacion') ?: 0;
                         @endphp
-                        <div class="flex mb-4">
+                        <div class="flex">
                             @for ($i = 1; $i <= 5; $i++)
                                 @php
                                     $diff = $media - $i + 1;
@@ -133,28 +134,41 @@
                             @endfor
                         </div>
                     @endif
-
+ <div class="espacio-info">
+                                <div class="espacio-info-grid p-3">
+                                    <div class="grid-item capacidad">
+                                        <strong>Capacidad:</strong>
+                                        <span>{{ $espacio->capacidad }} </span>
+                                    </div>
+                                    <div class="grid-item equipamiento">
+                                        <strong>Equipamiento:</strong>
+                                        <span>{{ $espacio->equipamiento }}</span>
+                                    </div>
+                                </div>
+                            </div>
                     {{-- + INFO --}}
                     @if ($espacio->estado_espacio === 'disponible')
+                    
                         <a href="{{ route('espacios.show', $espacio) }}"
-                            class="btn-custom w-full text-center rounded-full py-2 mb-4">
+                            class="btn-custom w-full text-center rounded-full py-2 ">
                             + INFO
                         </a>
                     @endif
-
+</div>
                     {{-- Botones admin para aptitud --}}
                     @auth
                         @if (auth()->user()->role === 'admin' && $espacio->estado_espacio === 'no_disponible')
-                            <div class="flex space-x-2">
-                                <form action="{{ route('espacios.apta', $espacio) }}" method="POST">
+                           
+                            <div class="d-flex">
+                                <form action="{{ route('espacios.apta', $espacio) }}" method="POST" class="flex-fill pe-1">
                                     @csrf
-                                    <button type="submit" class="btn-custom">
+                                    <button type="submit" class="btn-custom w-100">
                                         APTA
                                     </button>
                                 </form>
-                                <form action="{{ route('espacios.no_apta', $espacio) }}" method="POST">
+                                <form action="{{ route('espacios.no_apta', $espacio) }}" method="POST" class="flex-fill ps-1">
                                     @csrf
-                                    <button type="submit" class="btn-custom-dark">
+                                    <button type="submit" class="btn-custom-dark w-100">
                                         NO APTA
                                     </button>
                                 </form>
@@ -166,7 +180,7 @@
             @endif
         @endforeach
     </section>
-   
+
 
     {{-- SCRIPT DE FILTRADO --}}
     <script>

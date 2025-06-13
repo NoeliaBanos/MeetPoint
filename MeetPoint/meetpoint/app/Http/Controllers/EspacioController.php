@@ -115,7 +115,7 @@ class EspacioController extends Controller
             'equipamiento_otros' => 'nullable|string',
             'imagen'             => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
             'estado_espacio'     => 'required|in:disponible,no_disponible',
-            'fecha_hora'         => 'required|date',
+          
         ]);
 
         if (!empty($data['equipamiento_otros'])) {

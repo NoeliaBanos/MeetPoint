@@ -15,7 +15,9 @@ class Reserva extends Model
         'user_id',
         'espacio_id',
         'fecha',
-        'fecha_hora',
+        'hora_entrada',
+        'fecha_hora', 
+        'hora_salida',
         'importe',
         'pago_estado',   // «pendiente» o «pagado»
     ];

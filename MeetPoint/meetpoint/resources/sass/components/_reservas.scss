@@ -1,0 +1,280 @@
+/* resources/sass/components/_reservas.scss
+   ——————————————————————————————————————————— */
+@use '../abstracts/variables' as v;
+@use '../base/mixins'        as m;
+@use 'sass:color';
+
+//────────────────────────────
+// Tarjeta resumen / pago
+//────────────────────────────
+.reserva-card {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: v.$space-xl;
+  background: v.$white;
+  border-radius: v.$border-radius;
+  box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .1);
+  transition: v.$transition-base;
+
+  &:hover {
+    box-shadow: 0 .5rem 2rem rgba(0, 0, 0, .15);
+    transform: translateY(-.25rem);
+  }
+
+  @include m.tablet {          // ≥ md
+    max-width: 32rem;
+    padding: v.$space-xl ;
+  }
+}
+
+//────────── Título ──────────
+.reserva-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: v.$body-color;
+  text-align: center;
+  margin-bottom: v.$space-xl;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 4rem; height: .25rem;
+    background: v.$primary;
+    margin: v.$space-s auto 0;
+  }
+
+  @include m.tablet { font-size: 2rem; }
+}
+
+//────────── Detalles ──────────
+.reserva-details {
+  margin-bottom: v.$space-xl;
+  padding-bottom: v.$space-l;
+  border-bottom: 1px solid rgba(v.$secondary, .3);
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: v.$space-s;
+
+    &:last-child { margin-bottom: 0; }
+  }
+
+  .detail-label  { font-weight: 600; color: v.$body-color; }
+  .detail-value  { color: color.adjust(v.$secondary, $lightness: -20%); }
+}
+
+//────────── Total ──────────
+.reserva-total {
+  text-align: center;
+  margin: v.$space-xl 0;
+
+  .total-label  {
+    font-size: .875rem;
+    color: v.$secondary;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-bottom: v.$space-xs;
+  }
+
+  .total-amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: v.$primary;
+    line-height: 1;
+
+    @include m.tablet { font-size: 3rem; }
+  }
+}
+
+//────────── Botón Pagar ──────────
+.btn-pagar {
+  @include m.btn(v.$primary, v.$white);   // usa tu mixin
+  font-size: 1.125rem;
+  padding: v.$space-m v.$space-xl;
+  margin: 0 auto;
+  box-shadow: 0 .25rem .75rem rgba(v.$primary, .3);
+
+  &:hover {
+    transform: translateY(-.125rem);
+    box-shadow: 0 .5rem 1rem rgba(v.$primary, .4);
+  }
+  &:active { transform: translateY(0); }
+}
+
+//────────── Nota debajo del botón ──────────
+.payment-note {
+  font-size: .875rem;
+  color: v.$secondary;
+  margin-top: v.$space-s;
+  text-align: center;
+}
+
+//────────────────────────────
+// Contenedor principal
+//────────────────────────────
+.reserva-container {
+  padding: v.$space-xl 0;
+}
+
+//────────────────────────────
+// Tarjeta de reserva
+//────────────────────────────
+.reserva-card {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: v.$space-xl;
+  background: v.$white;
+  border-radius: v.$border-radius;
+  box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .1);
+  transition: v.$transition-base;
+
+  &:hover {
+    box-shadow: 0 .5rem 2rem rgba(0, 0, 0, .15);
+    transform: translateY(-.25rem);
+  }
+
+  @include m.tablet {          // ≥ md
+    max-width: 32rem;
+    padding: v.$space-xl;
+  }
+}
+
+//────────── Título ──────────
+.reserva-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: v.$body-color;
+  text-align: center;
+  margin-bottom: v.$space-xl;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 4rem; height: .25rem;
+    background: v.$primary;
+    margin: v.$space-s auto 0;
+  }
+
+  @include m.tablet { font-size: 2rem; }
+}
+
+//────────── Formulario ──────────
+.reserva-form {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-l;
+}
+
+//────────── Grupos de formulario ──────────
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: v.$space-m;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.form-label {
+  font-weight: 600;
+  color: v.$body-color;
+  margin-bottom: v.$space-s;
+  font-size: 1rem;
+}
+
+.form-input {
+  border: 1px solid v.$secondary;
+  border-radius: v.$border-radius;
+  padding: v.$space-s v.$space-m;
+  width: 100%;
+  max-width: 13rem;
+  text-align: center;
+  font-size: 1rem;
+  transition: v.$transition-base;
+  
+  &:focus {
+    border-color: v.$primary;
+    box-shadow: 0 0 0 .25rem rgba(v.$primary, .25);
+    outline: none;
+  }
+  
+  &:disabled {
+    background-color: color.adjust(v.$secondary, $lightness: 30%);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+//────────── Mensaje de error ──────────
+.error-message {
+  color: #dc3545;
+  font-size: .875rem;
+  margin-top: v.$space-xs;
+  text-align: center;
+  
+  &.hidden {
+    display: none;
+  }
+}
+
+//────────── Resumen de selección ──────────
+.selection-summary {
+  text-align: center;
+  padding: v.$space-m;
+  background-color: color.adjust(v.$primary, $lightness: 45%);
+  border-radius: v.$border-radius;
+  margin: v.$space-m 0;
+  
+  &.hidden {
+    display: none;
+  }
+  
+  .summary-text {
+    color: v.$body-color;
+    font-size: .9375rem;
+  }
+  
+  .highlight {
+    font-weight: 600;
+    color: color.adjust(v.$primary, $lightness: -15%);
+  }
+}
+
+//────────── Total ──────────
+.total-summary {
+  text-align: center;
+  margin: v.$space-xl 0;
+  
+  &.hidden {
+    display: none;
+  }
+  
+  .total-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: v.$body-color;
+  }
+  
+  .total-amount {
+    font-size: 2rem;
+    font-weight: 800;
+    color: v.$primary;
+    line-height: 1;
+
+    @include m.tablet { font-size: 2.5rem; }
+  }
+}
+
+//────────── Acciones del formulario ──────────
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: v.$space-xl;
+  gap: v.$space-s;
+}

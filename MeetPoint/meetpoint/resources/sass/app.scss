@@ -1,141 +1,152 @@
-@use 'abstracts' as v;
+@use 'abstracts'as v;
 @use 'base';
-@use 'components' as *;
+@use 'components'as *;
 
 // 2. Variables personalizadas (sobreescribiendo Bootstrap)
-$font-family-base: 'Montserrat', sans-serif;
-$font-family-title: 'DMSerifDisplay', serif;
+$font-family-base: 'Montserrat',
+sans-serif;
+$font-family-title: 'DMSerifDisplay',
+serif;
 $transition-base: all 0.3s ease-in-out;
 /* === Estructura 100% alto con footer al pie ===================== */
 @import 'custom';
+
 html {
-  height: 100%;
+    height: 100%;
 }
 
 body {
-  font-family: $font-family-base !important;
-  display: grid;
-  min-height: 100dvh;
-  grid-template-rows: auto 1fr auto;
+    font-family: $font-family-base !important;
+    display: grid;
+    min-height: 100dvh;
+    grid-template-rows: auto 1fr auto;
 }
 
 /* 2️⃣ el contenedor principal crece y empuja al footer */
-main { 
-  min-height: 100dvh;
-  grid-template-rows: auto 1fr auto;
+main {
+    min-height: 100dvh;
+    grid-template-rows: auto 1fr auto;
 }
 
 /* el footer nunca se encoge */
 // footer { flex-shrink: 0; }
 
 /* === Tipografías de titulares ==================================== */
-h1, h2, h3 {
-  font-family: $font-family-title !important;
-  letter-spacing: -0.5px;
-  padding: 1rem;
+h1,
+h2,
+h3 {
+    font-family: $font-family-title !important;
+    letter-spacing: -0.5px;
+    padding: 1rem;
 }
-h1{
-  color:v.$primary;
+
+h1 {
+    color: v.$primary;
 }
-h3{
-  color:v.$secondary;
+
+h3 {
+    color: v.$secondary;
 }
 
 /* === Enlaces genéricos =========================================== */
 a {
-  color: $black;
-  text-decoration: none;
-  
-  &:hover {
-    color: v.$primary;
-  }
+    color: $black;
+    text-decoration: none;
+
+    &:hover {
+        color: v.$primary;
+    }
 }
 
 /* Icono check reutilizable */
 .check {
-  width: 15px;
-  height: auto;
-  color: v.$primary;
+    width: 15px;
+    height: auto;
+    color: v.$primary;
 }
 
 .page-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;  // que el wrapper ocupe toda la altura de la ventana
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; // que el wrapper ocupe toda la altura de la ventana
 }
 
 // Steps Section
 .step-card {
-  transition: $transition-base;
-  border: 1px solid rgba(v.$primary, 0.1);
-  padding: $spacer;
-  height: 100%;
-  text-align: center;
-  border-radius: $border-radius-lg;
-  background: $white;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: $box-shadow-lg;
-    border-color: rgba(v.$primary, 0.3);
-  }
+    transition: $transition-base;
+    border: 1px solid rgba(v.$primary, 0.1);
+    padding: $spacer;
+    height: 100%;
+    text-align: center;
+    border-radius: $border-radius-lg;
+    background: $white;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: $box-shadow-lg;
+        border-color: rgba(v.$primary, 0.3);
+    }
 }
 
 .step-number {
-  width: 60px;
-  height: 60px;
-  font-size: 1.5rem;
-  font-weight: $font-weight-bold;
-  // background: v.$primary;
-  color: $white;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: $spacer;
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    font-weight: $font-weight-bold;
+    // background: v.$primary;
+    color: $white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $spacer;
 }
 
 // Accordion
 .custom-accordion {
-  .accordion-item {
-    border: 0;
-    margin-bottom: $spacer;
-    border-radius: $border-radius-lg !important;
-    overflow: hidden;
-    box-shadow: $box-shadow-sm;
-    
-    &:last-of-type {
-      margin-bottom: 0;
+    .accordion-item {
+        border: 0;
+        margin-bottom: $spacer;
+        border-radius: $border-radius-lg !important;
+        overflow: hidden;
+        box-shadow: $box-shadow-sm;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
     }
-  }
-  
-  .accordion-button {
-    background: $white;
-    font-weight: $font-weight-bold;
-    padding: $spacer * 0.75 $spacer;
-    
-    &:not(.collapsed) {
-      color: v.$primary;
-      background-color: rgba(v.$primary, 0.05);
+
+    .accordion-button {
+        background: $white;
+        font-weight: $font-weight-bold;
+        padding: $spacer * 0.75 $spacer;
+
+        &:not(.collapsed) {
+            color: v.$primary;
+            background-color: rgba(v.$primary, 0.05);
+        }
+
+        &:focus {
+            box-shadow: none;
+            border-color: v.$primary;
+        }
     }
-    
-    &:focus {
-      box-shadow: none;
-      border-color: v.$primary;
+
+    .accordion-body {
+        background: $light;
     }
-  }
-  
-  .accordion-body {
-    background: $light;
-  }
 }
 
 // Utilidades
 .transition-all {
-  transition: $transition-base;
+    transition: $transition-base;
 }
 
 .font-title {
-  font-family: $font-family-title;
-  letter-spacing: -0.5px;
+    font-family: $font-family-title;
+    letter-spacing: -0.5px;
+}
+
+.bg-custom {
+    background-color: v.$primary;
 }

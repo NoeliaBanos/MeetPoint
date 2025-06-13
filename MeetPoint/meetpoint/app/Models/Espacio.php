@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Espacio extends Model
 {
      protected $fillable = [
-        'estado_espacio',
-        'nombre',
+          'nombre',
         'precio_hora',
-        'equipamiento',
+        'capacidad',
         'descripcion',
-        'imagen',
-        // cualquier otro campo de tu tabla espacios
+        'equipamiento',
+        'imagen_url',
+        'estado_espacio',
+        'hora_apertura',
+        'hora_cierre',
     ];
     public function reservas() {
         return $this->hasMany(Reserva::class, 'espacio_id');

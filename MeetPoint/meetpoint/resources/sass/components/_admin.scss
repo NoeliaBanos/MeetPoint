@@ -85,17 +85,6 @@
     }
 }
 
-.btn-secondary {
-    @extend .btn;
-    background-color: v.$white;
-    color: v.$body-color;
-    border-color: v.$secondary;
-
-    &:hover {
-        background-color: darken(v.$white, 5%);
-        transform: translateY(-2px);
-    }
-}
 
 .btn-logout {
     @extend .btn;

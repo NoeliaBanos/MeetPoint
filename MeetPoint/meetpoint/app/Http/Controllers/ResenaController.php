@@ -77,4 +77,10 @@ class ResenaController extends Controller
         $resena = Resena::findOrFail($id);
         return view('resenas.show', compact('resena'));
     }
+    public function makeVisible(Resena $resena)
+{
+   $resena->update(['visible' => true]);
+    return back()->with('success', 'La reseña ahora es pública.');
+}
+
 }

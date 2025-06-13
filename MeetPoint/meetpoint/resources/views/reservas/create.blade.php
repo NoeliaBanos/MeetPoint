@@ -3,83 +3,223 @@
 @section('title', 'Reservar')
 
 @section('content')
-    <h1 class="mb-4">Reserva – {{ $espacio->nombre }}</h1>
+    <div class="reserva-container">
+        <div class="reserva-card">
+            <h1>
+                Reserva – {{ $espacio->nombre }}
+            </h1>
 
-    <form method="POST" action="{{ route('reservas.store', $espacio) }}" id="formReserva">
-        @csrf
+            <form method="POST" action="{{ route('reservas.store', $espacio) }}" id="formReserva"
+                data-espacio-id="{{ $espacio->id }}" data-precio-hora="{{ $espacio->precio_hora }}"
+                data-hora-apertura="{{ substr($espacio->hora_apertura, 0, 5) }}"
+                data-hora-cierre="{{ substr($espacio->hora_cierre, 0, 5) }}" class="reserva-form">
+                @csrf
 
-        {{-- FECHA ----------------------------------------------------------- --}}
-        <label class="block mb-2 font-semibold">Fecha:</label>
-        <input type="date" name="fecha" id="fecha" class="border p-2 rounded w-52" min="{{ now()->toDateString() }}"
-            required>
+                {{-- Fecha --}}
+                <div class="form-group">
+                    <label for="fecha" class="form-label">Fecha:</label>
+                    <input type="date" name="fecha" id="fecha" class="form-input" min="{{ now()->toDateString() }}"
+                        required>
+                </div>
 
-        {{-- HORAS ----------------------------------------------------------- --}}
-        <h2 class="mt-6 mb-2 font-semibold">
-            Horas ({{ number_format($espacio->precio_hora, 2) }} €/h):
-        </h2>
-        <ul id="hoursWrapper" class="space-y-2"></ul>
+                {{-- Hora de entrada --}}
+                <div class="form-group">
+                    <label for="horaEntrada" class="form-label">Hora de entrada:</label>
+                    <input type="time" name="hora_entrada" id="horaEntrada" class="form-input" disabled required>
+                    <p id="errorMessage" class="error-message hidden"></p>
+                </div>
 
-        {{-- TOTAL ----------------------------------------------------------- --}}
-        <p id="summary" class="mt-4 text-lg font-semibold hidden">
-            Total: <span id="total">0,00</span> €
-        </p>
+                {{-- Hora de salida --}}
+                <div class="form-group">
+                    <label for="horaSalida" class="form-label">Hora de salida:</label>
+                    <input type="time" name="hora_salida" id="horaSalida" class="form-input" disabled required>
+                </div>
 
-        <button class="btn-custom mt-6" id="btnSubmit" type="submit" disabled>
-            Continuar a pago
-        </button>
-    </form>
+                {{-- Resumen --}}
+                <div class="selection-summary hidden" id="selectionSummary">
+                    <p class="summary-text">
+                        Has seleccionado: <span id="selFecha" class="highlight"></span>
+                        de <span id="selStart" class="highlight"></span> a <span id="selEnd" class="highlight"></span>
+                    </p>
+                </div>
 
-    {{-- --------------  SCRIPT IN-LINE, GARANTIZADO -------------- --}}
+                {{-- Total --}}
+                <div class="total-summary hidden" id="summary">
+                    <p class="total-text">
+                        Total: <span id="total" class="total-amount">0,00</span> €
+                    </p>
+                </div>
+
+                {{-- Campos ocultos --}}
+                <input type="hidden" name="fecha_hora" id="fechaHora" value="">
+                <input type="hidden" name="importe" id="importe" value="0">
+
+                <div class="form-actions">
+                    <button type="submit" id="btnSubmit" class="btn-custom" disabled>
+                        Continuar a pago
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const precioHora = {{ $espacio->precio_hora }};
+            const form = document.getElementById('formReserva');
+            const espacioId = form.dataset.espacioId;
+            const precioHora = parseFloat(form.dataset.precioHora);
+            const horaApertura = form.dataset.horaApertura;
+            const horaCierre = form.dataset.horaCierre;
+
             const fechaInput = document.getElementById('fecha');
-            const hoursWrap = document.getElementById('hoursWrapper');
+            const startInput = document.getElementById('horaEntrada');
+            const endInput = document.getElementById('horaSalida');
+            const errorMessage = document.getElementById('errorMessage');
+            const selSummary = document.getElementById('selectionSummary');
+            const selFecha = document.getElementById('selFecha');
+            const selStart = document.getElementById('selStart');
+            const selEnd = document.getElementById('selEnd');
+            const summary = document.getElementById('summary');
             const totalSpan = document.getElementById('total');
+            const fechaHoraIn = document.getElementById('fechaHora');
+            const importeIn = document.getElementById('importe');
             const btnSubmit = document.getElementById('btnSubmit');
-            const summaryBox = document.getElementById('summary');
 
-            /* genera checkboxes 09-21 */
-            function drawHours() {
-                hoursWrap.innerHTML = ''; // limpia
-                for (let h = 9; h <= 21; h++) {
-                    const li = document.createElement('li');
-                    const label = document.createElement('label');
-                    label.className = 'inline-flex items-center gap-2 cursor-pointer';
+            let reserved = [];
 
-                    const cb = document.createElement('input');
-                    cb.type = 'checkbox';
-                    cb.name = 'hours[]';
-                    cb.value = h;
-                    cb.addEventListener('change', updateTotal);
-
-                    label.appendChild(cb);
-                    label.append(`${h}:00`);
-                    li.appendChild(label);
-                    hoursWrap.appendChild(li);
-                }
+            function resetAll() {
+                startInput.value = '';
+                endInput.value = '';
+                startInput.disabled = true;
+                endInput.disabled = true;
+                errorMessage.textContent = '';
+                errorMessage.classList.add('hidden');
+                selSummary.classList.add('hidden');
+                summary.classList.add('hidden');
+                btnSubmit.disabled = true;
+                totalSpan.textContent = '0,00';
+                fechaHoraIn.value = '';
+                importeIn.value = '0';
+                reserved = [];
             }
 
-            /* actualiza total */
-            function updateTotal() {
-                const horasSel = hoursWrap.querySelectorAll('input:checked').length;
-                if (horasSel === 0) {
-                    btnSubmit.disabled = true;
-                    summaryBox.classList.add('hidden');
-                } else {
-                    const total = (horasSel * precioHora).toFixed(2).replace('.', ',');
-                    totalSpan.textContent = total;
-                    btnSubmit.disabled = false;
-                    summaryBox.classList.remove('hidden');
-                }
+            function addMinutes(time, mins) {
+                const [h, m] = time.split(':').map(Number);
+                const d = new Date();
+                d.setHours(h, m + mins, 0);
+                return d.toTimeString().slice(0, 5);
             }
 
-            /* cambia fecha → pinta horas y reinicia total */
-            fechaInput.addEventListener('change', () => {
+            // 1) Al cambiar fecha, cargar reservas
+            fechaInput.addEventListener('change', async () => {
+                resetAll();
                 if (!fechaInput.value) return;
-                drawHours();
-                updateTotal();
+
+                try {
+                    const res = await fetch(
+                        `/espacios/${espacioId}/reserved-intervals?fecha=${fechaInput.value}`);
+                    const data = res.ok ? await res.json() : [];
+                    reserved = data.map(i => ({
+                        start: i.hora_entrada.slice(0, 5),
+                        end: i.hora_salida.slice(0, 5),
+                    }));
+                } catch {
+                    reserved = [];
+                }
+
+                startInput.disabled = false;
+                startInput.min = horaApertura;
+                startInput.max = horaCierre;
             });
+
+            // 2) Validar hora de entrada
+            startInput.addEventListener('input', () => {
+                endInput.value = '';
+                endInput.disabled = true;
+                errorMessage.textContent = '';
+                errorMessage.classList.add('hidden');
+                selSummary.classList.add('hidden');
+                summary.classList.add('hidden');
+                btnSubmit.disabled = true;
+
+                const dateVal = fechaInput.value;
+                const sVal = startInput.value;
+                if (!dateVal || !sVal) return;
+
+                const dtStart = new Date(`${dateVal}T${sVal}:00`);
+                const now = new Date();
+                if (dtStart < now) {
+                    errorMessage.textContent = 'La entrada debe ser en el futuro.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+                if (reserved.some(r => sVal >= r.start && sVal < r.end)) {
+                    errorMessage.textContent = 'La sala ya está reservada en esa hora.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+
+                const next = reserved
+                    .filter(r => r.start > sVal)
+                    .sort((a, b) => a.start.localeCompare(b.start))[0];
+
+                endInput.min = addMinutes(sVal, 1);
+                endInput.max = next ? next.start : horaCierre;
+                endInput.disabled = false;
+            });
+
+            // 3) Validar salida y calcular total + campos ocultos
+            endInput.addEventListener('input', () => {
+                errorMessage.textContent = '';
+                errorMessage.classList.add('hidden');
+                summary.classList.add('hidden');
+                btnSubmit.disabled = true;
+                selSummary.classList.add('hidden');
+
+                const dateVal = fechaInput.value;
+                const sVal = startInput.value;
+                const eVal = endInput.value;
+                if (!dateVal || !sVal || !eVal) return;
+
+                const dtStart = new Date(`${dateVal}T${sVal}:00`);
+                const dtEnd = new Date(`${dateVal}T${eVal}:00`);
+                const now = new Date();
+
+                if (dtEnd <= dtStart) {
+                    errorMessage.textContent = 'La salida debe ser posterior a la entrada.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+                if (dtEnd < now) {
+                    errorMessage.textContent = 'La salida debe ser en el futuro.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+
+                // Mostrar resumen
+                selFecha.textContent = new Date(dateVal).toLocaleDateString();
+                selStart.textContent = sVal;
+                selEnd.textContent = eVal;
+                selSummary.classList.remove('hidden');
+
+                // Calcular total
+                const horas = (dtEnd - dtStart) / 1000 / 60 / 60;
+                const total = (horas * precioHora).toFixed(2).replace('.', ',');
+                totalSpan.textContent = total;
+                importeIn.value = total.replace(',', '.');
+
+                // Rellenar fecha_hora
+                fechaHoraIn.value = `${dateVal} ${sVal}:00`;
+                startInput.value = startInput.value + ':00';
+                endInput.value = endInput.value + ':00';
+
+                summary.classList.remove('hidden');
+                btnSubmit.disabled = false;
+            });
+
+            resetAll();
         });
     </script>
-@endsection
+@endpush

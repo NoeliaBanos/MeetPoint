@@ -1,14 +1,58 @@
 @use '../abstracts/variables' as v;
-@use '../base/mixins'as m;
-// Ejemplo de uso de variable y mixin de Bootstrap
-.btn-custom {
-  @include m.btn(v.$primary, v.$white);
-  &-sec{
-    @include m.btn(v.$secondary, v.$white);
-    
-  }
-  &-dark{
-    @include m.btn(v.$body-color, v.$white);
+@use '../base/mixins'        as m;
 
+/* ------------------------------------------------------------------
+   1.  Bloque base (placeholder): tamaño, padding, sombra, estados…
+   ------------------------------------------------------------------ */
+%btn-base {
+  font-size: 1.125rem;
+  padding: v.$space-m v.$space-xl;
+  box-shadow: 0 .25rem .75rem rgba(v.$primary, .3);
+  transition: all v.$btn-duracion v.$timing;
+
+  &:hover   { transform: translateY(-.125rem); }
+  &:active  { transform: translateY(0); }
+
+  &:disabled {
+    background-color: v.$secondary;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: .7;
+  }
+}
+
+/* ------------------------------------------------------------------
+   2.  Variantes generadas automáticamente
+   ------------------------------------------------------------------ */
+$btn-variants: (
+  'custom':      v.$primary,
+  'custom-sec':  v.$secondary,
+  'custom-dark': v.$body-color
+);
+
+@each $name, $bg in $btn-variants {
+  .btn-#{$name} {
+    @extend %btn-base;
+    @include m.btn($bg, v.$white);             // color de fondo + texto
+    box-shadow: 0 .25rem .75rem rgba($bg, .3); // sombra adaptada al color
+
+    &:hover {
+      box-shadow: 0 .5rem 1rem rgba($bg, .4);  // sombra más intensa
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   3.  Botón secundario “outline” hecho a mano
+   ------------------------------------------------------------------ */
+.btn-secondary {
+  @extend %btn-base;
+  @include m.btn(v.$white, v.$body-color);     // fondo blanco, texto gris
+  border-color: v.$secondary;
+
+  &:hover {
+    background-color: darken(v.$white, 5%);
+    transform: translateY(-.125rem);           // mismo efecto que el base
   }
 }
