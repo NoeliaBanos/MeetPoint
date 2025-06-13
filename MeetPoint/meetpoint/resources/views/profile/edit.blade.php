@@ -89,52 +89,11 @@
                     </div>
                 </form>
 
-                {{-- Separador --}}
-                <hr class="my-5">
-
-                {{-- ─── Formulario: Cambiar contraseña ─────────────────── --}}
-                <h2 class="fw-semibold text-center mb-4">Cambiar contraseña</h2>
-
-                <form method="POST" action="{{ route('password.update') }}">
-                    @csrf
-                    @method('PUT')
-
-                    {{-- Contraseña actual --}}
-                    <div class="mb-3">
-                        <label for="current_password" class="form-label fw-bold">Contraseña actual</label>
-                        <input type="password" name="current_password" id="current_password"
-                            class="form-control @error('current_password') is-invalid @enderror" required>
-                        @error('current_password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Nueva contraseña --}}
-                    <div class="mb-3">
-                        <label for="password" class="form-label fw-bold">Nueva contraseña</label>
-                        <input type="password" name="password" id="password"
-                            class="form-control @error('password') is-invalid @enderror" required>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Confirmar contraseña --}}
-                    <div class="mb-3">
-                        <label for="password_confirmation" class="form-label fw-bold">Confirma la contraseña</label>
-                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
-                            required>
-                    </div>
-
-                    {{-- Botón --}}
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary">Actualizar contraseña</button>
-                    </div>
-                </form>
+          
+                
 
             </div>{{-- /.col --}}
         </div>
     </div>
 
-    @include('partials.footer')
 @endsection

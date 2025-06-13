@@ -1,44 +1,71 @@
+{{-- resources/views/profile/edit-password.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Cambiar contraseña')
 
 @section('content')
-<div class="container mt-4">
-    <h1 class="mb-4">Cambiar contraseña</h1>
+    <div class="container py-5">
+        <h1 class="display-6 text-center mb-4">Cambiar contraseña</h1>
 
-    @if(session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
-    @endif
+        {{-- Mensaje de éxito --}}
+        @if(session('status'))
+            <div class="alert alert-success text-center">
+                {{ session('status') }}
+            </div>
+        @endif
 
-    <form action="{{ route('password.update') }}" method="POST">
-        @csrf
-        @method('PUT')
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
 
-        <div class="mb-3">
-            <label for="current_password" class="form-label">Contraseña actual</label>
-            <input type="password" name="current_password" id="current_password"
-                   class="form-control @error('current_password') is-invalid @enderror">
-            @error('current_password')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+                <form action="{{ route('profile.password.update') }}" method="POST" class="needs-validation" novalidate>
+                    @csrf
+                    @method('PUT')
+
+                    {{-- Contraseña actual --}}
+                    <div class="form-floating mb-3">
+                        <input type="password"
+                               name="current_password"
+                               id="current_password"
+                               class="form-control @error('current_password') is-invalid @enderror"
+                               placeholder=" "
+                               required>
+                        <label for="current_password">Contraseña actual</label>
+                        @error('current_password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    {{-- Nueva contraseña --}}
+                    <div class="form-floating mb-3">
+                        <input type="password"
+                               name="password"
+                               id="password"
+                               class="form-control @error('password') is-invalid @enderror"
+                               placeholder=" "
+                               required>
+                        <label for="password">Nueva contraseña</label>
+                        @error('password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    {{-- Confirmar nueva contraseña --}}
+                    <div class="form-floating mb-4">
+                        <input type="password"
+                               name="password_confirmation"
+                               id="password_confirmation"
+                               class="form-control"
+                               placeholder=" "
+                               required>
+                        <label for="password_confirmation">Confirmar contraseña</label>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn-custom">Actualizar contraseña</button>
+                    </div>
+                </form>
+
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label for="password" class="form-label">Nueva contraseña</label>
-            <input type="password" name="password" id="password"
-                   class="form-control @error('password') is-invalid @enderror">
-            @error('password')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Repite la contraseña</label>
-            <input type="password" name="password_confirmation" id="password_confirmation"
-                   class="form-control">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Actualizar contraseña</button>
-    </form>
-</div>
+    </div>
 @endsection

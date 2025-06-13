@@ -53,7 +53,3 @@
 
     </div>
 </section>
-
-
-
-@include('partials.footer')

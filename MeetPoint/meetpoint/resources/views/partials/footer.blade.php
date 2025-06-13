@@ -1,5 +1,5 @@
 <footer class="text-center ">
-    <div class="d-flex justify-content-center gap-3 footer">
+    <div class="d-flex justify-content-center gap-3 footer py-5">
         <a href="{{ route('espacios.index') }}">Espacios</a>
         <a href="{{ route('resenas.index') }}">Reseñas</a>
         <a href="{{ route('contacto.create') }}">Contacta con nosotros</a>

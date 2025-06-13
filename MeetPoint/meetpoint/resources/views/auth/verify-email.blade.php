@@ -27,7 +27,7 @@
                 {{-- Reenviar enlace --}}
                 <form method="POST" action="{{ route('verification.send') }}" class="mb-3">
                     @csrf
-                    <button type="submit" class="btn btn-primary w-100">
+                    <button type="submit" class="btn btn-custom w-100">
                         Reenviar correo de verificación
                     </button>
                 </form>
@@ -60,5 +60,4 @@
     </div>
 </section>
 
-@include('partials.footer')
 @endsection

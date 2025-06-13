@@ -17,7 +17,5 @@
             </li>
         @endforeach
     </ul>
-    {{-- FOOTER --}}
-  @include('partials.footer')
 
 @endsection

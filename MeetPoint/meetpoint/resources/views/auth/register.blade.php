@@ -117,5 +117,4 @@
         </div>
     </section>
 
-    @include('partials.footer')
 @endsection

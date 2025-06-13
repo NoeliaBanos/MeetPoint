@@ -27,7 +27,7 @@
       </div>
       <div class="modal-footer">
         @if(session('success'))
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-custom" data-bs-dismiss="modal">
             Cerrar
           </button>
         @else

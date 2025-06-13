@@ -52,7 +52,7 @@
                                 <i class="fas fa-calendar-alt"></i> Reservar ahora
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-primary btn-reservar">
+                            <a href="{{ route('login') }}" class="btn btn-custom btn-reservar">
                                 <i class="fas fa-sign-in-alt"></i> Iniciar sesión para reservar
                             </a>
                         @endauth
@@ -140,5 +140,4 @@
         </div>
     </div>
 
-    @include('partials.footer')
 @endsection

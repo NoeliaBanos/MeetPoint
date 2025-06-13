@@ -96,6 +96,4 @@
     </div>
 </section>
 
-{{-- Si tu layout no incluye el footer, lo añades aquí --}}
-@include('partials.footer')
 @endsection

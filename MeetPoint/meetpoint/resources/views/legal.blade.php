@@ -74,7 +74,5 @@
 
     
 
-    {{-- FOOTER --}}
-    @include('partials.footer')
 
 @endsection

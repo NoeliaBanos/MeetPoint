@@ -15,6 +15,7 @@ use App\Http\Controllers\{
 /*--------------------------------------------------------------------
  | HOME
  *-------------------------------------------------------------------*/
+
 Route::get('/', [HomeController::class, 'index'])->name('index');
 
 /*--------------------------------------------------------------------
@@ -104,6 +105,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('password.edit');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    // Mostrar formulario para cambiar contraseña
+    Route::get(
+        '/profile/password',
+        [ProfileController::class, 'editPassword']
+    )->name('profile.password.edit');
+
+    // Procesar el cambio de contraseña
+    Route::post(
+        '/profile/password',
+        [ProfileController::class, 'updatePassword']
+    )->name('profile.password.update');
 });
 
 /*--------------------------------------------------------------------

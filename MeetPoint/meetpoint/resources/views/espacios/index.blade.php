@@ -166,8 +166,7 @@
             @endif
         @endforeach
     </section>
-
-    @include('partials.footer')
+   
 
     {{-- SCRIPT DE FILTRADO --}}
     <script>
