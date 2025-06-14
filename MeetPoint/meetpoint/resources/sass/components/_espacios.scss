@@ -1,99 +1,279 @@
-// resources/sass/_espacios.scss
+// _espacios.scss
 @use '../abstracts/variables' as v;
 @use '../base/mixins' as m;
+@use 'sass:color';
 
-.espacios {
-  &-grid {
+.espacios-page {
+  padding: v.$space-xl 0;
+
+  @include m.mobile {
+    padding: v.$space-l 0;
+  }
+}
+
+.filters-section {
+  background-color: color.scale(v.$primary, $lightness: 95%);
+  border-radius: v.$border-radius;
+  padding: v.$space-l;
+  margin-bottom: v.$space-xl;
+
+  @include m.mobile {
+    padding: v.$space-m;
+    margin-bottom: v.$space-l;
+  }
+
+  .filters-grid {
     display: grid;
-    grid-template-columns: 1fr;    // móvil: 1 columna
-    gap: v.$space-l;
+    grid-template-columns: 1fr;
+    gap: v.$space-m;
 
-    @include m.tablet {           // tablet: 2 columnas
-      grid-template-columns: repeat(2, 1fr);
-    }
-    @include m.desktop {          // desktop: 3 columnas
+    @include m.tablet {
       grid-template-columns: repeat(3, 1fr);
+      align-items: center;
     }
+
+    .filter-group {
+      .form-floating {
+        margin-bottom: 0;
+      }
+
+      .form-control {
+        border-radius: v.$border-radius;
+        border: 1px solid v.$secondary;
+        transition: v.$transition-base;
+
+        &:focus {
+          border-color: v.$primary;
+          box-shadow: 0 0 0 0.25rem rgba(v.$primary, 0.25);
+        }
+      }
+    }
+
+    .equip-toggle {
+      @include m.btn(v.$secondary, v.$white);
+      width: 100%;
+      margin-bottom: v.$space-s;
+    }
+
+    .equip-grid {
+      display: none;
+      grid-template-columns: repeat(2, 1fr);
+      gap: v.$space-s;
+      margin-top: v.$space-s;
+
+      @include m.tablet {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      &.visible {
+        display: grid;
+      }
+
+      .form-check {
+        margin: 0;
+      }
+    }
+
+    .price-filter {
+      text-align: center;
+
+      label {
+        font-weight: 500;
+        color: v.$body-color;
+        margin-bottom: v.$space-xs;
+        display: block;
+      }
+
+      .price-display {
+        font-weight: 600;
+        color: v.$primary;
+        margin: 0 v.$space-s;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        margin-top: v.$space-s;
+        -webkit-appearance: none;
+        height: 6px;
+        background: color.scale(v.$primary, $lightness: 80%);
+        border-radius: 3px;
+        outline: none;
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: v.$primary;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.espacios-grid {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.$space-l;
+
+  @include m.tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include m.desktop {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 .espacio-card {
-  display: flex;
-  flex-direction: column;
   background: v.$white;
   border-radius: v.$border-radius;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  padding: v.$space-m;
+  transition: v.$transition-base;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-}
 
-.img-espacios {
-  width: 100%;
-  height: 180px;
-  overflow: hidden;
-  margin-bottom: v.$space-m;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
 
-  img {
+  .img-espacios {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-}
+    height: 200px;
+    overflow: hidden;
 
-.espacio-title {
-  font-size: 1.25rem;
-  margin: 0 0 v.$space-s;
-  line-height: 1.2;
-}
+    @include m.tablet {
+      height: 220px;
+    }
 
-.actions-header {
-  display: flex;
-  gap: v.$space-s;
-  margin-bottom: v.$space-m;
+    @include m.desktop {
+      height: 240px;
+    }
 
-  .btn-sm {
-    padding: v.$space-xs v.$space-s;
-    font-size: 0.875rem;
-  }
-}
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: v.$transition-base;
 
-hr {
-  border: none;
-  border-top: 1px solid rgba(v.$secondary, 0.3);
-  margin: v.$space-m 0;
-}
-
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: v.$space-m;
-
-  .price {
-    margin: 0;
-    font-weight: 500;
-  }
-
-  .stars {
-    display: flex;
-    gap: v.$space-xs;
-
-    .star-icon {
-      width: 20px;
-      height: 20px;
-      display: inline-block;
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
+
+  .card-body {
+    padding: v.$space-m;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
+    gap: v.$space-s; // Añadido espacio entre elementos
+  }
+
+  .admin-actions {
+    display: flex;
+    gap: v.$space-s;
+
+    .btn {
+      padding: v.$space-xs v.$space-s;
+      font-size: 0.875rem;
+    }
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid color.scale(v.$secondary, $lightness: 30%);
+    margin: v.$space-m 0;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: start;  // Cambiado de 'start' a 'center' para mejor alineación
+    flex-wrap: nowrap;    // Cambiado de 'wrap' a 'nowrap'
+    gap: v.$space-s;
+    width: 100%;          // Asegura que ocupe todo el ancho disponible
+    min-width: 0;         // Importante para contener elementos hijos
+
+    .price {
+        font-weight: 600;
+        color: v.$primary;
+        margin: 0;
+        white-space: nowrap;  // Evita que el precio se parta en varias líneas
+        overflow: hidden;     // Oculta contenido que exceda
+        text-overflow: ellipsis; // Añade puntos suspensivos si el texto es muy largo
+        max-width: 60%;      // Limita el ancho del precio
+        justify-self: flex-start;
+        justify-self: self-start;
+        justify-self: self-start;
+        justify-content: flex-start;
+        
+    }
+
+    .stars {
+        display: flex;
+        gap: v.$space-xs;
+        flex-shrink: 0; 
+       
+
+        .star-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;  // Asegura que las imágenes no se reduzcan
+        }
+    }
 }
 
+  .espacio-info {
+    margin-bottom: v.$space-m;
 
+    .espacio-info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: v.$space-s;
 
-@include m.tablet {
-  .img-espacios { height: 200px; }
-}
+      @include m.mobile {
+        grid-template-columns: repeat(2, 1fr);
+      }
 
-@include m.desktop {
-  .img-espacios { height: 220px; }
+      .grid-item {
+        strong {
+          display: block;
+          color: v.$body-color;
+          margin-bottom: v.$space-xs;
+        }
+
+        span {
+          color: v.$secondary;
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+
+  .admin-apta-actions {
+    display: flex;
+    gap: v.$space-s;
+    margin-top: auto; // Empuja los botones hacia abajo
+    width: 100%; // Ocupa todo el ancho disponible
+
+    .btn {
+      flex: 1;
+      width: 100%; // Asegura que ocupe todo el espacio disponible
+      text-align: center;
+      padding: v.$space-s v.$space-m; // Añade más relleno para mejor apariencia
+    }
+  }
 }

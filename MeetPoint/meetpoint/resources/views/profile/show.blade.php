@@ -4,190 +4,283 @@
 @section('title', 'Mi perfil')
 
 @section('content')
-    <div class="container py-5">
+    <div class="container profile-container">
         @if ($user->role === 'admin')
             @include('profile._admin')
         @else
             {{-- Perfil Usuario --}}
-            <div class="bg-white shadow rounded p-4">
+            <div class="profile-card">
 
                 {{-- Datos personales --}}
-                <div class="d-flex flex-column align-items-center mb-4 w-100">
+                <div class="profile-header">
                     @php
                         $avatarSrc = $user->imagen_url ? asset($user->imagen_url) : asset('images/profile.png');
                     @endphp
-                    <img src="{{ $avatarSrc }}" alt="Avatar de {{ $user->name }}" class="rounded-circle mb-2"
-                        style="width: 100px; height: 100px; object-fit: cover;">
-                    <h1 class="text-center mb-1">{{ $user->name }} {{ $user->apellidos }}</h1>
-                    <small class="text-muted text-center">{{ $user->email }}</small>
-                </div>
+                    <div class="avatar-wrapper">
+                        @php
+                            // Ruta relativa dentro de public/
+                            $imgPath = 'img_subidas/users/' . $user->imagen_url;
 
+                            // Si hay imagen y existe en disco, la usamos; si no, la genérica
+                            $avatarSrc =
+                                !empty($user->imagen_url) && file_exists(public_path($imgPath))
+                                    ? asset($imgPath)
+                                    : asset('images/profile.png');
+                        @endphp
+
+                        <div>
+                            <img src="{{ $avatarSrc }}" alt="Avatar de {{ $user->name }}">
+                        </div>
+                    </div>
+
+                    <div class="profile-info">
+                        <h1 class="profile-name">{{ $user->name }} {{ $user->apellidos }}</h1>
+                        <div class="profile-meta">
+                            <span class="profile-email">{{ $user->email }}</span>
+                            @if (auth()->user()->email_verified_at)
+                                <span class="verified-badge"><i class="bi bi-check-circle-fill"></i> Verificado</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Botones de acción -->
-                <div class="d-flex flex-wrap gap-2">
+                <div class="action-buttons">
+                    <div class="button-group">
+                        {{-- Modificar datos --}}
+                        <a href="{{ route('profile.edit') }}" class="btn-custom">
+                            <i class="bi bi-pencil-square"></i> Modificar datos
+                        </a>
 
-                    {{-- Modificar datos --}}
-                    <a href="{{ route('profile.edit') }}" class="btn-custom flex-fill text-center">
-                        Modificar datos
-                    </a>
+                        {{-- Cambiar contraseña --}}
+                        <a href="{{ route('profile.password.edit') }}" class="btn-custom-dark">
+                            <i class="bi bi-key"></i> Cambiar contraseña
+                        </a>
+                    </div>
 
-                    {{-- Cambiar contraseña --}}
-                    <a href="{{ route('profile.password.edit') }}" class="btn-secondary text-center">
-                        Cambiar contraseña
-                    </a>
+                    <div class="button-group">
+                        {{-- Verificar correo --}}
+                        @unless (auth()->user()->email_verified_at)
+                            <form method="POST" action="{{ route('verification.send') }}" class="flex-fill">
+                                @csrf
+                                <button type="submit" class="btn-custom-sec">
+                                    <i class="bi bi-envelope-check"></i> Verificar correo
+                                </button>
+                            </form>
+                        @endunless
 
-                    {{-- Verificar correo (solo si NO está verificado) --}}
-                    @unless (auth()->user()->email_verified_at)
-                        <form method="POST" action="{{ route('verification.send') }}" class="flex-fill">
-                            @csrf
-                            <button type="submit" class="btn-custom-sec w-100 text-center">
-                                Verificar correo
-                            </button>
-                        </form>
-                    @endunless
-
+                        {{-- Crear sala --}}
+                        @if (auth()->user()->email_verified_at)
+                            <a href="{{ route('espacios.create') }}" class="btn-custom-sec">
+                                <i class="bi bi-plus-circle"></i> Crear sala
+                            </a>
+                        @endif
+                    </div>
                 </div>
 
-
-                <!-- Crear sala (solo usuarios verificados) -->
-                @if (auth()->user()->email_verified_at)
-                    <a href="{{ route('espacios.create') }}" class="btn-custom-sec text-center">
-                        Crear sala
-                    </a>
-                @endif
-
-            </div>
-
-
-            {{-- Salas futuras --}}
-            @php
-                $upcoming = $user->reservas
-                    ->where('fecha', '>=', now())
-                    ->sortBy('fecha_hora')
-                    ->groupBy(fn($r) => $r->espacio_id . '—' . $r->fecha->toDateString());
-            @endphp
-
-            <h2 class="text-xl font-semibold ">Salas reservadas</h2>
-            @forelse ($upcoming as $group)
+                {{-- Salas futuras --}}
                 @php
-                    $first = $group->first();
-                    $horas = $group
-                        ->pluck('fecha_hora')
-                        ->unique(fn($h) => $h->format('H:i'))
-                        ->map->format('H:i')
-                        ->implode(', ');
+                    $upcoming = $user->reservas
+                        ->where('fecha', '>=', now())
+                        ->sortBy('fecha_hora')
+                        ->groupBy(fn($r) => $r->espacio_id . '—' . $r->fecha->toDateString());
                 @endphp
-                <p class="mb-1">
-                    <b>{{ $first->espacio->nombre }}</b> —
-                    {{ $first->fecha_hora->format('d/m/Y') }} –
-                    <b>Horas:</b> {{ $horas }}
-                </p>
-            @empty
-                <p class="text-gray-500">No tienes reservas.</p>
-            @endforelse
 
-            {{-- Reseñas pasadas --}}
-            @php
-                $userReviews = $user->resenas()->with('espacio')->get();
-                $pastReservations = $user
-                    ->reservas()
-                    // Si cada reserva dura 1 h a partir de fecha_hora:
-                    ->where('fecha_hora', '<=', now()->subHour()) // <- ya terminó
-                    ->doesntHave('resena')
-                    ->with('espacio')
-                    ->get();
-            @endphp
-
-            <h2 class="text-xl font-semibold ">Reseñas realizadas</h2>
-            @forelse($userReviews as $review)
-                <div class="mb-4 p-3 border border-gray-200 rounded shadow-sm bg-white">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div>
-                            <strong>{{ $review->espacio->nombre }}</strong><br>
-                            <small class="text-muted">{{ $review->created_at->format('d/m/Y') }}</small>
-                        </div>
-                        <div class="text-end">
-                            <span class="fw-bold text-dark">{{ $review->calificacion }}/5</span>
-                        </div>
+                <section class="profile-section">
+                    <div class="section-header">
+                        <h1> Salas reservadas</h1>
                     </div>
-                    @if ($review->comentario)
-                        <div class="text-sm fst-italic">
-                            “{{ $review->comentario }}”
-                        </div>
-                    @endif
-                </div>
-            @empty
-                <p class="text-gray-500">Aún no has realizado ninguna reseña.</p>
-            @endforelse
 
-            <h2 class="text-xl font-semibold">Salas pendientes de reseña</h2>
-            @forelse($pastReservations as $reserva)
-                <div class="mb-4 p-3 border border-dashed border-gray-300 rounded bg-gray-50">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>{{ $reserva->espacio->nombre }}</strong><br>
-                            <small class="text-sm text-muted">{{ $reserva->fecha_hora->format('d/m/Y H:i') }}</small>
+                    <div class="reservations-grid">
+                        @forelse ($upcoming as $group)
+                            @php
+                                $first = $group->first();
+                                $entrada = $group->min('fecha_hora')->format('H:i');
+                                $ultima = $group->max('fecha_hora');
+                                $salida = $ultima->copy()->addHour()->format('H:i');
+                            @endphp
+
+                            <div class="reservation-item">
+                                <div class="reservation-content">
+                                    <div class="reservation-main">
+                                        <h3>{{ $first->espacio->nombre }}</h3>
+                                        <span class="reservation-date">
+                                            <i class="bi bi-calendar-event"></i>
+                                            {{ $first->fecha_hora->format('d/m/Y') }}
+                                        </span>
+                                    </div>
+
+                                    <div class="reservation-times">
+                                        <div class="time-block">
+                                            <span class="time-icon"><i class="bi bi-clock"></i></span>
+                                            <span class="time-value">{{ $entrada }}</span>
+                                        </div>
+                                        <div class="time-block">
+                                            <span class="time-icon"><i class="bi bi-clock-fill"></i></span>
+                                            <span class="time-value">{{ $salida }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="bi bi-calendar-x"></i>
+                                </div>
+                                <h3>No tienes reservas</h3>
+                                <p>Cuando hagas reservas, aparecerán aquí.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </section>
+
+                {{-- Reseñas pasadas --}}
+                @php
+                    $userReviews = $user->resenas()->with('espacio')->get();
+                @endphp
+
+                <section class="profile-section">
+                    <div class="section-header">
+                        <h1> Reseñas realizadas</h1>
+                    </div>
+
+                    <div class="reviews-grid">
+                        @forelse($userReviews as $review)
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <h3>{{ $review->espacio->nombre }}</h3>
+                                    <div class="review-meta">
+                                        <span class="review-date">{{ $review->created_at->format('d/m/Y') }}</span>
+                                        <div class="review-rating">
+                                            {{ $review->calificacion }}/5
+                                        </div>
+                                    </div>
+                                </div>
+                                @if ($review->comentario)
+                                    <div class="review-comment">
+                                        <p>{{ $review->comentario }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        @empty
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="bi bi-chat-square-text"></i>
+                                </div>
+                                <h3>Aún no has realizado reseñas</h3>
+                                <p>Cuando evalúes salas, tus reseñas aparecerán aquí.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </section>
+
+                @php
+                    // IDs de espacios ya reseñados por el usuario
+                    $reseñados = $user->resenas()->pluck('espacio_id')->toArray();
+
+                    // Traigo todas las reservas pasadas sin importar si tienen reseña anidada
+                    $todasPast = $user
+                        ->reservas()
+                        ->where('fecha_hora', '<=', now()->subHour())
+                        ->with('espacio')
+                        ->get();
+
+                    // Me quedo solo con las que NO estén en el array de espacios reseñados
+                    $pendientes = $todasPast
+                        ->filter(function ($reserva) use ($reseñados) {
+                            return !in_array($reserva->espacio_id, $reseñados);
+                        })
+                        ->unique('espacio_id');
+                @endphp
+
+                <section class="profile-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-pencil-square"></i> Pendientes de reseña</h2>
+                    </div>
+
+                    <div class="pending-grid">
+                        @forelse($pendientes as $reserva)
+                            <div class="pending-item">
+                                <div class="pending-content">
+                                    <h3>{{ $reserva->espacio->nombre }}</h3>
+                                    <span class="pending-date">
+                                        <i class="bi bi-calendar-event"></i>
+                                        {{ $reserva->fecha_hora->format('d/m/Y H:i') }}
+                                    </span>
+                                </div>
+                                <button class="review-btn" data-bs-toggle="modal" data-bs-target="#crearResenaModal"
+                                    data-espacio-id="{{ $reserva->espacio->id }}"
+                                    data-espacio-nombre="{{ $reserva->espacio->nombre }}">
+                                    <i class="bi bi-star"></i> Puntuar
+                                </button>
+                            </div>
+                        @empty
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <h3>Todo al día</h3>
+                                <p>No tienes salas pendientes de reseñar.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </section>
+
+                {{-- Cerrar sesión --}}
+                <div class="logout-section">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn-custom-dark w-100">
+                             Cerrar sesión
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @endif
+
+        {{-- Modal Reseña --}}
+        <div class="modal fade" id="crearResenaModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            <i class="bi bi-star-fill"></i>
+                            Reseña para <span id="modalNombreSala"></span>
+                        </h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <form method="POST" action="{{ route('resenas.store') }}">
+                        @csrf
+                        <input type="hidden" name="espacio_id" id="modalEspacioId">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="modalCalificacion">Puntuación (1-5)</label>
+                                <input type="number" name="calificacion" id="modalCalificacion" min="1"
+                                    max="5" class="form-control" required>
+                                @error('calificacion')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="modalComentario">Tu reseña</label>
+                                <textarea name="comentario" id="modalComentario" class="form-control" rows="4" required>{{ old('comentario') }}</textarea>
+                                @error('comentario')
+                                    <div class="error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
-                        <div class="text-end">
-                            <button class="btn btn-sm btn-custom" data-bs-toggle="modal" data-bs-target="#crearResenaModal"
-                                data-espacio-id="{{ $reserva->espacio->id }}"
-                                data-espacio-nombre="{{ $reserva->espacio->nombre }}">
-                                Puntuar
+                        <div class="modal-footer">
+                            <button type="button" class="btn-custom-sec" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn-custom">
+                                <i class="bi bi-check-circle"></i> Enviar reseña
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            @empty
-                <p class="text-gray-500">No tienes salas pendientes de reseñar.</p>
-            @endforelse
-
-            {{-- Cerrar sesión --}}
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="btn-custom-sec w-100">CERRAR SESIÓN</button>
-            </form>
-    </div>
-    @endif
-
-    {{-- Modal Reseña --}}
-    <div class="modal fade" id="crearResenaModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content rounded-xl shadow">
-                <div class="modal-header">
-                    <h3 class="pt-2 ps-2">
-                        Reseña para <span id="modalNombreSala" class="text-muted small"></span>
-                    </h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <form method="POST" action="{{ route('resenas.store') }}">
-                    @csrf
-                    <input type="hidden" name="espacio_id" id="modalEspacioId">
-                    <div class="modal-body">
-                        <div class="form-floating mb-3">
-                            <input type="number" name="calificacion" id="modalCalificacion" min="1" max="5"
-                                step="1" class="form-control" placeholder="Puntuación del 1 al 5" required>
-                            <label for="modalCalificacion">Puntuación (1-5)</label>
-                            @error('calificacion')
-                                <div class="text-danger mt-1 small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-floating mb-3">
-                            <textarea name="comentario" id="modalComentario" class="form-control" placeholder="Escribe tu reseña"
-                                style="height:120px" required>{{ old('comentario') }}</textarea>
-                            <label for="modalComentario">Reseña</label>
-                            @error('comentario')
-                                <div class="text-danger mt-1 small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn-custom">Confirmar</button>
-                        <button type="button" class="btn btn-custom-sec" data-bs-dismiss="modal">Cancelar</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
     </div>
 @endsection
 

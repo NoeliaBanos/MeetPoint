@@ -1,0 +1,402 @@
+@use '../abstracts/variables' as v;
+@use 'sass:color';
+
+// Estilos
+.profile-container {
+    padding: v.$space-xl 0;
+}
+
+.profile-card {
+    background: v.$white;
+    border-radius: v.$border-radius;
+    box-shadow: 0 2px 8px rgba(v.$body-color, 0.1);
+    padding: v.$space-xl;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: v.$space-xl;
+
+    .avatar-wrapper {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto v.$space-m;
+        border: 4px solid v.$primary-light;
+        
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .profile-name {
+        color: v.$body-color;
+        margin-bottom: v.$space-xs;
+    }
+
+    .profile-email {
+        color: color.scale(v.$body-color, $lightness: 30%);
+        display: block;
+        margin-bottom: v.$space-xs;
+    }
+
+    .verified-badge {
+        background: v.$primary-light;
+        color: v.$primary;
+        padding: v.$space-xs v.$space-s;
+        border-radius: v.$border-radius;
+        display: inline-block;
+        font-size: 0.8rem;
+    }
+}
+
+.action-buttons {
+    margin-bottom: v.$space-xl;
+
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: v.$space-m;
+        margin-bottom: v.$space-m;
+        justify-content: center;
+    }
+}
+
+.profile-section {
+    margin-bottom: v.$space-xl;
+
+    .section-header {
+        border-bottom: 1px solid v.$secondary;
+        padding-bottom: v.$space-s;
+        margin-bottom: v.$space-l;
+
+        h2 {
+            color: v.$body-color;
+            display: flex;
+            align-items: center;
+            gap: v.$space-s;
+        }
+    }
+}
+
+.reservation-item, .review-item, .pending-item {
+    background: v.$white;
+    border-radius: v.$border-radius;
+    padding: v.$space-m;
+    margin-bottom: v.$space-m;
+    border: 1px solid v.$secondary;
+    transition: v.$transition-base;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(v.$body-color, 0.1);
+    }
+}
+
+.reservation-item {
+    h3 {
+        color: v.$body-color;
+        margin-bottom: v.$space-xs;
+    }
+
+    .reservation-date {
+        color: color.scale(v.$body-color, $lightness: 30%);
+        display: block;
+        margin-bottom: v.$space-m;
+    }
+
+    .reservation-times {
+        display: flex;
+        gap: v.$space-l;
+
+        .time-block {
+            display: flex;
+            align-items: center;
+            gap: v.$space-s;
+
+            .time-icon {
+                color: v.$primary;
+            }
+        }
+    }
+}
+
+.review-item {
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: v.$space-s;
+
+        h3 {
+            color: v.$body-color;
+        }
+
+        .review-date {
+            color: color.scale(v.$body-color, $lightness: 30%);
+            font-size: 0.8rem;
+        }
+
+        .review-rating {
+            color: v.$primary;
+            font-weight: bold;
+        }
+    }
+
+    .review-comment {
+        color: color.scale(v.$body-color, $lightness: 20%);
+        font-style: italic;
+        padding-top: v.$space-s;
+        border-top: 1px solid v.$secondary;
+    }
+}
+
+.pending-item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: v.$space-m;
+
+    .pending-content {
+        h3 {
+            color: v.$body-color;
+            margin-bottom: v.$space-xs;
+        }
+
+        .pending-date {
+            color: color.scale(v.$body-color, $lightness: 30%);
+            font-size: 0.9rem;
+        }
+    }
+
+    .review-btn {
+        background: v.$primary;
+        color: v.$white;
+        border: none;
+        padding: v.$space-s v.$space-m;
+        border-radius: v.$border-radius;
+        transition: v.$transition-base;
+
+        &:hover {
+            background: color.adjust(v.$primary, $lightness: -10%);
+        }
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: v.$space-xl v.$space-m;
+    color: color.scale(v.$body-color, $lightness: 30%);
+
+    .empty-icon {
+        font-size: 2rem;
+        margin-bottom: v.$space-m;
+        color: v.$secondary;
+    }
+
+    h3 {
+        margin-bottom: v.$space-xs;
+    }
+}
+
+.logout-section {
+    margin-top: v.$space-xl;
+    text-align: center;
+
+    .logout-btn {
+        background: none;
+        border: none;
+        color: color.scale(v.$body-color, $lightness: 30%);
+        transition: v.$transition-base;
+
+        &:hover {
+            color: v.$primary;
+        }
+    }
+}
+
+// Modal
+#crearResenaModal {
+    .modal-header {
+        background: v.$primary;
+        color: v.$white;
+    }
+
+    .modal-footer {
+        background: color.scale(v.$secondary, $lightness: 15%);
+    }
+}
+
+// Responsive
+@media (max-width: v.$bp-md) {
+    .profile-card {
+        padding: v.$space-m;
+    }
+}
+
+@media (max-width: v.$bp-sm) {
+    .action-buttons .button-group {
+        flex-direction: column;
+    }
+
+    .reservation-times {
+        flex-direction: column;
+        gap: v.$space-s !important;
+    }
+}
+
+
+.profile-edit-container {
+    padding: v.$space-xl 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.profile-edit-title {
+    text-align: center;
+    color: v.$body-color;
+    margin-bottom: v.$space-xl;
+    font-size: 1.8rem;
+}
+
+.alert-message {
+    padding: v.$space-m;
+    border-radius: v.$border-radius;
+    margin-bottom: v.$space-xl;
+    text-align: center;
+
+    &.success {
+        background-color: color.scale(v.$primary, $lightness: 90%);
+        color: darken(v.$primary, 10%);
+        border: 1px solid color.scale(v.$primary, $lightness: 80%);
+    }
+}
+
+.profile-edit-content {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-edit-form {
+    width: 100%;
+    max-width: 600px;
+}
+
+.form-group {
+    margin-bottom: v.$space-l;
+
+    &.avatar-group {
+        margin-bottom: v.$space-xl;
+    }
+}
+
+.form-label {
+    display: block;
+    margin-bottom: v.$space-xs;
+    color: v.$body-color;
+    font-weight: bold;
+}
+
+.form-input {
+    width: 100%;
+    padding: v.$space-s v.$space-m;
+    border: 1px solid v.$secondary;
+    border-radius: v.$border-radius;
+    transition: v.$transition-base;
+
+    &:focus {
+        border-color: v.$primary;
+        box-shadow: 0 0 0 3px color.scale(v.$primary, $alpha: -80%);
+        outline: none;
+    }
+
+    &.is-invalid {
+        border-color: #dc3545;
+    }
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: v.$space-xs;
+}
+
+.avatar-preview-label {
+    margin: v.$space-m 0 v.$space-xs;
+    color: color.scale(v.$body-color, $lightness: 30%);
+}
+
+.avatar-preview {
+    width: 70px;
+    height: 70px;
+    margin-top: v.$space-s;
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid v.$primary-light;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: v.$space-m;
+    margin-top: v.$space-xl;
+}
+
+.btn-primary {
+    background-color: v.$primary;
+    color: v.$white;
+    padding: v.$space-s v.$space-l;
+    border: none;
+    border-radius: v.$border-radius;
+    cursor: pointer;
+    transition: v.$transition-base;
+
+    &:hover {
+        background-color: color.adjust(v.$primary, $lightness: -10%);
+    }
+}
+
+.btn-secondary {
+    background-color: v.$secondary;
+    color: v.$body-color;
+    padding: v.$space-s v.$space-l;
+    border: none;
+    border-radius: v.$border-radius;
+    cursor: pointer;
+    transition: v.$transition-base;
+
+    &:hover {
+        background-color: color.adjust(v.$secondary, $lightness: -10%);
+    }
+}
+
+// Responsive
+@media (max-width: v.$bp-md) {
+    .profile-edit-container {
+        padding: v.$space-l v.$space-m;
+    }
+    
+    .profile-edit-title {
+        font-size: 1.5rem;
+        margin-bottom: v.$space-l;
+    }
+}
+
+@media (max-width: v.$bp-sm) {
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100%;
+    }
+}

@@ -52,8 +52,8 @@
                                 <i class="fas fa-calendar-alt"></i> Reservar ahora
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-custom btn-reservar">
-                                <i class="fas fa-sign-in-alt"></i> Iniciar sesión para reservar
+                            <a href="{{ route('login') }}" class="btn-custom btn-reservar">
+                                 Iniciar sesión para reservar
                             </a>
                         @endauth
                         <div class="reserva-info">

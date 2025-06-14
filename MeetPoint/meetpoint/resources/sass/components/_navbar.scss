@@ -1,15 +1,109 @@
-// Evita que las nav-link ocupen varias líneas
-.navbar-nav .nav-link {
-  white-space: nowrap;
-}
+// _navigation.scss
+@use '../abstracts/variables' as v;
+@use '../base/mixins' as m;
+@use 'sass:color';
 
-// Espacio horizontal entre items
-.navbar-nav.flex-row > .nav-item + .nav-item {
-  margin-left: 1rem;
-}
-// dropdown
-// Suaviza y redondea un poco el dropdown
-.dropdown-menu {
-  border-radius: 0.5rem;
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+.navbar {
+  border-bottom: 1px solid color.scale(v.$primary, $lightness: 80%);
+  background-color: v.$white !important;
+  padding: v.$space-s 0;
+
+  @include m.tablet {
+    padding: v.$space-m 0;
+  }
+
+  .navbar-brand {
+    img {
+      transition: v.$transition-base;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .navbar-toggler {
+    border: none;
+    padding: v.$space-xs;
+    &:focus {
+      box-shadow: 0 0 0 0.25rem rgba(v.$primary, 0.25);
+    }
+  }
+
+  // Items de navegación
+  .nav-link {
+    white-space: nowrap;
+    color: v.$body-color;
+    font-weight: 500;
+    padding: v.$space-xs v.$space-s;
+    border-radius: v.$border-radius;
+    transition: v.$transition-base;
+
+    &:hover {
+      color: v.$primary;
+      background-color: color.scale(v.$primary, $lightness: 90%);
+    }
+
+    &.active {
+      color: v.$primary;
+      font-weight: 600;
+    }
+  }
+
+  // Menú móvil
+  #mobileNavContent {
+    .navbar-nav {
+      margin-top: v.$space-m;
+
+      .nav-item {
+        margin-bottom: v.$space-xs;
+      }
+    }
+
+    hr {
+      margin: v.$space-m 0;
+      border-color: color.scale(v.$primary, $lightness: 80%);
+    }
+  }
+
+  // Dropdown
+  .dropdown-menu {
+    border-radius: v.$border-radius;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    border: none;
+    margin-top: v.$space-s;
+    padding: v.$space-s 0;
+    transition: v.$transition-base;
+
+    .dropdown-item {
+      padding: v.$space-xs v.$space-m;
+      color: v.$body-color;
+      transition: v.$transition-base;
+
+      &:hover {
+        background-color: color.scale(v.$primary, $lightness: 90%);
+        color: v.$primary;
+      }
+
+      &:active {
+        background-color: v.$primary;
+        color: v.$white;
+      }
+    }
+
+    .dropdown-divider {
+      border-color: color.scale(v.$primary, $lightness: 80%);
+      margin: v.$space-s 0;
+    }
+  }
+
+  // Icono de verificación
+  .check {
+    width: 16px;
+    height: 16px;
+  }
+
+  // Espaciado entre items en desktop
+  .navbar-nav.flex-row > .nav-item + .nav-item {
+    margin-left: v.$space-m;
+  }
 }

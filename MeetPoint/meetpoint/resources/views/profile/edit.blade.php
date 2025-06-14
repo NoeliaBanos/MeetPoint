@@ -67,20 +67,23 @@
                         @enderror
 
                         {{-- Vista previa: avatar de la BBDD o imagen por defecto --}}
-
-
                         @php
-                            $avatarSrc = $user->imagen_url
-                                ? asset('img_subidas/users/' . $user->imagen_url)
-                                : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&size=64';
+                            // Ruta relativa dentro de public/
+                            $imgPath = 'img_subidas/users/' . $user->imagen_url;
+                            // Si hay imagen y existe en disco, la usamos, si no, la genérica
+                            $avatarSrc =
+                                !empty($user->imagen_url) && file_exists(public_path($imgPath))
+                                    ? asset($imgPath)
+                                    : asset('images/profile.png');
                         @endphp
 
                         <p class="py-2">Imagen anterior:</p>
                         <div style="width: 70px;">
                             <img src="{{ $avatarSrc }}" alt="Avatar de {{ $user->name }}"
-                                style="border-radius:50%; object-fit:cover;">
+                                style="border-radius:50%; object-fit:cover; width:100%; height:100%;">
                         </div>
                     </div>
+
 
                     {{-- Botones --}}
                     <div class="d-flex justify-content-end">
@@ -89,8 +92,8 @@
                     </div>
                 </form>
 
-          
-                
+
+
 
             </div>{{-- /.col --}}
         </div>

@@ -1,86 +1,79 @@
 @extends('layouts.app')
 
-@section('title', 'Restablecer contraseña')
+@section('title', 'Recuperar contraseña')
 
 @section('content')
-{{-- ------------------------------------------------------------------ --}}
-{{--  Layout 50 / 50  – formulario + imagen                            --}}
-{{-- ------------------------------------------------------------------ --}}
-<section class="container-fluid py-5">
+
+<section class="contact-public">
     <div class="row g-0">
+        {{-- Columna 1: Formulario --}}
+        <div class="col-12 col-lg-6 form-column">
+            <div class="form-wrapper">
+                <div class="form-intro">
+                    <div class="password-icon">
+                       
+                    </div>
+                    <h1 class="form-title">¿Olvidaste tu contraseña?</h1>
+                    <p class="form-description">
+                        No te preocupes, te enviaremos un enlace seguro para que puedas crear una nueva contraseña.
+                    </p>
+                </div>
 
-        {{-- Columna 1: Formulario ------------------------------------- --}}
-        <div class="col-12 col-lg-6 p-4 d-flex align-items-center justify-content-center">
+                @if (session('status'))
+                    <div class="alert-message success">
+                       
+                        <span>{{ session('status') }}</span>
+                    </div>
+                @endif
 
-            <div class="w-100" style="max-width:460px"> {{-- ancho máx. opcional --}}
-                <form method="POST" action="{{ route('password.store') }}"
-                      class="needs-validation" novalidate>
+                <form method="POST" action="{{ route('password.email') }}" class="auth-form">
                     @csrf
-                    <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-                    <h2 class="mb-4 text-center">Restablecer contraseña</h2>
-
-                    {{-- Email --}}
-                    <div class="form-floating mb-3">
-                        <input  type="email"
-                                class="form-control @error('email') is-invalid @enderror"
-                                id="email"
-                                name="email"
-                                placeholder="nombre@ejemplo.com"
-                                value="{{ old('email', $request->email) }}"
-                                required
-                                autofocus>
-                        <label for="email">Email</label>
-                        <div class="invalid-feedback">
-                            @error('email') {{ $message }} @else Introduce un correo válido. @enderror
-                        </div>
+                    <div class="form-group">
+                        <label for="email" class="input-label">
+                           
+                            <span>Correo electrónico</span>
+                        </label>
+                        <input type="email" 
+                               class="form-input @error('email') error @enderror" 
+                               id="email" 
+                               name="email" 
+                               placeholder="tucorreo@ejemplo.com" 
+                               value="{{ old('email') }}" 
+                               required 
+                               autofocus>
+                        @error('email')
+                            <p class="error-message">{{ $message }}</p>
+                        @else
+                            <p class="helper-text">Introduce el email asociado a tu cuenta</p>
+                        @enderror
                     </div>
 
-                    {{-- Nueva contraseña --}}
-                    <div class="form-floating mb-3">
-                        <input  type="password"
-                                class="form-control @error('password') is-invalid @enderror"
-                                id="password"
-                                name="password"
-                                placeholder="Nueva contraseña"
-                                required
-                                autocomplete="new-password">
-                        <label for="password">Nueva contraseña</label>
-                        <div class="invalid-feedback">
-                            @error('password') {{ $message }} @else Introduce la nueva contraseña. @enderror
-                        </div>
-                    </div>
-
-                    {{-- Confirmación --}}
-                    <div class="form-floating mb-4">
-                        <input  type="password"
-                                class="form-control @error('password_confirmation') is-invalid @enderror"
-                                id="password_confirmation"
-                                name="password_confirmation"
-                                placeholder="Confirmar contraseña"
-                                required
-                                autocomplete="new-password">
-                        <label for="password_confirmation">Confirmar contraseña</label>
-                        <div class="invalid-feedback">
-                            @error('password_confirmation') {{ $message }} @else Repite la contraseña. @enderror
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-custom w-100">
-                        Restablecer contraseña
+                    <button type="submit" class="primary-button full-width">
+                      
+                        <span>Enviar enlace de recuperación</span>
                     </button>
+
+                    <div class="form-footer">
+                        <a href="{{ route('login') }}" class="text-link">
+                           
+                            <span>Volver al inicio de sesión</span>
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>
 
-        {{-- Columna 2: Imagen ----------------------------------------- --}}
-        <div class="col-12 col-lg-6">
-            {{-- Sustituye la ruta por la imagen que quieras mostrar --}}
-            <img  src="{{ asset('images/reset-bg.jpg') }}"
-                  alt="Imagen decorativa de restablecer contraseña"
-                  class="object-fit-cover w-100 h-100">
+        {{-- Columna 2: Imagen --}}
+        <div class="col-12 col-lg-6 image-column">
+            <div class="image-overlay"></div>
+            <img src="{{ asset('images/auth-bg.jpg') }}" 
+                 alt="Imagen decorativa de recuperación de contraseña" 
+                 class="auth-image">
+            <div class="image-credits">
+                <span>© 2023 TuEmpresa. Todos los derechos reservados.</span>
+            </div>
         </div>
-
     </div>
 </section>
 

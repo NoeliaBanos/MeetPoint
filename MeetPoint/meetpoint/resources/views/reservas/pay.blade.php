@@ -4,36 +4,55 @@
 @section('title', 'Confirmar y pagar')
 
 @section('content')
-    <div class="container py-5">
-        <div class="reserva-card">
-            <div class="reserva-content">
-                {{-- CABECERA --}}
+    <div class="payment-container">
+        <div class="payment-card">
+            {{-- CABECERA CON ICONO --}}
+            <div class="payment-header">
+                <div class="payment-icon">
+
+                </div>
                 <h1>
                     Confirmación de reserva
                 </h1>
+                <p class="payment-subtitle">Revisa los detalles antes de proceder al pago</p>
+            </div>
 
-                {{-- DETALLES DE LA RESERVA --}}
-                <div class="reserva-details">
+            {{-- TARJETA DE DETALLES --}}
+            <div class="details-card">
+                <div class="details-header">
+                    <h2>Detalles de tu reserva</h2>
+                    <div class="details-badge">
+                        <span class="badge-text">Reserva #{{ $reserva->id }}</span>
+                    </div>
+                </div>
+
+                <div class="details-grid">
                     {{-- Espacio --}}
-                    <div class="detail-row">
-                        <span class="detail-label">Espacio:</span>
-                        <span class="detail-value">{{ $reserva->espacio->nombre }}</span>
+                    <div class="detail-item">
+                        <div class="detail-content">
+                            <span class="detail-label">Espacio reservado:</span>
+                            <span class="detail-value">{{ $reserva->espacio->nombre }}</span>
+                        </div>
                     </div>
-
                     {{-- Fecha --}}
-                    <div class="detail-row">
-                        <span class="detail-label">Fecha:</span>
-                        <span class="detail-value">{{ \Carbon\Carbon::parse($reserva->fecha)->format('d/m/Y') }}</span>
+                    <div class="detail-item">
+                        <div class="detail-content">
+                            <span class="detail-label">Fecha:</span>
+                            <span
+                                class="detail-value">{{ \Carbon\Carbon::parse($reserva->fecha)->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</span>
+                        </div>
                     </div>
 
-                    {{-- Hora de entrada / salida --}}
-                    <div class="detail-row">
-                        <span class="detail-label">Hora de entrada:</span>
-                        <span class="detail-value">{{ \Carbon\Carbon::parse($reserva->hora_entrada)->format('H:i') }}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Hora de salida:</span>
-                        <span class="detail-value">{{ \Carbon\Carbon::parse($reserva->hora_salida)->format('H:i') }}</span>
+                    {{-- Horario --}}
+                    <div class="detail-item">
+
+                        <div class="detail-content">
+                            <span class="detail-label">Horario:</span>
+                            <span class="detail-value">
+                                {{ \Carbon\Carbon::parse($reserva->hora_entrada)->format('H:i') }} -
+                                {{ \Carbon\Carbon::parse($reserva->hora_salida)->format('H:i') }}
+                            </span>
+                        </div>
                     </div>
 
                     {{-- Duración --}}
@@ -43,34 +62,64 @@
                                 \Carbon\Carbon::parse($reserva->hora_salida),
                             ) / 60;
                     @endphp
-                    <div class="detail-row">
-                        <span class="detail-label">Duración:</span>
-                        <span class="detail-value">{{ number_format($hours, 1) }} h</span>
+                    <div class="detail-item">
+
+                        <div class="detail-content">
+                            <span class="detail-label">Duración:</span>
+                            <span class="detail-value">{{ number_format($hours, 1) }} horas</span>
+                        </div>
                     </div>
 
-                    {{-- Capacidad (extra) --}}
-                    <div class="detail-row">
-                        <span class="detail-label">Capacidad sala:</span>
-                        <span class="detail-value">{{ $reserva->espacio->capacidad }} personas</span>
+                    {{-- Capacidad --}}
+                    <div class="detail-item">
+
+                        <div class="detail-content">
+                            <span class="detail-label">Capacidad máxima:</span>
+                            <span class="detail-value">{{ $reserva->espacio->capacidad }} personas</span>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                {{-- PRECIO --}}
-                <div class="reserva-total">
-                    <p class="total-label">Total a pagar</p>
-                    <p class="total-amount">
-                        {{ number_format($reserva->importe, 2, ',', '.') }} €
-                    </p>
+            {{-- RESUMEN DE PAGO --}}
+            <div class="payment-summary">
+                <div>
+                    <h2>Resumen de pago</h2>
+                </div>
+
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span class="price-label">Precio por hora:</span>
+                        <span class="price-value">{{ number_format($reserva->espacio->precio_hora, 2, ',', '.') }} €</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">Horas reservadas:</span>
+                        <span class="price-value">{{ number_format($hours, 1) }}</span>
+                    </div>
+                    <div class="price-row total-row">
+                        <span class="price-label">Total:</span>
+                        <span class="price-value">{{ number_format($reserva->importe, 2, ',', '.') }} €</span>
+                    </div>
                 </div>
 
                 {{-- BOTÓN DE PAGO --}}
-                <div class="reserva-actions">
-                    <button id="btnPagar" class="btn-pagar">
-                        Pagar con PayPal
+                <div class="payment-actions">
+                    <button id="btnPagar" class="btn-pay">
+                        <span class="btn-icon">
+
+                        </span>
+                        <span class="btn-text">Pagar con PayPal</span>
                     </button>
-                    <p class="payment-note">
-                        Serás redirigido a PayPal en una nueva pestaña.
-                    </p>
+
+                    <div class="payment-security">
+                        <div class="security-badge">
+
+                            <span>Pago seguro</span>
+                        </div>
+                        <p class="payment-note">
+                            Serás redirigido a PayPal para completar el pago de forma segura.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

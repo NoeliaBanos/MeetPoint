@@ -4,7 +4,7 @@
 
 @section('content')
     {{-- Hero Section --}}
- <div class="hero-section">
+ <div class="hero-section" style="background: url('images/fondo.webp') center/cover no-repeat;">
     <div class="hero-overlay"></div>
     <div class="hero-content container d-flex flex-column justify-content-center text-white">
         <h1 class="hero-title">MeetPoint</h1>

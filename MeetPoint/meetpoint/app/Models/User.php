@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Espacio;   
 use App\Models\Favorite;  
 
-class User extends Authenticatable
+class User extends Authenticatable 
 {
     use HasFactory, Notifiable;
 

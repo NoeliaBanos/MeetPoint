@@ -5,7 +5,7 @@
 @section('content')
     <div class="reserva-container">
         <div class="reserva-card">
-            <h1>
+            <h1 class="reserva-title">
                 Reserva – {{ $espacio->nombre }}
             </h1>
 

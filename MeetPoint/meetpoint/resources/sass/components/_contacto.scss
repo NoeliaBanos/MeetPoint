@@ -1,150 +1,264 @@
-@use '../abstracts/variables'as v;
-@use '../base/mixins'as m;
+// _contact.scss
+@use '../abstracts/variables' as v;
+@use '../base/mixins' as m;
+@use 'sass:color';
 
+.contact-container {
+  padding: v.$space-xl 0;
+
+  @include m.mobile {
+    padding: v.$space-l 0;
+  }
+}
+
+// Estilos para el panel de mensajes (admin)
 .messages-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: v.$space-xl v.$space-m;
+
+  @include m.mobile {
+    padding: v.$space-m;
+  }
 
   .messages-header {
     text-align: center;
-    margin-bottom: 2rem;
+
+   
+
+
+   
   }
 }
 
 .message-card {
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
-  margin-bottom: 1.5rem;
-  transition: all 0.2s ease;
+  background: v.$white;
+  border-radius: v.$border-radius;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  border: 1px solid color.scale(v.$primary, $lightness: 80%);
+  margin-bottom: v.$space-l;
+  transition: v.$transition-base;
   overflow: hidden;
 
   &:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-    border-color: #d1d5db;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    transform: translateY(-0.125rem);
+    border-color: color.scale(v.$primary, $lightness: 60%);
   }
 
   .message-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25rem 1.5rem;
-    background-color: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
+    padding: v.$space-m v.$space-l;
+    background-color: v.$primary;
+    border-bottom: 1px solid color.scale(v.$primary, $lightness: 80%);
+
+    @include m.mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: v.$space-s;
+      padding: v.$space-m;
+    }
 
     .sender-info {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: v.$space-m;
 
-    
+      @include m.mobile {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: v.$space-xs;
+        width: 100%;
+      }
+
+     
 
       .message-date {
         font-size: 0.875rem;
-        color: #6b7280;
+        color: v.$white;
       }
     }
 
     .delete-form {
       .delete-btn {
-        background: #fee2e2;
-        border: none;
-        border-radius: 50%;
+        @include m.btn(v.$primary, v.$white);
+        
         width: 2rem;
         height: 2rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        color: #dc2626;
+        padding: 0;
 
         &:hover {
-          background: #fecaca;
           transform: scale(1.1);
         }
 
-        svg {
-          width: 1.25rem;
-          height: 1.25rem;
-        }
+       
       }
     }
   }
 
   .message-content {
-    padding: 1.5rem;
+    padding: v.$space-l;
+
+    @include m.mobile {
+      padding: v.$space-m;
+    }
 
     .contact-detail {
       display: flex;
-      margin-bottom: 0.75rem;
+      margin-bottom: v.$space-s;
       font-size: 0.9375rem;
 
       .detail-label {
         font-weight: 500;
-        color: #4b5563;
+        color: v.$body-color;
         min-width: 80px;
       }
 
       .detail-value {
-        color: #111827;
+        color: v.$body-color;
       }
     }
 
     .message-text {
-      margin-top: 1.25rem;
-      padding-top: 1.25rem;
-      border-top: 1px dashed #e5e7eb;
+      margin-top: v.$space-m;
+      padding-top: v.$space-m;
+      border-top: 1px dashed color.scale(v.$primary, $lightness: 80%);
 
       p {
-      
         line-height: 1.6;
         white-space: pre-line;
+        color: v.$body-color;
       }
     }
   }
 }
 
+// Estilos para el formulario público
+.contact-public {
+  .row {
+    min-height: 100vh;
+
+    @include m.mobile {
+      min-height: auto;
+    }
+  }
+
+  .form-column {
+    padding: v.$space-xl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include m.mobile {
+      padding: v.$space-l v.$space-m;
+      order: 2;
+    }
+  }
+
+  .image-column {
+    padding: 0;
+    overflow: hidden;
+
+    @include m.mobile {
+      order: 1;
+      height: 300px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  form {
+    width: 100%;
+    max-width: 500px;
+
+
+    .form-floating {
+      margin-bottom: v.$space-m;
+
+      label {
+        color: v.$secondary;
+      }
+
+      .form-control {
+        border-radius: v.$border-radius;
+        border: 1px solid v.$secondary;
+        transition: v.$transition-base;
+
+        &:focus {
+          border-color: v.$primary;
+          box-shadow: 0 0 0 0.25rem rgba(v.$primary, 0.25);
+        }
+      }
+    }
+
+   
+  }
+  // Estilos específicos para el login
+  .form-container {
+   
+    .form-check {
+      display: flex;
+      align-items: center;
+      gap: v.$space-s;
+
+      &-label {
+        color: v.$body-color;
+        margin-bottom: 0;
+      }
+    }
+
+    .text-primary {
+      color: v.$primary;
+      transition: v.$transition-base;
+
+      &:hover {
+        color: color.scale(v.$primary, $lightness: -20%);
+      }
+    }
+
+    .btn-custom {
+      @include m.btn(v.$primary, v.$white);
+      padding: v.$space-s v.$space-xl;
+      font-weight: 500;
+      border-radius: v.$border-radius;
+      transition: v.$transition-base;
+
+      &:hover {
+        background-color: color.scale(v.$primary, $lightness: -10%);
+        transform: translateY(-2px);
+      }
+    }
+
+    .alert-success {
+      background-color: color.scale(v.$primary, $lightness: 80%);
+      border-color: v.$primary;
+      color: color.scale(v.$primary, $lightness: -30%);
+    }
+  }
+}
+
+// Estado vacío (compartido)
 .empty-state {
-  background: white;
-  border-radius: 0.5rem;
-  padding: 3rem 2rem;
+  background: v.$white;
+  border-radius: v.$border-radius;
+  padding: v.$space-xl v.$space-m;
   text-align: center;
-  border: 1px solid v.$white;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid color.scale(v.$primary, $lightness: 80%);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
 
-  h3 {
-    font-size: 1.25rem;
+  .bi {
+    font-size: 2rem;
     color: v.$primary;
-    margin-bottom: 0.5rem;
-  }
-
-  p {
-    color: v.$primary;
-    font-size: 0.9375rem;
-  }
-}
-
-.img-half{
-  height: 95%;
-}
-
-// Responsive adjustments
-@media (max-width: 640px) {
-  .message-card {
-    .message-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
-
-      .sender-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-      }
-    }
+    margin-bottom: v.$space-s;
+    display: block;
   }
 }
