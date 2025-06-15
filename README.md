@@ -10,8 +10,6 @@
 - **Sistema de reseñas**:
   - Puntuaciones de 1 a 5 estrellas.
   - Comentarios con nombre y fecha.
-  - Filtros por puntuación o relevancia (según número de "me gusta").
-  - Filtro de lenguaje inapropiado automático.
 - **Panel de administración**:
   - Gestión de salas, reservas y usuarios.
   - Moderación de comentarios.
@@ -31,7 +29,7 @@
 ## 🧠 Características
 
 - Gestión inteligente en tiempo real para optimizar el uso del espacio.
-- Sistema de reseñas verificadas y filtrables.
+- Sistema de reseñas.
 - Modelo de precios dinámico basado en demanda y recursos.
 - Moderación automática y manual para garantizar contenido apropiado.
 
