@@ -1,4 +1,5 @@
 @use '../abstracts/variables' as v;
+@use '../base/mixins' as m;
 @use 'sass:color';
 
 // Estilos
@@ -64,6 +65,7 @@
         gap: v.$space-m;
         margin-bottom: v.$space-m;
         justify-content: center;
+        align-items: center;
     }
 }
 
@@ -220,16 +222,7 @@
 }
 
 // Modal
-#crearResenaModal {
-    .modal-header {
-        background: v.$primary;
-        color: v.$white;
-    }
 
-    .modal-footer {
-        background: color.scale(v.$secondary, $lightness: 15%);
-    }
-}
 
 // Responsive
 @media (max-width: v.$bp-md) {
@@ -399,4 +392,175 @@
     .btn-primary, .btn-secondary {
         width: 100%;
     }
+}
+.password-reset {
+  .row {
+    min-height: 100vh;
+
+    @include m.mobile {
+      min-height: auto;
+    }
+  }
+
+  .form-column {
+    padding: v.$space-xl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include m.mobile {
+      padding: v.$space-l v.$space-m;
+      order: 2;
+    }
+  }
+
+  .image-column {
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+
+    @include m.mobile {
+      order: 1;
+      height: 300px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .form-wrapper {
+    width: 100%;
+    max-width: 500px;
+
+    .form-intro {
+      text-align: center;
+      margin-bottom: v.$space-xl;
+
+      .form-title {
+        color: v.$body-color;
+        margin-bottom: v.$space-s;
+        font-size: 1.75rem;
+      }
+
+      .form-description {
+        color: color.scale(v.$body-color, $lightness: 20%);
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+    }
+
+    .alert-message {
+      padding: v.$space-m;
+      margin-bottom: v.$space-l;
+      border-radius: v.$border-radius;
+      display: flex;
+      align-items: center;
+      gap: v.$space-s;
+
+      &.success {
+        background-color: color.scale(v.$primary, $lightness: 80%);
+        border: 1px solid v.$primary;
+        color: color.scale(v.$primary, $lightness: -30%);
+      }
+    }
+
+    .auth-form {
+      .form-group {
+        margin-bottom: v.$space-l;
+
+        .input-label {
+          display: block;
+          margin-bottom: v.$space-s;
+          color: v.$body-color;
+          font-weight: 500;
+        }
+
+        .form-input {
+          width: 100%;
+          padding: v.$space-m;
+          border: 1px solid v.$secondary;
+          border-radius: v.$border-radius;
+          transition: v.$transition-base;
+          font-size: 1rem;
+
+          &:focus {
+            border-color: v.$primary;
+            box-shadow: 0 0 0 0.25rem rgba(v.$primary, 0.25);
+            outline: none;
+          }
+
+          &.error {
+            border-color: color.scale(red, $lightness: -20%);
+          }
+        }
+
+        .error-message {
+          color: color.scale(red, $lightness: -20%);
+          font-size: 0.875rem;
+          margin-top: v.$space-xs;
+        }
+
+        .helper-text {
+          color: color.scale(v.$body-color, $lightness: 40%);
+          font-size: 0.875rem;
+          margin-top: v.$space-xs;
+        }
+      }
+
+      .primary-button {
+        @include m.btn(v.$primary, v.$white);
+        padding: v.$space-m v.$space-xl;
+        font-size: 1rem;
+        font-weight: 500;
+        border-radius: v.$border-radius;
+        width: 100%;
+        margin-bottom: v.$space-l;
+
+        @include m.tablet {
+          width: auto;
+        }
+      }
+
+      .form-footer {
+        text-align: center;
+
+        .text-link {
+          color: v.$primary;
+          text-decoration: none;
+          transition: v.$transition-base;
+          font-size: 0.9375rem;
+
+          &:hover {
+            color: color.scale(v.$primary, $lightness: -20%);
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(v.$primary, 0.1), rgba(v.$primary, 0.3));
+  }
+
+  .image-credits {
+    position: absolute;
+    bottom: v.$space-m;
+    right: v.$space-m;
+    color: v.$white;
+    font-size: 0.75rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+    @include m.mobile {
+      display: none;
+    }
+  }
 }

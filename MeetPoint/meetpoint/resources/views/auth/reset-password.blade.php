@@ -49,13 +49,13 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="primary-button full-width">
+                    <button type="submit" class="btn-custom w-100">
                       
-                        <span>Enviar enlace de recuperación</span>
+                        <span >Enviar enlace de recuperación</span>
                     </button>
 
-                    <div class="form-footer">
-                        <a href="{{ route('login') }}" class="text-link">
+                    <div class="form-footer pt-2 text-center">
+                        <a href="{{ route('login') }}" class="text-link mt-4">
                            
                             <span>Volver al inicio de sesión</span>
                         </a>
@@ -67,7 +67,7 @@
         {{-- Columna 2: Imagen --}}
         <div class="col-12 col-lg-6 image-column">
             <div class="image-overlay"></div>
-            <img src="{{ asset('images/auth-bg.jpg') }}" 
+            <img src="{{ asset('images/fondo.jpg') }}" 
                  alt="Imagen decorativa de recuperación de contraseña" 
                  class="auth-image">
             <div class="image-credits">

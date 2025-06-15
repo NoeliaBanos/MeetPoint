@@ -12,7 +12,7 @@
                     </div>
                     <div class="stat-actions">
                         <a href="{{ route('espacios.index') }}" class="btn-custom">VER LISTA</a>
-                        <a href="{{ route('espacios.create') }}" class="btn-secondary">AÑADIR</a>
+                        <a href="{{ route('espacios.create') }}" class="btn-custom-sec">AÑADIR</a>
                     </div>
                 </div>
 
@@ -29,7 +29,7 @@
 
                 <form method="POST" action="{{ route('logout') }}" class="logout-form">
                     @csrf
-                    <button type="submit" class="btn-logout">CERRAR SESIÓN</button>
+                    <button type="submit" class="btn-custom-dark w-100">CERRAR SESIÓN</button>
                 </form>
             </div>
             @extends('layouts.app')

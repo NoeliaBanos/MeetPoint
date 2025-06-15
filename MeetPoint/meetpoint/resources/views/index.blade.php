@@ -28,7 +28,10 @@
 
     {{-- Paso a Paso --}}
     <section class="container my-5 py-5">
-        <h2 class="text-center mb-5 font-title">¿Cómo funciona MeetPoint?</h2>
+         <a href="{{ asset('Manual_usuario_MeetPoint.pdf') }}" target="_blank" rel="noopener">
+          <h2 class="text-center mb-5 font-title">¿Cómo funciona MeetPoint?</h2>
+        </a>
+       
         <div class="row g-4 justify-content-center">
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="step-card p-4 h-100 text-center shadow-sm rounded-4 transition-all">

@@ -87,8 +87,8 @@
 
                     {{-- Botones --}}
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('profile.show') }}" class="btn btn-secondary me-2">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        <a href="{{ route('profile.show') }}" class="btn-custom-sec me-4">Cancelar</a>
+                        <button type="submit" class="btn-custom">Guardar cambios</button>
                     </div>
                 </form>
 
